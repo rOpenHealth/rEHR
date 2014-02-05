@@ -1,0 +1,16 @@
+Package: rCPRD
+Maintainer: David Springate <daspringate@gmail.com>
+Author: David Springate
+Version: 0.1
+License: GPL-3
+Title: rpubmed
+Description: R tools for processing and extracting clinical information from
+    downloaded CPRD cohorts
+Depends:
+    sqldf,
+    yaml,
+Suggests:
+    testthat,
+    roxygen2,
+Collate:
+    'cprd_import.R'

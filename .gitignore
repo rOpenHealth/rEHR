@@ -1,0 +1,8 @@
+.Rproj.user
+rCPRD.Rproj
+CPRD
+CPRD/*
+.Rhistory
+.RData
+.Rbuildignore
+testing.R
