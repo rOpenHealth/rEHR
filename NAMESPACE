@@ -1,1 +1,4 @@
+export(add_to_database)
+export(database)
+export(import_CPRD_data)
 export(read_zip)

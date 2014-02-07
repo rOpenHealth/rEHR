@@ -9,6 +9,7 @@ Description: R tools for processing and extracting clinical information from
 Depends:
     sqldf,
     yaml,
+    stringr,
 Suggests:
     testthat,
     roxygen2,
