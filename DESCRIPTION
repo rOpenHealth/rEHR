@@ -10,8 +10,12 @@ Depends:
     sqldf,
     yaml,
     stringr,
+    RCurl,
+    XML
 Suggests:
     testthat,
     roxygen2,
 Collate:
     'cprd_import.R'
+    'clinicalcodes.R'
+    'cprd_patients.R'

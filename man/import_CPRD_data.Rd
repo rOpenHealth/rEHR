@@ -2,7 +2,9 @@
 \alias{import_CPRD_data}
 \title{Imports all selected CPRD data into an sqlite database
 Note that if you chose to import all the filetype, you may end up with aa very large database file.
-You may then chose only to import the files you want to use.  You can always import the rest of the files later.}
+You may then chose only to import the files you want to use.  You can always import the rest of the files later.
+This function may take a long time to process because it unzips (potentially large) files, reads into R where it convertsthe date formats
+before importing to SQLite. However, this initial data preparation step will greatly accelarate downstream processing.}
 \usage{
   import_CPRD_data(db, data_dir,
     filetypes = c("Additional", "Clinical", "Consultation", "Immunisation", "Patient", "Practice", "Referral", "Staff", "Test", "Therapy"),
@@ -29,6 +31,11 @@ You may then chose only to import the files you want to use.  You can always imp
   Note that if you chose to import all the filetype, you
   may end up with aa very large database file. You may then
   chose only to import the files you want to use.  You can
-  always import the rest of the files later.
+  always import the rest of the files later. This function
+  may take a long time to process because it unzips
+  (potentially large) files, reads into R where it
+  convertsthe date formats before importing to SQLite.
+  However, this initial data preparation step will greatly
+  accelarate downstream processing.
 }
 

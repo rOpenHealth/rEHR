@@ -1,0 +1,36 @@
+\name{patients_in_window}
+\alias{patients_in_window}
+\title{Select patients alive and registered between certain dates
+criteria are that crd is before start of window, tod is after end of window deathdate is after end of window}
+\usage{
+  patients_in_window(db, startdate, enddate, qs = TRUE,
+    registration_buffer = 0, patient_tablename = "Patient")
+}
+\arguments{
+  \item{db}{a database connection}
+
+  \item{startdate}{character for the start of the window.
+  format \%Y-\%m-\%d}
+
+  \item{enddate}{character for the end of the window.
+  format \%Y-\%m-\%d}
+
+  \item{qs}{logical should only patients deemed to be of
+  acceptable quality standard be selected? Most downloaded
+  cohorts will be up to standard by default}
+
+  \item{registration_buffer}{numeric how many days must
+  patients be registered for prior to the startdate to be
+  included? Setting a posive value can reduce information
+  bias}
+
+  \item{patient_tablename}{The name of the patient table.
+  default is Patient}
+}
+\description{
+  Select patients alive and registered between certain
+  dates criteria are that crd is before start of window,
+  tod is after end of window deathdate is after end of
+  window
+}
+

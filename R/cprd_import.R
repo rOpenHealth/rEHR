@@ -62,6 +62,7 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
     }
 }
 
+
 #' Imports all selected CPRD data into an sqlite database
 #' Note that if you chose to import all the filetype, you may end up with aa very large database file.
 #' You may then chose only to import the files you want to use.  You can always import the rest of the files later.
