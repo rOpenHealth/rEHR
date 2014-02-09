@@ -6,13 +6,19 @@
 #' @param codelist_name character representing a codelist name associated with an article on www.ClinicalCodes.org
 #' @export
 #' @return a dataframe of clinical codes or a list of dataframes of clinical codes
+#' @examples \dontrun{
+#' # Get codelist from url:
+#' angina_codes <- get_ClinicalCodes(url = "https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/6/codelist/angina/download/")
+#' depression_codes <- get_ClinicalCodes(article_id = 6, codelist_name = "depression")
+#' codelists = get_ClinicalCodes(article_id = 6)
+#' } 
 get_ClinicalCodes <- function(url = NULL, article_id = NULL, codelist_name = NULL){
     if(!is.null(url)){
+        clinicalcodes_regex <- "(www\\.[cC]{1}linical[cC]{1}odes.org)|(https://clinicalcodes.rss.mhs.man.ac.uk)/medcodes/article/(.)+/codelist/(.)+/download(/)*"
+        if(!str_detect(url, clinicalcodes_regex)) stop("You must provide a valid www.ClinicalCodes.org codelist download link")
         url <- getURL(url)
         read.csv(text = url)
     } else if(!is.null(article_id) && !is.null(codelist_name)){
-        clinicalcodes_regex <- "(www\\.[cC]{1}linical[cC]{1}odes.org)|(https://clinicalcodes.rss.mhs.man.ac.uk)/medcodes/article/(.)+/codelist/(.)+/download(/)*"
-        if(!str_detect(url, clinicalcodes_regex)) stop("You must provide a valid www.ClinicalCodes.org codelist download link")
         url <- getURL(sprintf("https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/%d/codelist/%s/download/",
                               article_id, codelist_name))
         read.csv(text = url)
