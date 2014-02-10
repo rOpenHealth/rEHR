@@ -1,6 +1,5 @@
 export(add_to_database)
 export(database)
-export(get_ClinicalCodes)
 export(import_CPRD_data)
 export(patients_in_window)
 export(read_zip)

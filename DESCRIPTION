@@ -7,8 +7,6 @@ Title: rpubmed
 Description: R tools for processing and extracting clinical information from
     downloaded CPRD cohorts
 Depends:
-    sqldf,
-    yaml,
     stringr,
     RCurl,
     XML
@@ -17,5 +15,4 @@ Suggests:
     roxygen2,
 Collate:
     'cprd_import.R'
-    'clinicalcodes.R'
     'cprd_patients.R'
