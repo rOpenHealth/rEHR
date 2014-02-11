@@ -5,7 +5,7 @@
 #' @param patid name of the patid field
 #' @param medcode name of the medcode field
 #' @export
-#' #' @examples \dontrun{
+#' @examples \dontrun{
 #' medcode_counts <- patients_per_medcode(db)
 #' head(medcode_counts)
 #' } 

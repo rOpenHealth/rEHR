@@ -17,3 +17,4 @@ Suggests:
 Collate:
     'cprd_import.R'
     'cprd_patients.R'
+    'cprd_medcodes.R'
