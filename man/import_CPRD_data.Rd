@@ -1,14 +1,16 @@
 \name{import_CPRD_data}
 \alias{import_CPRD_data}
 \title{Imports all selected CPRD data into an sqlite database
-Note that if you chose to import all the filetype, you may end up with aa very large database file.
+This function should be general enough to import from both cohorts downloaded via the CPRD online tool and CPRD GOLD builds
+Note that if you chose to import all the filetype, you may end up with a very large database file.
 You may then chose only to import the files you want to use.  You can always import the rest of the files later.
-This function may take a long time to process because it unzips (potentially large) files, reads into R where it convertsthe date formats
-before importing to SQLite. However, this initial data preparation step will greatly accelarate downstream processing.}
+This function may take a long time to process because it unzips (potentially large) files, reads into R where it converts the date formats
+before importing to SQLite. However, this initial data preparation step will greatly accelerate downstream processing.}
 \usage{
   import_CPRD_data(db, data_dir,
     filetypes = c("Additional", "Clinical", "Consultation", "Immunisation", "Patient", "Practice", "Referral", "Staff", "Test", "Therapy"),
-    dateformat = "\%d/\%m/\%Y", yob_origin = 1800)
+    dateformat = "\%d/\%m/\%Y", yob_origin = 1800,
+    regex = "PET", recursive = TRUE)
 }
 \arguments{
   \item{db}{a database connection}
@@ -25,17 +27,26 @@ before importing to SQLite. However, this initial data preparation step will gre
 
   \item{yob_origin}{value to add yob values to to get
   actual year of birth (Generally 1800)}
+
+  \item{regex}{character regular expression to identify
+  data files in the directory. This is separated from the
+  filetype by an underscore. e.g. 'p[0-9]{3}' in CPRD GOLD}
+
+  \item{recursive}{logical should files be searched for
+  recursively under the data_dir?}
 }
 \description{
   Imports all selected CPRD data into an sqlite database
-  Note that if you chose to import all the filetype, you
-  may end up with aa very large database file. You may then
-  chose only to import the files you want to use.  You can
-  always import the rest of the files later. This function
-  may take a long time to process because it unzips
-  (potentially large) files, reads into R where it
-  convertsthe date formats before importing to SQLite.
+  This function should be general enough to import from
+  both cohorts downloaded via the CPRD online tool and CPRD
+  GOLD builds Note that if you chose to import all the
+  filetype, you may end up with a very large database file.
+  You may then chose only to import the files you want to
+  use.  You can always import the rest of the files later.
+  This function may take a long time to process because it
+  unzips (potentially large) files, reads into R where it
+  converts the date formats before importing to SQLite.
   However, this initial data preparation step will greatly
-  accelarate downstream processing.
+  accelerate downstream processing.
 }
 
