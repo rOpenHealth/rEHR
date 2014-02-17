@@ -1,11 +1,6 @@
 \name{import_CPRD_data}
 \alias{import_CPRD_data}
-\title{Imports all selected CPRD data into an sqlite database
-This function should be general enough to import from both cohorts downloaded via the CPRD online tool and CPRD GOLD builds
-Note that if you chose to import all the filetype, you may end up with a very large database file.
-You may then chose only to import the files you want to use.  You can always import the rest of the files later.
-This function may take a long time to process because it unzips (potentially large) files, reads into R where it converts the date formats
-before importing to SQLite. However, this initial data preparation step will greatly accelerate downstream processing.}
+\title{Imports all selected CPRD data into an sqlite database}
 \usage{
   import_CPRD_data(db, data_dir,
     filetypes = c("Additional", "Clinical", "Consultation", "Immunisation", "Patient", "Practice", "Referral", "Staff", "Test", "Therapy"),
@@ -36,17 +31,18 @@ before importing to SQLite. However, this initial data preparation step will gre
   recursively under the data_dir?}
 }
 \description{
-  Imports all selected CPRD data into an sqlite database
-  This function should be general enough to import from
-  both cohorts downloaded via the CPRD online tool and CPRD
-  GOLD builds Note that if you chose to import all the
-  filetype, you may end up with a very large database file.
-  You may then chose only to import the files you want to
-  use.  You can always import the rest of the files later.
-  This function may take a long time to process because it
-  unzips (potentially large) files, reads into R where it
-  converts the date formats before importing to SQLite.
-  However, this initial data preparation step will greatly
+  This function can import from both cohorts downloaded via
+  the CPRD online tool and CPRD GOLD builds
+}
+\details{
+  Note that if you chose to import all the filetype, you
+  may end up with a very large database file. You may then
+  chose only to import the files you want to use.  You can
+  always import the rest of the files later. This function
+  may take a long time to process because it unzips
+  (potentially large) files, reads into R where it converts
+  the date formats before importing to SQLite. However,
+  this initial data preparation step will greatly
   accelerate downstream processing.
 }
 

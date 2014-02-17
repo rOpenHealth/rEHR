@@ -13,6 +13,12 @@
   a dataframe
 }
 \description{
-  Reads a zipped data file to a dataframe
+  This function will unzip a zipped text file and read it
+  in to an R data frame
+}
+\details{
+  Default behaviour is to read in as a standard read.delim
+  call. extra arguments to read.delim can be passed to the
+  function
 }
 

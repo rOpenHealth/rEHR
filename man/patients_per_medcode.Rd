@@ -1,7 +1,6 @@
 \name{patients_per_medcode}
 \alias{patients_per_medcode}
-\title{Produce a dataset of CPRD medcodes with frequencies of patients in the clinical table
-Note that this does not translate to Read/OXMIS codes}
+\title{Produce a dataset of CPRD medcodes with frequencies of patients in the clinical table}
 \usage{
   patients_per_medcode(db, clinical_table = "Clinical",
     patid = "patid", medcode = "medcode")
@@ -17,9 +16,14 @@ Note that this does not translate to Read/OXMIS codes}
   \item{medcode}{name of the medcode field}
 }
 \description{
-  Produce a dataset of CPRD medcodes with frequencies of
-  patients in the clinical table Note that this does not
-  translate to Read/OXMIS codes
+  This function aggregates all distinct patients matching
+  each CPRD medcode in the clinical table
+}
+\details{
+  Note that this does not translate to Read/OXMIS codes.
+  This function should be fast because all of the heavy
+  lifting happens in SQLite before the data is exported to
+  R
 }
 \examples{
 \dontrun{

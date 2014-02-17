@@ -1,7 +1,6 @@
 \name{add_to_database}
 \alias{add_to_database}
-\title{Adds a series of files to a database
-Will automatically unzip files before calling them in}
+\title{Adds a series of files to a database}
 \usage{
   add_to_database(db, files, table_name,
     dateformat = "\%d/\%m/\%Y", yob_origin = 1800)
@@ -22,7 +21,10 @@ Will automatically unzip files before calling them in}
   actual year of birth (Generally 1800)}
 }
 \description{
-  Adds a series of files to a database Will automatically
-  unzip files before calling them in
+  This function can be used to import a CPRD file or files
+  into a SQLite database connection.
+}
+\details{
+  Will automatically unzip files before calling them in
 }
 

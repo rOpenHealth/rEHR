@@ -1,6 +1,12 @@
 
 
 #' Reads a zipped data file to a dataframe
+#' 
+#' This function will unzip a zipped text file and read it in to an R data frame
+#' 
+#' Default behaviour is to read in as a standard read.delim call.
+#' extra arguments to read.delim can be passed to the function
+#' 
 #' @param file character a file to read in
 #' @param ... extra arguments to pass to read.delim
 #' @return a dataframe
@@ -15,7 +21,11 @@ read_zip <- function(file, ...) {
 
 
 #' Wrapper for dbconnect
+#' 
 #' Connects to a SQLite database or creates one if it does not already exist
+#' 
+#' '.sqlite' file extension is automatically added and does not need to be specified in the dbname argument.
+#' 
 #' @param dbname a name for the new database
 #' @export
 database <- function(dbname){
@@ -23,7 +33,11 @@ database <- function(dbname){
 }
 
 #' Adds a series of files to a database
+#' 
+#' This function can be used to import a CPRD file or files into a SQLite database connection.
+#' 
 #' Will automatically unzip files before calling them in
+#' 
 #' @param db a database connection object
 #' @param files a character vector of filenames to files to be imported
 #' @param table_name a name for the table to import to
@@ -64,7 +78,9 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
 
 
 #' Imports all selected CPRD data into an sqlite database
-#' This function should be general enough to import from both cohorts downloaded via the CPRD online tool and CPRD GOLD builds
+#' 
+#' This function can import from both cohorts downloaded via the CPRD online tool and CPRD GOLD builds
+#' 
 #' Note that if you chose to import all the filetype, you may end up with a very large database file.
 #' You may then chose only to import the files you want to use.  You can always import the rest of the files later.
 #' This function may take a long time to process because it unzips (potentially large) files, reads into R where it converts the date formats 

@@ -1,7 +1,6 @@
 \name{patients_in_window}
 \alias{patients_in_window}
-\title{Select patients alive and registered between certain dates
-criteria are that crd is before start of window, tod is after end of window deathdate is after end of window}
+\title{Select patients alive and registered between certain dates}
 \usage{
   patients_in_window(db, startdate, enddate, qs = TRUE,
     registration_buffer = 0, patient_tablename = "Patient")
@@ -28,9 +27,12 @@ criteria are that crd is before start of window, tod is after end of window deat
   default is Patient}
 }
 \description{
-  Select patients alive and registered between certain
-  dates criteria are that crd is before start of window,
-  tod is after end of window deathdate is after end of
-  window
+  This function selects patients from the patient table of
+  a CPRD database who are alive and registered within a
+  supplied window
+}
+\details{
+  criteria are that crd is before start of window, tod is
+  after end of window deathdate is after end of window
 }
 

@@ -1,5 +1,10 @@
 #' Produce a dataset of CPRD medcodes with frequencies of patients in the clinical table
-#' Note that this does not translate to Read/OXMIS codes
+#' 
+#' This function aggregates all distinct patients matching each CPRD medcode in the clinical table
+#' 
+#' Note that this does not translate to Read/OXMIS codes.
+#' This function should be fast because all of the heavy lifting happens in SQLite before the data is exported to R
+#' 
 #' @param db a database connection
 #' @param clinical_table name of the clinical table in the database
 #' @param patid name of the patid field

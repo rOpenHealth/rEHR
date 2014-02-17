@@ -3,14 +3,29 @@ rCPRD
 
 David A. Springate 2014
 
-R tools for processing and extracting clinical information from downloaded CPRD cohorts
----------------------------------------------------------------------------------------
+R tools for processing and extracting clinical information from CPRD cohorts
+-----------------------------------------------------------------------------
 
-This in development package will provide tools for interrogating cohorts of primary care data downloaded from the [CPRD](www.cprd.com).
+This in development package will provide tools for interrogating cohorts of primary care data downloaded from the [CPRD](www.cprd.com) and also from CPRD GOLD data cuts.
+
+The package is not yet on CRAN but you can istall from github using the devtools package:
+
+```R
+install.packages("devtools")
+require(devtools)
+install_github("rCPRD", "rOpenHealth")
+require(rCPRD)
+```
+
+Current functionality
+---------------------
+
+* Importing zipped/unzipped text files to a SQLite database and then into R
+* Produce frequencies of unique patients with each clinical code
+* Select patients alive and registered between certain dates
 
 It will contain tools for:
 
-* Importing zipped text files to a SQLite database and then into R
 * Searching and extracting from tables based on clinical codes, and other clinical events (e.g. diagnostic test results)
 * Merging across several file types to generate flat files suitable for further analysis
 * Using sampling methods (such as incidence density sampling) to produce case-control datasets

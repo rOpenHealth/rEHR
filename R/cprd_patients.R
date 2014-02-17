@@ -1,5 +1,9 @@
 #' Select patients alive and registered between certain dates
+#' 
+#' This function selects patients from the patient table of a CPRD database who are alive and registered within a supplied window
+#' 
 #' criteria are that crd is before start of window, tod is after end of window deathdate is after end of window
+#' 
 #' @param db a database connection
 #' @param startdate character for the start of the window. format \%Y-\%m-\%d
 #' @param enddate character for the end of the window. format \%Y-\%m-\%d
