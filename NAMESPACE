@@ -1,6 +1,8 @@
 export(add_to_database)
 export(database)
 export(import_CPRD_data)
+export(medcodes_to_read)
 export(patients_in_window)
 export(patients_per_medcode)
+export(read_to_medcodes)
 export(read_zip)

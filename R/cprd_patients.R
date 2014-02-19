@@ -15,7 +15,7 @@ patients_in_window <- function(db, startdate, enddate, qs = TRUE, registration_b
     registration_date <- as.character(as.Date(startdate) - registration_buffer)
     selector <- sprintf("SELECT * FROM %s WHERE crd < %s AND tod > %s AND (deathdate > %s OR deathdate is NULL)",
                         patient_tablename, registration_date, enddate, enddate)
-    if(qs) selector <- paste(selector, "AND accept =", as.numeric(qs))
+    if(qs) selector <- paste(selector, "AND accept = 1")
     sqldf(selector, connection = db)
 }
 

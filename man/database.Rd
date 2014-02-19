@@ -12,7 +12,7 @@
   not already exist
 }
 \details{
-  '.sqlite' file extension is automatically added and does
-  not need to be specified in the dbname argument.
+  If the '.sqlite' file extension is ommited from the
+  dbname argument it is automatically added.
 }
 

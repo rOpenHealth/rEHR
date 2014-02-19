@@ -6,3 +6,4 @@ CPRD/*
 .RData
 .Rbuildignore
 testing.R
+data/*

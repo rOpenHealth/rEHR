@@ -24,12 +24,13 @@ read_zip <- function(file, ...) {
 #' 
 #' Connects to a SQLite database or creates one if it does not already exist
 #' 
-#' '.sqlite' file extension is automatically added and does not need to be specified in the dbname argument.
+#' If the '.sqlite' file extension is ommited from the dbname argument it is automatically added.
 #' 
 #' @param dbname a name for the new database
 #' @export
 database <- function(dbname){
-    dbConnect(SQLite(), dbname = paste(dbname, "sqlite", sep = "."))
+    if(!str_detect(dbname, "\\.sqlite$")) dbname = paste(dbname, "sqlite", sep = ".")
+    dbConnect(SQLite(), dbname)
 }
 
 #' Adds a series of files to a database
