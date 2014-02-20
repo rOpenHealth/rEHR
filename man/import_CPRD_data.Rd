@@ -5,7 +5,7 @@
   import_CPRD_data(db, data_dir,
     filetypes = c("Additional", "Clinical", "Consultation", "Immunisation", "Patient", "Practice", "Referral", "Staff", "Test", "Therapy"),
     dateformat = "\%d/\%m/\%Y", yob_origin = 1800,
-    regex = "PET", recursive = TRUE)
+    regex = "PET", recursive = TRUE, ...)
 }
 \arguments{
   \item{db}{a database connection}
@@ -29,6 +29,8 @@
 
   \item{recursive}{logical should files be searched for
   recursively under the data_dir?}
+
+  \item{...}{arguments to be passed to add_to_database}
 }
 \description{
   This function can import from both cohorts downloaded via
