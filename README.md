@@ -33,6 +33,7 @@ import_CPRD_data(db, "path/to/original/datadir", filetypes =  c("Clinical", "Pat
 
 * Produce frequencies of unique patients with each clinical code
 * Select patients alive and registered between certain dates
+* Translate CPRD medcodes <-> Read codes (lookup not supplied as yet...)
 
 ### Future functionality
 

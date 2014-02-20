@@ -38,14 +38,18 @@ database <- function(dbname){
 #' This function can be used to import a CPRD file or files into a SQLite database connection.
 #' 
 #' Will automatically unzip files before calling them in
+#' If practid is TRUE, a practid variable is constructed by converting the last 3 digits of the patient id (if supplied) to a numeric.
+#' If filenames is TRUE, source data filenames are included as a variable with the filetypes stripped away.
 #' 
 #' @param db a database connection object
 #' @param files a character vector of filenames to files to be imported
 #' @param table_name a name for the table to import to
 #' @param dateformat the format that dates are stored in the CPRD data.  If this is wrong it won't break but all dates are likely to be NA
 #' @param yob_origin value to add yob values to to get actual year of birth (Generally 1800)
+#' @param practid logical should practice id variable be constructed from the patient ids?
+#' @param filename logical should the filename be included as a variable?
 #' @export
-add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_origin = 1800){
+add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_origin = 1800, practid = TRUE, filenames = FALSE){
     date_fields <- c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod", "deathdate")
     for(f in files){
         if(str_detect(f, "zip$")){
@@ -63,6 +67,11 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
             }
         }
         if("yob" %in% names(dat)) dat$yob <- dat$yob + yob_origin
+        if(practid && "patid" %in% names(dat)){
+            message(" Adding practid variable...", appendLF = FALSE)
+            dat$practid <- as.numeric(str_extract(dat$patid, "[0-9]{3}$"))
+        }
+        if(filenames) dat$filename <- str_replace(basename(f), "\\..*", "")
         message(sprintf(" Importing to table '%s'...", table_name))
         if(dbExistsTable(db, table_name)){
             dbWriteTable(conn = db, 
@@ -93,6 +102,7 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
 #' @param yob_origin value to add yob values to to get actual year of birth (Generally 1800)
 #' @param regex character regular expression to identify data files in the directory. This is separated from the filetype by an underscore. e.g. 'p[0-9]{3}' in CPRD GOLD  
 #' @param recursive logical should files be searched for recursively under the data_dir?
+#' @param ... arguments to be passed to add_to_database
 #' @export
 import_CPRD_data <- function(db, data_dir,
                              filetypes = c("Additional", "Clinical", "Consultation", 
@@ -101,7 +111,7 @@ import_CPRD_data <- function(db, data_dir,
                              dateformat = "%d/%m/%Y", 
                              yob_origin = 1800,
                              regex = "PET",
-                             recursive = TRUE){
+                             recursive = TRUE, ...){
     all_files <- list.files(data_dir, recursive = recursive)
     for(filetype in filetypes){
         current <- all_files[str_detect(all_files, paste(regex, filetype, sep = "_"))]
@@ -110,7 +120,7 @@ import_CPRD_data <- function(db, data_dir,
             message(sprintf("No %s files to import.", filetype))
         } else {
             add_to_database(db, files = current, table_name = filetype, 
-                            dateformat = dateformat, yob_origin = yob_origin)
+                            dateformat = dateformat, yob_origin = yob_origin, ...)
         }
     }
 }
