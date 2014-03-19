@@ -2,10 +2,8 @@
 \alias{read_to_medcodes}
 \title{Translate Read/Oxmis codes to CPRD medcodes}
 \usage{
-  read_to_medcodes(readcodes_data, lookup_table,
-    readcodes_name = "readcode",
-    lookup_readcodes = "readcode",
-    lookup_medcodes = "medcode", description)
+read_to_medcodes(readcodes_data, lookup_table, readcodes_name = "readcode",
+  lookup_readcodes = "readcode", lookup_medcodes = "medcode", description)
 }
 \arguments{
   \item{readcodes_data}{a dataframe with a column matching
@@ -27,20 +25,19 @@
   categories from the lookup table also be included?}
 }
 \value{
-  a data frame matching the input medcodes_data with the
-  Read codes and optional description columns merged in.
+a data frame matching the input medcodes_data with the Read
+codes and optional description columns merged in.
 }
 \description{
-  This function accepts a data frame with a column for
-  Read/Oxmis codes and merges with a medical lookup table
-  to give columns for CPRD medcodes and optional
-  descriptions
+This function accepts a data frame with a column for
+Read/Oxmis codes and merges with a medical lookup table to
+give columns for CPRD medcodes and optional descriptions
 }
 \details{
-  Note that if the names of the Read/Oxmis codes columns
-  are different in the data and the lookup table, the name
-  in the data is retained To maintain sanity, a warning
-  will be given to inform of are any name conflicts between
-  the input data and the lookup
+Note that if the names of the Read/Oxmis codes columns are
+different in the data and the lookup table, the name in the
+data is retained To maintain sanity, a warning will be
+given to inform of are any name conflicts between the input
+data and the lookup
 }
 

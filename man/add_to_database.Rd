@@ -2,9 +2,8 @@
 \alias{add_to_database}
 \title{Adds a series of files to a database}
 \usage{
-  add_to_database(db, files, table_name,
-    dateformat = "\%d/\%m/\%Y", yob_origin = 1800,
-    practid = TRUE, filenames = FALSE)
+add_to_database(db, files, table_name, dateformat = "\%d/\%m/\%Y",
+  yob_origin = 1800, practid = TRUE, filenames = FALSE)
 }
 \arguments{
   \item{db}{a database connection object}
@@ -28,15 +27,15 @@
   as a variable?}
 }
 \description{
-  This function can be used to import a CPRD file or files
-  into a SQLite database connection.
+This function can be used to import a CPRD file or files
+into a SQLite database connection.
 }
 \details{
-  Will automatically unzip files before calling them in If
-  practid is TRUE, a practid variable is constructed by
-  converting the last 3 digits of the patient id (if
-  supplied) to a numeric. If filenames is TRUE, source data
-  filenames are included as a variable with the filetypes
-  stripped away.
+Will automatically unzip files before calling them in If
+practid is TRUE, a practid variable is constructed by
+converting the last 3 digits of the patient id (if
+supplied) to a numeric. If filenames is TRUE, source data
+filenames are included as a variable with the filetypes
+stripped away.
 }
 

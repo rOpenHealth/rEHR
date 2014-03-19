@@ -69,7 +69,7 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
         if("yob" %in% names(dat)) dat$yob <- dat$yob + yob_origin
         if(practid && "patid" %in% names(dat)){
             message(" Adding practid variable...", appendLF = FALSE)
-            dat$practid <- as.numeric(str_extract(dat$patid, "[0-9]{3}$"))
+            dat$practid <- as.integer(str_extract(dat$patid, "[0-9]{3}$"))
         }
         if(filenames) dat$filename <- str_replace(basename(f), "\\..*", "")
         message(sprintf(" Importing to table '%s'...", table_name))

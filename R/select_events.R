@@ -1,0 +1,45 @@
+#' Extracts From the database
+#' 
+#' This is a generic function for extracting CPRD data from the database
+#' 
+#' The function is the base function for a range of others
+#' It can either extract by itself or generate the SQL to make a query.  
+#' In this way it can be combined to make compound queries.
+#' The where argument is equivalent to the WHERE clause in sql
+#' The elements are converted to SQL using dplyr::translate_sql_q
+#' If an element is wrapped in a `.()`, the element is expanded.
+#' Dates should be entered as strings in ISO format (%Y-%m-%d)
+#' 
+#' @export
+#' 
+#' @param db a database connection
+#' @param tab the database table to extract from
+#' @param columns character vector of columns to extract from the table "*" means all tables
+#' @param where sting representation of the selection criteria
+#' @param sql_only logical should the function just return a string of the SQL query?
+#' @return a dataframe or a string representing an sql query
+#' @examples \dontrun{
+#' load("data/medical.RData")
+#' a <- read.csv("data/chronic-renal-disease.csv")
+#' a <- read_to_medcodes(a, medical, "code", lookup_readcodes= "readcode", lookup_medcodes="medcode", description = T)
+#' b <- select_events(db, tab = "Referral", columns = c("patid", "eventdate", "medcode"), where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
+#' b1 <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
+#' }
+select_events <- function(db, tab, columns = "*", where = NULL, sql_only = FALSE){
+    assert_that(is.character(tab) && length(tab) == 1)
+    if(is.character(where)){
+        e <- strsplit(where, "[[:space:]]+")[[1]]
+        where_clause <- translate_sql_q(parse(text = paste(lapply(e, 
+                                                           function(x){
+                                                               if(str_detect(x, "^\\.")){
+                                                                   eval(parse(text = str_match(x, "\\.(.+)")[2]))
+                                                               } else x
+                                                           }), collapse = " ")))
+        columns <- paste(columns, collapse = ", ")
+        sql_query <- paste("SELECT", columns, "FROM", tab, "WHERE", where_clause)
+    } else sql_query <- paste("SELECT", columns, "FROM", tab)
+    if(sql_only){
+        sql_query
+    } else sqldf(sql_query, connection = db)
+}
+

@@ -6,15 +6,14 @@ License: GPL-3
 Title: rpubmed
 Description: R tools for processing and extracting clinical information from
     downloaded CPRD cohorts
+Licence: GNU GPL3
 Depends:
+    R (>= 3.0.2)
+Imports:
+    assertthat,
     sqldf,
     stringr,
-    RCurl,
-    XML
+    dplyr
 Suggests:
     testthat,
     roxygen2,
-Collate:
-    'cprd_import.R'
-    'cprd_patients.R'
-    'cprd_medcodes.R'

@@ -2,10 +2,10 @@
 \alias{import_CPRD_data}
 \title{Imports all selected CPRD data into an sqlite database}
 \usage{
-  import_CPRD_data(db, data_dir,
-    filetypes = c("Additional", "Clinical", "Consultation", "Immunisation", "Patient", "Practice", "Referral", "Staff", "Test", "Therapy"),
-    dateformat = "\%d/\%m/\%Y", yob_origin = 1800,
-    regex = "PET", recursive = TRUE, ...)
+import_CPRD_data(db, data_dir, filetypes = c("Additional", "Clinical",
+  "Consultation", "Immunisation", "Patient", "Practice", "Referral", "Staff",
+  "Test", "Therapy"), dateformat = "\%d/\%m/\%Y", yob_origin = 1800,
+  regex = "PET", recursive = TRUE, ...)
 }
 \arguments{
   \item{db}{a database connection}
@@ -33,18 +33,18 @@
   \item{...}{arguments to be passed to add_to_database}
 }
 \description{
-  This function can import from both cohorts downloaded via
-  the CPRD online tool and CPRD GOLD builds
+This function can import from both cohorts downloaded via
+the CPRD online tool and CPRD GOLD builds
 }
 \details{
-  Note that if you chose to import all the filetype, you
-  may end up with a very large database file. You may then
-  chose only to import the files you want to use.  You can
-  always import the rest of the files later. This function
-  may take a long time to process because it unzips
-  (potentially large) files, reads into R where it converts
-  the date formats before importing to SQLite. However,
-  this initial data preparation step will greatly
-  accelerate downstream processing.
+Note that if you chose to import all the filetype, you may
+end up with a very large database file. You may then chose
+only to import the files you want to use.  You can always
+import the rest of the files later. This function may take
+a long time to process because it unzips (potentially
+large) files, reads into R where it converts the date
+formats before importing to SQLite. However, this initial
+data preparation step will greatly accelerate downstream
+processing.
 }
 

@@ -2,8 +2,8 @@
 \alias{patients_in_window}
 \title{Select patients alive and registered between certain dates}
 \usage{
-  patients_in_window(db, startdate, enddate, qs = TRUE,
-    registration_buffer = 0, patient_tablename = "Patient")
+patients_in_window(db, startdate, enddate, qs = TRUE,
+  registration_buffer = 0, patient_tablename = "Patient")
 }
 \arguments{
   \item{db}{a database connection}
@@ -27,12 +27,12 @@
   default is Patient}
 }
 \description{
-  This function selects patients from the patient table of
-  a CPRD database who are alive and registered within a
-  supplied window
+This function selects patients from the patient table of a
+CPRD database who are alive and registered within a
+supplied window
 }
 \details{
-  criteria are that crd is before start of window, tod is
-  after end of window deathdate is after end of window
+criteria are that crd is before start of window, tod is
+after end of window deathdate is after end of window
 }
 
