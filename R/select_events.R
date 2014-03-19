@@ -25,7 +25,7 @@
 #' b <- select_events(db, tab = "Referral", columns = c("patid", "eventdate", "medcode"), where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
 #' b1 <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
 #' }
-select_events <- function(db, tab, columns = "*", where = NULL, sql_only = FALSE){
+select_events <- function(db = NULL, tab, columns = "*", where = NULL, sql_only = FALSE){
     assert_that(is.character(tab) && length(tab) == 1)
     if(is.character(where)){
         e <- strsplit(where, "[[:space:]]+")[[1]]
@@ -40,6 +40,9 @@ select_events <- function(db, tab, columns = "*", where = NULL, sql_only = FALSE
     } else sql_query <- paste("SELECT", columns, "FROM", tab)
     if(sql_only){
         sql_query
-    } else sqldf(sql_query, connection = db)
+    } else {
+        assert_that(class(db) == "SQLiteConnection")
+        sqldf(sql_query, connection = db)
+    }
 }
 

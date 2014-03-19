@@ -2,7 +2,8 @@
 \alias{select_events}
 \title{Extracts From the database}
 \usage{
-select_events(db, tab, columns = "*", where = NULL, sql_only = FALSE)
+select_events(db = NULL, tab, columns = "*", where = NULL,
+  sql_only = FALSE)
 }
 \arguments{
   \item{db}{a database connection}

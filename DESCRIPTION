@@ -16,4 +16,4 @@ Imports:
     dplyr
 Suggests:
     testthat,
-    roxygen2,
+    roxygen2
