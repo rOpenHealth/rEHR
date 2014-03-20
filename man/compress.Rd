@@ -1,0 +1,33 @@
+\name{compress}
+\alias{compress}
+\title{Compresses a dataframe to make more efficient use of resources}
+\usage{
+compress(dat, origin = "1970-01-01", format = "\%Y-\%m-\%d",
+  date_fields = c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod",
+  "deathdate"), integer_fields = c("yob", "practid"))
+}
+\arguments{
+  \item{dat}{a dataframe}
+
+  \item{origin}{ISO string representation of the dat of
+  origin.  default is UNIX start date}
+
+  \item{format}{character: format of the date string.
+  Default is ISO standard}
+
+  \item{date_fields}{character vector of column names
+  representing dates}
+
+  \item{integer_fields}{character vector of column names
+  that should be integers}
+}
+\value{
+dataframe
+}
+\description{
+Converts date variables in a dataframe to integers Integers
+represent time in days from the supplied origin Converts
+specified numeric values to integer This function is useful
+for keeping file sizes down
+}
+

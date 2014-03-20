@@ -1,0 +1,18 @@
+\name{to_stata}
+\alias{to_stata}
+\title{Compresses a dataframe and saves in stata format}
+\usage{
+to_stata(dat, fname, ...)
+}
+\arguments{
+  \item{dat}{dataframe}
+
+  \item{fname}{character string: filepath to save to}
+
+  \item{\dots}{arguments to be passed to compress}
+}
+\description{
+Defaults to saving compressed dates to integer days from
+1960-01-01 which is the standard in stata.
+}
+

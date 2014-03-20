@@ -45,7 +45,7 @@ select_by_year <- function(dbname, tables, columns = "*", where, year_range, yea
         this_year <- year_fn(year)
         where_year <- str_replace_all(where, "STARTDATE", sprintf("'%s'", this_year$startdate))
         where_year <- str_replace_all(where_year, "ENDDATE", sprintf("'%s'", this_year$enddate))
-        if(length(tables > 1)){
+        if(length(tables) > 1){
             year_out <- do.call(`rbind`, lapply(tables, function(tab){
                 out <- select_events(db = db, tab = tab, columns = columns, where = where_year, sql_only = FALSE)
                 out$table <- tab

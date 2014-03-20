@@ -1,5 +1,3 @@
-
-
 #' Reads a zipped data file to a dataframe
 #' 
 #' This function will unzip a zipped text file and read it in to an R data frame
@@ -7,10 +5,11 @@
 #' Default behaviour is to read in as a standard read.delim call.
 #' extra arguments to read.delim can be passed to the function
 #' 
+#' @export
+#' 
 #' @param file character a file to read in
 #' @param ... extra arguments to pass to read.delim
 #' @return a dataframe
-#' @export
 read_zip <- function(file, ...) {
     zipFileInfo <- unzip(file, list=TRUE)
     if(nrow(zipFileInfo) > 1)
@@ -25,13 +24,15 @@ read_zip <- function(file, ...) {
 #' Connects to a SQLite database or creates one if it does not already exist
 #' 
 #' If the '.sqlite' file extension is ommited from the dbname argument it is automatically added.
+#'
+#' @export
 #' 
 #' @param dbname a name for the new database
-#' @export
 database <- function(dbname){
-    if(!str_detect(dbname, "\\.sqlite$")) dbname = paste(dbname, "sqlite", sep = ".")
+    if(!str_detect(dbname, "\\.sqlite$")) dbname <- paste(dbname, "sqlite", sep = ".")
     dbConnect(SQLite(), dbname)
 }
+
 
 #' Adds a series of files to a database
 #' 
@@ -41,6 +42,8 @@ database <- function(dbname){
 #' If practid is TRUE, a practid variable is constructed by converting the last 3 digits of the patient id (if supplied) to a numeric.
 #' If filenames is TRUE, source data filenames are included as a variable with the filetypes stripped away.
 #' 
+#' @export
+#'  
 #' @param db a database connection object
 #' @param files a character vector of filenames to files to be imported
 #' @param table_name a name for the table to import to
@@ -48,7 +51,6 @@ database <- function(dbname){
 #' @param yob_origin value to add yob values to to get actual year of birth (Generally 1800)
 #' @param practid logical should practice id variable be constructed from the patient ids?
 #' @param filenames logical should the filename be included as a variable?
-#' @export
 add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_origin = 1800, practid = TRUE, filenames = FALSE){
     date_fields <- c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod", "deathdate")
     for(f in files){
@@ -95,6 +97,9 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
 #' You may then chose only to import the files you want to use.  You can always import the rest of the files later.
 #' This function may take a long time to process because it unzips (potentially large) files, reads into R where it converts the date formats 
 #' before importing to SQLite. However, this initial data preparation step will greatly accelerate downstream processing.
+#'
+#' @export
+#'  
 #' @param db a database connection
 #' @param data_dir the directory containing the CPRD cohort data
 #' @param filetypes character vector of filetypes to be imported
@@ -103,7 +108,6 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
 #' @param regex character regular expression to identify data files in the directory. This is separated from the filetype by an underscore. e.g. 'p[0-9]{3}' in CPRD GOLD  
 #' @param recursive logical should files be searched for recursively under the data_dir?
 #' @param \dots arguments to be passed to add_to_database
-#' @export
 import_CPRD_data <- function(db, data_dir,
                              filetypes = c("Additional", "Clinical", "Consultation", 
                                            "Immunisation", "Patient", "Practice", 

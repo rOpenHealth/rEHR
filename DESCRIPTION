@@ -15,7 +15,8 @@ Imports:
     DBI,
     RSQLite,
     stringr,
-    dplyr
+    dplyr,
+    foreign
 Suggests:
     testthat,
     roxygen2,

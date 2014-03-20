@@ -8,4 +8,5 @@
 #' @import RSQLite
 #' @import stringr
 #' @importFrom dplyr translate_sql_q
+#' @importFrom foreign write.dta
 NULL
