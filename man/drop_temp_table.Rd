@@ -1,0 +1,17 @@
+\name{drop_temp_table}
+\alias{drop_temp_table}
+\title{Checks if a temporary table exists and then deletes if it does}
+\usage{
+drop_temp_table(db, tab_name)
+}
+\arguments{
+  \item{db}{a database connection}
+
+  \item{tab_name}{character the name of the table of
+  interest}
+}
+\description{
+Checks if a temporary table exists and then deletes if it
+does
+}
+

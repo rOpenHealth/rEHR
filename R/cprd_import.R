@@ -47,7 +47,7 @@ database <- function(dbname){
 #' @param dateformat the format that dates are stored in the CPRD data.  If this is wrong it won't break but all dates are likely to be NA
 #' @param yob_origin value to add yob values to to get actual year of birth (Generally 1800)
 #' @param practid logical should practice id variable be constructed from the patient ids?
-#' @param filename logical should the filename be included as a variable?
+#' @param filenames logical should the filename be included as a variable?
 #' @export
 add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_origin = 1800, practid = TRUE, filenames = FALSE){
     date_fields <- c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod", "deathdate")
@@ -102,7 +102,7 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
 #' @param yob_origin value to add yob values to to get actual year of birth (Generally 1800)
 #' @param regex character regular expression to identify data files in the directory. This is separated from the filetype by an underscore. e.g. 'p[0-9]{3}' in CPRD GOLD  
 #' @param recursive logical should files be searched for recursively under the data_dir?
-#' @param ... arguments to be passed to add_to_database
+#' @param \dots arguments to be passed to add_to_database
 #' @export
 import_CPRD_data <- function(db, data_dir,
                              filetypes = c("Additional", "Clinical", "Consultation", 

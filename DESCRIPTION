@@ -12,8 +12,11 @@ Depends:
 Imports:
     assertthat,
     sqldf,
+    DBI,
+    RSQLite,
     stringr,
     dplyr
 Suggests:
     testthat,
-    roxygen2
+    roxygen2,
+    multicore

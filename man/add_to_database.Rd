@@ -23,7 +23,7 @@ add_to_database(db, files, table_name, dateformat = "\%d/\%m/\%Y",
   \item{practid}{logical should practice id variable be
   constructed from the patient ids?}
 
-  \item{filename}{logical should the filename be included
+  \item{filenames}{logical should the filename be included
   as a variable?}
 }
 \description{

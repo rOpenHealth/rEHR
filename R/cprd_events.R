@@ -2,6 +2,8 @@
 #' 
 #' This function runs a select_events() query and then groups by patient id and picks only the earliest event for each patient
 #' 
+#' @export
+#' 
 #' @param db A database connection object
 #' @param tab the database table to extract from
 #' @param group_column column to group by.  Default is patid
@@ -33,6 +35,8 @@ first_events <- function(db = NULL, tab, group_column = "patid", other_columns =
 #' Selects the earliest event grouped by patient
 #' 
 #' This function runs a select_events() query and then groups by patient id and picks only the earliest event for each patient
+#' 
+#' @export
 #' 
 #' @param db A database connection object
 #' @param tab the database table to extract from

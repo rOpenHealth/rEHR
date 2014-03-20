@@ -30,7 +30,7 @@ import_CPRD_data(db, data_dir, filetypes = c("Additional", "Clinical",
   \item{recursive}{logical should files be searched for
   recursively under the data_dir?}
 
-  \item{...}{arguments to be passed to add_to_database}
+  \item{\dots}{arguments to be passed to add_to_database}
 }
 \description{
 This function can import from both cohorts downloaded via

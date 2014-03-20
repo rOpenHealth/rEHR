@@ -1,0 +1,34 @@
+\name{temp_table}
+\alias{temp_table}
+\title{Creates a temporary table in the database}
+\usage{
+temp_table(db, tab_name, select_query)
+}
+\arguments{
+  \item{db}{a database connection object}
+
+  \item{tab_name}{character name for the teporary table}
+
+  \item{select_query}{character the query that specifies
+  the temporary table}
+}
+\description{
+This function is useful if most of your work is on a subset
+of the database
+}
+\details{
+The table will exist for as long as the database connection
+is kept open The Select_query argument will take the output
+from a select_events(sql_only = TRUE) based function
+}
+\examples{
+\dontrun{
+db <- database("myCPRDdb")
+temp_table(db, tab_name = "post_2005",
+           select_query = select_events(db, tab = "Referral",
+                                        columns = c("patid", "eventdate", "medcode"),
+                                        where = "eventdate > '2005-01-01'",
+                                        sql_only = TRUE))
+}
+}
+
