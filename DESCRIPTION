@@ -8,14 +8,12 @@ Description: R tools for processing and extracting clinical information from
     downloaded CPRD cohorts
 Licence: GNU GPL3
 Depends:
-    R (>= 3.0.2)
+    R (>= 3.0.2),
+    dplyr,
+    sqldf
 Imports:
     assertthat,
-    sqldf,
-    DBI,
-    RSQLite,
     stringr,
-    dplyr,
     foreign
 Suggests:
     testthat,
