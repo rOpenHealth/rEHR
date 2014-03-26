@@ -1,0 +1,22 @@
+\name{append_to_temp_table}
+\alias{append_to_temp_table}
+\title{Appends rows to a temporary table}
+\usage{
+append_to_temp_table(db, tab_name, columns, select_query)
+}
+\arguments{
+  \item{db}{a database connection}
+
+  \item{tab_name}{the name of the temporary table being
+  appended to}
+
+  \item{columns}{character vector of columns in tab_name}
+
+  \item{select_query}{SQL query for the selector}
+}
+\description{
+This function checks if a table is a temp table and then
+adds to it based on the select statement The check is to
+maintain the integrity of the database
+}
+

@@ -2,9 +2,8 @@
 \alias{first_events}
 \title{Selects the earliest event grouped by patient}
 \usage{
-first_events(db = NULL, tab, group_column = "patid",
-  other_columns = "eventdate", where = NULL, date_column = "eventdate",
-  sql_only = FALSE)
+first_events(db = NULL, tab, columns = "eventdate", where = NULL,
+  sql_only = FALSE, group_column = "patid", date_column = "eventdate")
 }
 \arguments{
   \item{db}{A database connection object}
@@ -14,7 +13,7 @@ first_events(db = NULL, tab, group_column = "patid",
   \item{group_column}{column to group by.  Default is
   patid}
 
-  \item{other_columns}{The other columns to be extracted}
+  \item{columns}{The other columns to be extracted}
 
   \item{where}{sting representation of the selection
   criteria}
@@ -35,7 +34,8 @@ patient
 }
 \examples{
 \dontrun{
-b1 <- first_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"), where = "medcode \%in\% .(a$medcode)")
+b1 <- first_events(db, tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode \%in\% .(a$medcode)")
+first_events(tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode \%in\% c(1, 2, 3, 4)", sql_only = TRUE)
 }
 }
 

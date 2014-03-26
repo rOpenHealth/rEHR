@@ -24,11 +24,32 @@ temp_table <- function(db, tab_name, select_query){
 }
 
 
+#' Appends rows to a temporary table
+#' 
+#' This function checks if a table is a temp table and then adds to it based on the select statement
+#' The check is to maintain the integrity of the database
+#' 
+#' @export
+#' 
+#' @param db a database connection
+#' @param tab_name the name of the temporary table being appended to
+#' @param columns character vector of columns in tab_name
+#' @param select_query SQL query for the selector
+append_to_temp_table <- function(db, tab_name, columns, select_query){
+    temp_names <- as.character(sqldf("SELECT name FROM sqlite_temp_master", connection=db)$name)
+    if(tab_name %in% temp_names){
+        message("Inserting...", appendLF = FALSE)
+        sqldf(paste("INSERT INTO", tab_name, "(", paste(columns, collapse = ", "),  ")", select_query), connection = db)
+        message(sprintf("Finished appending to temporary table '%s'.", tab_name))
+    } else message(sprintf("%s is not a temporary table in this database!"), tab_name)
+}
+
+
 #' Checks if a temporary table exists and then deletes if it does
 #' @param db a database connection
 #' @param tab_name character the name of the table of interest
 drop_temp_table <- function(db, tab_name){
-    temp_names <- as.character(sqldf("SELECT name FROM sqlite_temp_master", connection=db))
+    temp_names <- as.character(sqldf("SELECT name FROM sqlite_temp_master", connection=db)$name)
     if(tab_name %in% temp_names){
         dbRemoveTable(db, tab_name)
         message(sprintf("Temporary table '%s' removed", tab_name))

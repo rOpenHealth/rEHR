@@ -3,7 +3,8 @@
 \title{Runs a series of selects over a year range and collects in a list of dataframes}
 \usage{
 select_by_year(dbname, tables, columns = "*", where, year_range,
-  year_fn = qof_years, as_list = TRUE, cores = 1L)
+  year_fn = qof_years, as_list = TRUE, selector_fn = select_events,
+  cores = 1L, ...)
 }
 \arguments{
   \item{dbname}{path to the database file}
@@ -25,8 +26,14 @@ select_by_year(dbname, tables, columns = "*", where, year_range,
   a list of years? If not, the data is collapsed into a
   dataframe}
 
+  \item{selector_fn}{function to select from the database.
+  See notes.}
+
   \item{cores}{integer: The number of processor cores
   available.}
+
+  \item{\dots}{extra arguments to be passed to the
+  \code{selector_fn}}
 }
 \description{
 This function applies a database select over a range of
@@ -40,10 +47,23 @@ threads, the input is a path to a database rather than a
 database connection itself and a new connection is made
 with every fork.
 
+\code{columns} can take a character vector of arbitrary
+length.  This means you can use it to insert SQL clauses
+e.g. "DISTINCT patid".
+
 Year start and year end criteria can be added to the where
 argument as 'STARTDATE' and 'ENDDATE'.  These will get
 translated to the correct start and end dates specified by
-year_fn
+year_fn Note that if you are working with temprary tables,
+you need to set \code{cores} to 1 This is because the use
+of \code{mclapply} means that new database connections need
+to be started for each fork and temporary files can only be
+seen inside the same connection
+
+The \code{selector_fn} argument determines how the database
+select operates. Default is the \code{select_events}
+function. Alternatives are \code{first_events} and
+\code{last_events}
 }
 \examples{
 \dontrun{

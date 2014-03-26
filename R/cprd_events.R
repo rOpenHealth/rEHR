@@ -7,16 +7,18 @@
 #' @param db A database connection object
 #' @param tab the database table to extract from
 #' @param group_column column to group by.  Default is patid
-#' @param other_columns The other columns to be extracted
+#' @param columns The other columns to be extracted
 #' @param where sting representation of the selection criteria
 #' @param date_column the column to sort by.  default is eventdate
 #' @param sql_only logical should the function just return a string of the SQL query?
 #' @return a dataframe or a string representing an sql query
 #' @examples \dontrun{
-#' b1 <- first_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"), where = "medcode %in% .(a$medcode)")
+#' b1 <- first_events(db, tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode %in% .(a$medcode)")
+#' first_events(tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode %in% c(1, 2, 3, 4)", sql_only = TRUE)
 #' }
-first_events <- function(db = NULL, tab, group_column = "patid", other_columns = "eventdate", 
-                         where = NULL, date_column = "eventdate", sql_only = FALSE){
+first_events <- function(db = NULL, tab, columns = "eventdate", 
+                         where = NULL, sql_only = FALSE, group_column = "patid", date_column = "eventdate"){
+    other_columns <- columns[!columns %in% group_column]
     outer_columns <- paste(paste0("max(",group_column, ")"), paste(other_columns, collapse = ", "), sep = ", ")
     inner_columns <- paste(c(group_column, other_columns), collapse = ", ")
     inner_query <- select_events(db = db, tab = tab, columns = inner_columns, where = where, sql_only = TRUE)
@@ -41,7 +43,7 @@ first_events <- function(db = NULL, tab, group_column = "patid", other_columns =
 #' @param db A database connection object
 #' @param tab the database table to extract from
 #' @param group_column column to group by.  Default is patid
-#' @param other_columns The other columns to be extracted
+#' @param columns The other columns to be extracted
 #' @param where sting representation of the selection criteria
 #' @param date_column the column to sort by.  default is eventdate
 #' @param sql_only logical should the function just return a string of the SQL query?
@@ -49,8 +51,9 @@ first_events <- function(db = NULL, tab, group_column = "patid", other_columns =
 #' @examples \dontrun{
 #' b2 <- last_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"), where = "medcode %in% .(a$medcode)")
 #' }
-last_events <- function(db = NULL, tab, group_column = "patid", other_columns = "eventdate", 
-                         where = NULL, date_column = "eventdate", sql_only = FALSE){
+last_events <- function(db = NULL, tab, columns = "eventdate", 
+                        where = NULL, sql_only = FALSE, group_column = "patid", date_column = "eventdate"){
+    other_columns <- columns[!columns %in% group_column]
     outer_columns <- paste(paste0("max(",group_column, ")"), paste(other_columns, collapse = ", "), sep = ", ")
     inner_columns <- paste(c(group_column, other_columns), collapse = ", ")
     inner_query <- select_events(db = db, tab = tab, columns = inner_columns, where = where, sql_only = TRUE)

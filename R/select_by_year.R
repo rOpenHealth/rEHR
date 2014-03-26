@@ -7,9 +7,18 @@
 #' Because the same database connection cannot be used across threads, the input is a path to a database
 #' rather than a database connection itself and a new connection is made with every fork.
 #' 
+#' \code{columns} can take a character vector of arbitrary length.  This means you can use it to
+#' insert SQL clauses e.g. "DISTINCT patid".
+#' 
 #' Year start and year end criteria can be added to the where argument
 #' as 'STARTDATE' and 'ENDDATE'.  These will get translated to the correct 
 #' start and end dates specified by year_fn
+#' Note that if you are working with temprary tables, you need to set \code{cores} to 1
+#' This is because the use of \code{mclapply} means that new database connections need to be started for each fork and
+#' temporary files can only be seen inside the same connection
+#' 
+#' The \code{selector_fn} argument determines how the database select operates. Default is the  \code{select_events} function.
+#' Alternatives are \code{first_events} and \code{last_events}
 #' 
 #' @export
 #' 
@@ -20,7 +29,9 @@
 #' @param year_range integer vector of years to be queried
 #' @param year_fn function that determines how year start and end dates are calculated
 #' @param as_list logical: Should the results be returned as a list of years? If not, the data is collapsed into a dataframe
+#' @param selector_fn function to select from the database. See notes.
 #' @param cores integer: The number of processor cores available.
+#' @param \dots extra arguments to be passed to the \code{selector_fn}
 #' @examples \dontrun{
 #' # Output from a single table
 #' where_q <- "crd < STARTDATE & (is.null(tod) | tod > ENDDATE) & accept == 1"
@@ -35,29 +46,31 @@
 #' where = where_q, year_range = 2000:2003, as_list = FALSE,
 #' cores = 10)
 #' }
-select_by_year <- function(dbname, tables, columns = "*", where, year_range, year_fn = qof_years, as_list = TRUE, cores = 1L){
+select_by_year <- function(dbname, tables, columns = "*", where, year_range, year_fn = qof_years, as_list = TRUE, 
+                           selector_fn = select_events, cores = 1L, ...){
     if(cores > 1){
         library(multicore)
         mylapply <- mclapply
     } else mylapply <- lapply
+    columns <- paste(columns, collapse = ", ")
     dat <- mylapply(year_range, function(year, ...){
-        db <- database(dbname)
+        if(cores > 1) db <- database(dbname)
         this_year <- year_fn(year)
         where_year <- str_replace_all(where, "STARTDATE", sprintf("'%s'", this_year$startdate))
         where_year <- str_replace_all(where_year, "ENDDATE", sprintf("'%s'", this_year$enddate))
         if(length(tables) > 1){
             year_out <- do.call(`rbind`, lapply(tables, function(tab){
-                out <- select_events(db = db, tab = tab, columns = columns, where = where_year, sql_only = FALSE)
+                out <- selector_fn(db = db, tab = tab, columns = columns, where = where_year, sql_only = FALSE)
                 out$table <- tab
                 out
             }))
             year_out$year <- year
-            dbDisconnect(db)
+            if(cores > 1) dbDisconnect(db)
             year_out
         } else {
-            year_out <- select_events(db = db, tab = tables, columns = columns, where = where_year, sql_only = FALSE)
+            year_out <- selector_fn(db = db, tab = tables, columns = columns, where = where_year, sql_only = FALSE)
             year_out$year <- year
-            dbDisconnect(db)
+            if(cores > 1) dbDisconnect(db)
             year_out
         }
     }, mc.cores = min(cores, length(year_range)))
