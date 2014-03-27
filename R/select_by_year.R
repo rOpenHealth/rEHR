@@ -13,7 +13,8 @@
 #' Year start and year end criteria can be added to the where argument
 #' as 'STARTDATE' and 'ENDDATE'.  These will get translated to the correct 
 #' start and end dates specified by year_fn
-#' Note that if you are working with temprary tables, you need to set \code{cores} to 1
+#' 
+#' Note that if you are working with temprary tables, you need to set \code{cores} to 1 and specify the open database connection with db
 #' This is because the use of \code{mclapply} means that new database connections need to be started for each fork and
 #' temporary files can only be seen inside the same connection
 #' 
@@ -23,6 +24,7 @@
 #' @export
 #' 
 #' @param dbname path to the database file
+#' @param db a database connection
 #' @param tables character vector of table names
 #' @param columns character vector of columns to be selected from the tables
 #' @param where character string representation of the selection criteria
@@ -46,12 +48,22 @@
 #' where = where_q, year_range = 2000:2003, as_list = FALSE,
 #' cores = 10)
 #' }
-select_by_year <- function(dbname, tables, columns = "*", where, year_range, year_fn = qof_years, as_list = TRUE, 
+select_by_year <- function(dbname = NULL, db = NULL, tables, columns = "*", where, year_range, year_fn = qof_years, as_list = TRUE, 
                            selector_fn = select_events, cores = 1L, ...){
     if(cores > 1){
+        assert_that(!is.null(dbname) && is.character(dbname))
         library(multicore)
         mylapply <- mclapply
-    } else mylapply <- lapply
+    } else {
+        if(!is.null(db) && class(db) == "SQLiteConnection"){
+            message("Using open database connection")
+        } else if(!is.null(dbname) && is.character(dbname)){
+            message(sprintf("Opening connection to %s", dbname))
+            db <- database(dbname)
+        } else stop("You must supply either an SQLite database connection or a path to a SQLite database ")
+        assert_that(!is.null(db) && class(db) == "SQLiteConnection")
+        mylapply <- lapply   
+    }
     columns <- paste(columns, collapse = ", ")
     dat <- mylapply(year_range, function(year, ...){
         if(cores > 1) db <- database(dbname)
@@ -60,7 +72,7 @@ select_by_year <- function(dbname, tables, columns = "*", where, year_range, yea
         where_year <- str_replace_all(where_year, "ENDDATE", sprintf("'%s'", this_year$enddate))
         if(length(tables) > 1){
             year_out <- do.call(`rbind`, lapply(tables, function(tab){
-                out <- selector_fn(db = db, tab = tab, columns = columns, where = where_year, sql_only = FALSE)
+                out <- selector_fn(db = db, tab = tab, columns = columns, where = where_year, sql_only = FALSE, ...)
                 out$table <- tab
                 out
             }))
@@ -68,7 +80,7 @@ select_by_year <- function(dbname, tables, columns = "*", where, year_range, yea
             if(cores > 1) dbDisconnect(db)
             year_out
         } else {
-            year_out <- selector_fn(db = db, tab = tables, columns = columns, where = where_year, sql_only = FALSE)
+            year_out <- selector_fn(db = db, tab = tables, columns = columns, where = where_year, sql_only = FALSE, ...)
             year_out$year <- year
             if(cores > 1) dbDisconnect(db)
             year_out

@@ -7,7 +7,7 @@ read_zip(file, ...)
 \arguments{
   \item{file}{character a file to read in}
 
-  \item{...}{extra arguments to pass to read.delim}
+  \item{\dots}{extra arguments to pass to read.delim}
 }
 \value{
 a dataframe

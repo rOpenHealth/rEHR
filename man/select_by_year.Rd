@@ -2,12 +2,14 @@
 \alias{select_by_year}
 \title{Runs a series of selects over a year range and collects in a list of dataframes}
 \usage{
-select_by_year(dbname, tables, columns = "*", where, year_range,
-  year_fn = qof_years, as_list = TRUE, selector_fn = select_events,
-  cores = 1L, ...)
+select_by_year(dbname = NULL, db = NULL, tables, columns = "*", where,
+  year_range, year_fn = qof_years, as_list = TRUE,
+  selector_fn = select_events, cores = 1L, ...)
 }
 \arguments{
   \item{dbname}{path to the database file}
+
+  \item{db}{a database connection}
 
   \item{tables}{character vector of table names}
 
@@ -54,10 +56,13 @@ e.g. "DISTINCT patid".
 Year start and year end criteria can be added to the where
 argument as 'STARTDATE' and 'ENDDATE'.  These will get
 translated to the correct start and end dates specified by
-year_fn Note that if you are working with temprary tables,
-you need to set \code{cores} to 1 This is because the use
-of \code{mclapply} means that new database connections need
-to be started for each fork and temporary files can only be
+year_fn
+
+Note that if you are working with temprary tables, you need
+to set \code{cores} to 1 and specify the open database
+connection with db This is because the use of
+\code{mclapply} means that new database connections need to
+be started for each fork and temporary files can only be
 seen inside the same connection
 
 The \code{selector_fn} argument determines how the database

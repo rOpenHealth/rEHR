@@ -8,7 +8,7 @@
 #' @export
 #' 
 #' @param file character a file to read in
-#' @param ... extra arguments to pass to read.delim
+#' @param \dots extra arguments to pass to read.delim
 #' @return a dataframe
 read_zip <- function(file, ...) {
     zipFileInfo <- unzip(file, list=TRUE)
