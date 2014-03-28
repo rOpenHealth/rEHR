@@ -19,7 +19,7 @@
 #'                                         sql_only = TRUE))
 #' }
 temp_table <- function(db, tab_name, select_query){
-    sqldf(paste("CREATE TEMP TABLE", tab_name, "AS", select_query), connection = db)
+    dbGetQuery(db, paste("CREATE TEMP TABLE", tab_name, "AS", select_query, ";"))
     message(sprintf("Temporary table '%s' created", tab_name))
 }
 
@@ -42,6 +42,30 @@ append_to_temp_table <- function(db, tab_name, columns, select_query){
         sqldf(paste("INSERT INTO", tab_name, "(", paste(columns, collapse = ", "),  ")", select_query), connection = db)
         message(sprintf("Finished appending to temporary table '%s'.", tab_name))
     } else message(sprintf("%s is not a temporary table in this database!"), tab_name)
+}
+
+
+
+#' Send a dataframe to a temporary table in the database
+#' 
+#' The table is a temporary database and is linked only to the current connection object
+#' 
+#' @param db a database connection
+#' @param tab_name character name for the new temporary database table
+#' @param dat dataframe to send to the temporary database table
+#' @param overwrite logical if a table already exists with the same name should it be dropped? 
+to_temp_table <- function(db, tab_name, dat, overwrite = FALSE){
+    temp_tables <- unlist(dbGetQuery(db, "select name from sqlite_temp_master;"))
+    if(overwrite && tab_name %in% temp_tables){
+        drop_temp_table(db, tab_name)
+    } else if(tab_name %in% temp_tables){
+        message("Temp table ", tab_name, " already exists - No action taken")
+        return(invisible())
+    }
+    temp_tab_name <- paste("temp", tab_name, sep = ".")
+    dbWriteTable(db, name = temp_tab_name, value = dat, row.names = FALSE) 
+    dat_name <- deparse(substitute(dat))
+    message("Sent ",  dat_name, " to temporary database ", tab_name)
 }
 
 

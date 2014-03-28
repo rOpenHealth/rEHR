@@ -2,7 +2,8 @@
 \alias{head.SQLiteConnection}
 \title{head for \code{SQLiteConnection} object}
 \usage{
-\method{head}{SQLiteConnection}(x, table = NULL, n = 6L, ...)
+\method{head}{SQLiteConnection}(x, table = NULL, n = 6L, temp = FALSE,
+  ...)
 }
 \arguments{
   \item{x}{A \code{SQLiteConnection} object}
@@ -10,6 +11,9 @@
   \item{table}{character specifying a table}
 
   \item{n}{integer: Number of rows to output}
+
+  \item{temp}{logical should the function list the temp
+  tables}
 
   \item{...}{Additional arguments}
 }

@@ -62,7 +62,7 @@ select_by_year <- function(dbname = NULL, db = NULL, tables, columns = "*", wher
             db <- database(dbname)
         } else stop("You must supply either an SQLite database connection or a path to a SQLite database ")
         assert_that(!is.null(db) && class(db) == "SQLiteConnection")
-        mylapply <- lapply   
+        mylapply <- function(..., mc.cores=1) lapply(...)   
     }
     columns <- paste(columns, collapse = ", ")
     dat <- mylapply(year_range, function(year, ...){

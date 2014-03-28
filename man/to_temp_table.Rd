@@ -1,0 +1,23 @@
+\name{to_temp_table}
+\alias{to_temp_table}
+\title{Send a dataframe to a temporary table in the database}
+\usage{
+to_temp_table(db, tab_name, dat, overwrite = FALSE)
+}
+\arguments{
+  \item{db}{a database connection}
+
+  \item{tab_name}{character name for the new temporary
+  database table}
+
+  \item{dat}{dataframe to send to the temporary database
+  table}
+
+  \item{overwrite}{logical if a table already exists with
+  the same name should it be dropped?}
+}
+\description{
+The table is a temporary database and is linked only to the
+current connection object
+}
+

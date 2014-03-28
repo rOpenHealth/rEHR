@@ -1,0 +1,37 @@
+\name{wrap_sql_query}
+\alias{wrap_sql_query}
+\title{combines strings and vectors in a sensible way for select queries}
+\usage{
+wrap_sql_query(query, ...)
+}
+\arguments{
+  \item{query}{a character string with identifier tags
+  (#[number]) for selecting the argument in \dots}
+
+  \item{\dots}{optional arguments selected by the
+  identifier tags}
+}
+\description{
+This function is a variant of the sprintf function. In the
+query, can be placed identifier tags which are a hash
+character followed by a number e.g. #1 The number in the
+tag reflects the position of the arguments after the query
+The resut of evaluating that argument will then be inserted
+in place of the tag. If the result of evaluating the
+argument is a vectr of length 1, it is inserted as is. If
+it is a vector of length > 1, it is wrapped in parentheses
+and comma separated.
+}
+\details{
+Note that this function is for help in constructing raw SQL
+queries and should not be used as an input to the
+\code{where} argument in \code{select_event} calls. This is
+because these calls use translate_sql_q to translate from R
+code to SQL
+}
+\examples{
+medcodes1 <- 1:5
+practice <- 255
+wrap_sql_query("eventdate >= STARTDATE & eventdate <= ENDDATE & medcode \%in\% #1 & practice == #2",medcodes1, practice)
+}
+

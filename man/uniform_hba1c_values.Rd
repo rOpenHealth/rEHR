@@ -1,0 +1,23 @@
+\name{uniform_hba1c_values}
+\alias{uniform_hba1c_values}
+\title{Transforms hba1c values to mmol/mol}
+\usage{
+uniform_hba1c_values(df)
+}
+\arguments{
+  \item{df}{a dataframe of hba1c test scores}
+}
+\value{
+dataframe with all hba1c values recoded to mmol/mol
+}
+\description{
+This function converts hba1c and fructosamine values to
+comon mmol/mol values conversions: mmol/L, mg/dL,
+fructosamine Assumes doctor miscoding for values < 20 after
+previous transformations
+}
+\details{
+The input dataframe must include the data2, data3 and
+enttype columns
+}
+
