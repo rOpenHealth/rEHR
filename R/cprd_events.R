@@ -36,7 +36,7 @@ first_events <- function(db = NULL, tab, columns = "eventdate",
 
 #' Selects the earliest event grouped by patient
 #' 
-#' This function runs a select_events() query and then groups by patient id and picks only the earliest event for each patient
+#' This function runs a select_events() query and then groups by patient id and picks only the latest event for each patient
 #' 
 #' @export
 #' 

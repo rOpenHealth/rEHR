@@ -50,6 +50,8 @@ append_to_temp_table <- function(db, tab_name, columns, select_query){
 #' 
 #' The table is a temporary database and is linked only to the current connection object
 #' 
+#' @export
+#' 
 #' @param db a database connection
 #' @param tab_name character name for the new temporary database table
 #' @param dat dataframe to send to the temporary database table
@@ -70,6 +72,9 @@ to_temp_table <- function(db, tab_name, dat, overwrite = FALSE){
 
 
 #' Checks if a temporary table exists and then deletes if it does
+#' 
+#' @export
+#' 
 #' @param db a database connection
 #' @param tab_name character the name of the table of interest
 drop_temp_table <- function(db, tab_name){
@@ -79,3 +84,39 @@ drop_temp_table <- function(db, tab_name){
         message(sprintf("Temporary table '%s' removed", tab_name))
     } else message(sprintf("Temporary table '%s' not found", tab_name))
 }
+
+#' drops all temporary tables from the database
+#' 
+#' This is useful for temporary storage/memory management
+#' 
+#' @export
+#' 
+#' @param db a database connection
+drop_all_temp_tables <- function(db){
+    temp_tables <- head(db, temp = TRUE)$name
+    if(length(temp_tables)){
+        for(tab_name in temp_tables){
+            dbRemoveTable(db, tab_name)
+            message(sprintf("Temporary table '%s' removed", tab_name))
+        }
+    } else message("No temporary tables in database to remove")
+}
+
+#' Sets location of the db temporary store for temporary tables
+#' 
+#' By default, sqlite stores temp tables in /tmp (Or windows equivalent). If you are building large temporary tables 
+#' and don't have a large /tmp directory, you can get "database or disk is full" errors.
+#' If you have a lot of RAM you can set \code{store} to "RAM" and the temp files will be stored in RAM
+#' rather than in /tmp.  This could also speed things up.
+#' 
+#' @export
+#' 
+#' @param db a database connection
+#' @param store character vector either "tmp" or "RAM"
+temp_location <- function(db, store = c("tmp", "RAM")){
+    store <- match.arg(store)
+    switch(store,
+           tmp = sqldf("pragma temp_store = 1", connection = db),
+           RAM = sqldf("pragma temp_store = 2", connection = db))
+}
+

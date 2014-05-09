@@ -1,0 +1,20 @@
+\name{temp_location}
+\alias{temp_location}
+\title{Sets location of the db temporary store for temporary tables}
+\usage{
+temp_location(db, store = c("tmp", "RAM"))
+}
+\arguments{
+  \item{db}{a database connection}
+
+  \item{store}{character vector either "tmp" or "RAM"}
+}
+\description{
+By default, sqlite stores temp tables in /tmp (Or windows
+equivalent). If you are building large temporary tables and
+don't have a large /tmp directory, you can get "database or
+disk is full" errors. If you have a lot of RAM you can set
+\code{store} to "RAM" and the temp files will be stored in
+RAM rather than in /tmp.  This could also speed things up.
+}
+

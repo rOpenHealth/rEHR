@@ -29,7 +29,7 @@ a dataframe or a string representing an sql query
 }
 \description{
 This function runs a select_events() query and then groups
-by patient id and picks only the earliest event for each
+by patient id and picks only the latest event for each
 patient
 }
 \examples{
