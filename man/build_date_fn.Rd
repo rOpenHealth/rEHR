@@ -1,0 +1,22 @@
+\name{build_date_fn}
+\alias{build_date_fn}
+\title{Function to build start/enddate helper fuctions}
+\usage{
+build_date_fn(start, end)
+}
+\arguments{
+  \item{start}{list containing the offset in years, month
+  and day as numerics for the start date}
+
+  \item{end}{list containing the offset in years, month and
+  day as numerics for the end date}
+}
+\value{
+a function taking a year as an argument and returning a
+list of startdates and enddates
+}
+\description{
+This builds functions identical to qof_years but they can
+be customised to the user's own preferences
+}
+

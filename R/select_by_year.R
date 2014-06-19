@@ -95,6 +95,28 @@ select_by_year <- function(dbname = NULL, db = NULL, tables, columns = "*", wher
 }
 
 
+#' Function to build start/enddate helper fuctions
+#' 
+#' This builds functions identical to qof_years but they can be customised to the user's own preferences
+#' 
+#' @export
+#' @param start list containing the offset in years, month and day as numerics for the start date
+#' @param end list containing the offset in years, month and day as numerics for the end date
+#' @return a function taking a year as an argument and returning a list of startdates and enddates
+build_date_fn <- function(start, end){
+    listnames <- c("offset", "month", "day")
+    assert_that(is.list(start), is.list(end), all(names(start) == listnames), all(names(end) == listnames),
+                start$month <= 10, end$month <= 12, start$day <= 31, end$day <= 31)
+    function(year){
+        list(startdate = sprintf("%d-%s-%s", year + start$offset,
+                                        str_pad(start$month, width = 2, side = "left", pad = "0"),
+                                        str_pad(start$day, width = 2, side = "left", pad = "0")),
+             enddate = sprintf("%d-%s-%s", year + end$offset,
+                               str_pad(end$month, width = 2, side = "left", pad = "0"),
+                               str_pad(end$day, width = 2, side = "left", pad = "0")))
+    }
+}
+
 #' Helper function providing startdate and enddate for a given year
 #' 
 #' Start and end dates matching QOF year start/ends

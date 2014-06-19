@@ -1,5 +1,6 @@
 export(add_to_database)
 export(append_to_temp_table)
+export(build_date_fn)
 export(compress)
 export(database)
 export(drop_all_temp_tables)
