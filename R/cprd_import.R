@@ -19,7 +19,8 @@ read_zip <- function(file, ...) {
 }
 
 
-#' Wrapper for dbconnect
+
+#' Wrapper for dbConnect
 #' 
 #' Connects to a SQLite database or creates one if it does not already exist
 #' 
@@ -27,8 +28,11 @@ read_zip <- function(file, ...) {
 #'
 #' @export
 #' 
-#' @param dbname a name for the new database
+#' @param dbname character name path to database file
 #' @return SQLiteConnection object
+#' @examples \dontrun{
+#' db <- database("mydb")
+#' }
 database <- function(dbname){
     if(!str_detect(dbname, "\\.sqlite$")) {
         dbname <- paste(dbname, "sqlite", sep = ".")
