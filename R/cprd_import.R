@@ -28,8 +28,11 @@ read_zip <- function(file, ...) {
 #' @export
 #' 
 #' @param dbname a name for the new database
+#' @return SQLiteConnection object
 database <- function(dbname){
-    if(!str_detect(dbname, "\\.sqlite$")) dbname <- paste(dbname, "sqlite", sep = ".")
+    if(!str_detect(dbname, "\\.sqlite$")) {
+        dbname <- paste(dbname, "sqlite", sep = ".")
+    } 
     dbConnect(SQLite(), dbname)
 }
 

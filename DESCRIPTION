@@ -9,12 +9,13 @@ Description: R tools for processing and extracting clinical information from
 Licence: GNU GPL3
 Depends:
     R (>= 3.0.2),
-    dplyr,
-    sqldf
+    sqldf,
+    RSQLite
 Imports:
     assertthat,
     stringr,
-    foreign
+    foreign,
+    dplyr
 Suggests:
     testthat,
     roxygen2,
