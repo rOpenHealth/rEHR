@@ -4,7 +4,7 @@
 \title{Runs a series of selects over a year range and collects in a list of dataframes}
 \usage{
 select_by_year(dbname = NULL, db = NULL, tables, columns = "*", where,
-  year_range, year_fn = qof_years, as_list = TRUE,
+  year_range, year_fn = qof_years, as_list = FALSE,
   selector_fn = select_events, cores = 1L, ...)
 }
 \arguments{
@@ -32,8 +32,7 @@ select_by_year(dbname = NULL, db = NULL, tables, columns = "*", where,
 }
 \description{
 This function applies a database select over a range of years and outputs as a list or a dataframe
-The function can be parallelised using \code{multicore}.  If cores are set to 1, lapply is used without
-calling in multicore.
+The function can be parallelised using \code{parallel}.
 }
 \details{
 Because the same database connection cannot be used across threads, the input is a path to a database

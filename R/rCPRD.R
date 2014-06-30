@@ -7,5 +7,6 @@
 #' @import dplyr
 #' @import RSQLite
 #' @import sqldf
+#' @import parallel
 #' @importFrom foreign write.dta
 NULL

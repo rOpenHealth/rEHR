@@ -15,8 +15,8 @@ Imports:
     assertthat,
     stringr,
     foreign,
-    dplyr
+    dplyr,
+    parallel
 Suggests:
     testthat,
     roxygen2,
-    multicore
