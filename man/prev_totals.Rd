@@ -3,22 +3,19 @@
 \alias{prev_totals}
 \title{Calculates the prevalence totals for the output of a data frame of events/patients etc.}
 \usage{
-prev_totals(dat, included_totals = c("patient", "practice"),
-  original_data = TRUE, year_var = "year", patient_var = "patid",
-  practice_var = "practid")
+prev_totals(dat, included_totals = c("year", "practid"), time_var = "year",
+  patient_var = "patid", original_data = TRUE)
 }
 \arguments{
 \item{dat}{a dataframe}
 
-\item{included_totals}{character vector describing which aggregates should be included c("patient", "practice")}
+\item{included_totals}{character vector describing which aggregates should be included e.g. c("year", "practid")}
+
+\item{time_var}{name of the variable determining timepoints}
+
+\item{patient_var}{name of the variable determining patient id for counting}
 
 \item{original_data}{logical should the original data set be included in the output}
-
-\item{year_var}{name of the variable determining year}
-
-\item{patient_var}{name of the variable determining patient id}
-
-\item{practice_var}{name of the variable determining practice id}
 }
 \value{
 list of aggregates and/or the original data
@@ -27,6 +24,6 @@ list of aggregates and/or the original data
 e.g. Run on the output of a call to select_by_year
 }
 \details{
-Outputs totals by practice and/or by patient
+Outputs totals by aggregated by a time variable and other variables
 }
 
