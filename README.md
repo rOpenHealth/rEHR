@@ -6,11 +6,11 @@ David A. Springate 2014, 2015
 R tools for processing and extracting clinical information from Electronic Medical Records
 -----------------------------------------------------------------------------
 
-This in development package provides tools for accelerating and automating the most common operations researchers perform to extract and analyse data from Electronic Medical Records Databases.  It currently only works for [CPRD](www.cprd.com) but I intend to extend it to other UK Primary Care Databases and to allow it to be easily adapted to other EHRs. The package was previously called `rCPRD`.
+This in development package provides tools for accelerating and automating the most common operations researchers perform to extract and analyse data from Electronic Medical Records Databases.  It currently only works for [CPRD](www.cprd.com) but I intend to extend it to other UK Primary Care Databases and to allow it to be easily adapted to other EHRs. The package was originally called `rCPRD`.
 
 The package provides tools for interrogating cohorts of primary care data downloaded from the [CPRD](www.cprd.com) and also from CPRD GOLD data cuts.
 
-The package is not yet on CRAN but you can install from github using the devtools package:
+It is not yet on CRAN but you can install from github using devtools:
 
 ```R
 install.packages("devtools")
@@ -49,7 +49,7 @@ import_CPRD_data(db, "path/to/original/datadir", filetypes =  c("Clinical", "Pat
 
 
 
-Please note that although these tools are freely available and open source (See the [licence](https://github.com/rOpenHealth/rEHR/blob/master/LICENSE)), CPRD is only available through a separate licence and is not freely distributable (not least for reasons of patient confidentiality).  For this reason, no CPRD clinical data will ever be available from this resource.
+Please note that although these tools are freely available and open source, CPRD is only available through a separate licence and is not freely distributable (not least for reasons of patient confidentiality).  For this reason, no CPRD clinical data will ever be available from this resource.
 
 The master branch will always be checked with devtools
 

@@ -1,11 +1,11 @@
-Package: rCPRD
+Package: rEHR
 Maintainer: David Springate <daspringate@gmail.com>
 Author: David Springate
-Version: 0.1
+Version: 0.2
 License: GPL-3
-Title: rpubmed
+Title: rEHR
 Description: R tools for processing and extracting clinical information from
-    downloaded CPRD cohorts
+    Electronic Medical Records Databases
 Licence: GNU GPL3
 Depends:
     R (>= 3.0.2),
