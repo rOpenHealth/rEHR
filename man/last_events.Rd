@@ -25,11 +25,13 @@ last_events(db = NULL, tab, columns = "eventdate", where = NULL,
 a dataframe or a string representing an sql query
 }
 \description{
-This function runs a select_events() query and then groups by patient id and picks only the latest event for each patient
+This function runs a select_events() query and then groups by patient id and picks only the
+latest event for each patient
 }
 \examples{
 \dontrun{
-b2 <- last_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"), where = "medcode \%in\% .(a$medcode)")
+b2 <- last_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"),
+where = "medcode \%in\% .(a$medcode)")
 }
 }
 

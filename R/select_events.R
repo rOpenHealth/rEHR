@@ -1,6 +1,6 @@
 #' Extracts From the database
 #' 
-#' This is a generic function for extracting CPRD data from the database
+#' This is a generic function for extracting EHR data from the database
 #' 
 #' The function is the base function for a range of others
 #' It can either extract by itself or generate the SQL to make a query.  
@@ -19,22 +19,20 @@
 #' @param sql_only logical should the function just return a string of the SQL query?
 #' @return a dataframe or a string representing an sql query
 #' @examples \dontrun{
+#' # medical lookup tables are provided with CPRD
 #' load("data/medical.RData")
 #' a <- read.csv("data/chronic-renal-disease.csv")
-#' a <- read_to_medcodes(a, medical, "code", lookup_readcodes= "readcode", lookup_medcodes="medcode", description = T)
-#' b <- select_events(db, tab = "Referral", columns = c("patid", "eventdate", "medcode"), where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
-#' b1 <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
+#' a <- read_to_medcodes(a, medical, "code", lookup_readcodes= "readcode", 
+#' lookup_medcodes="medcode", description = T)
+#' b <- select_events(db, tab = "Referral", columns = c("patid", "eventdate", "medcode"), 
+#' where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
+#' b1 <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
+#' where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
 #' }
 select_events <- function(db = NULL, tab, columns = "*", where = NULL, sql_only = FALSE){
     assert_that(is.character(tab) && length(tab) == 1)
     if(is.character(where)){
-        e <- strsplit(where, "[[:space:]]+")[[1]]
-        where_clause <- translate_sql_q(parse(text = paste(lapply(e, 
-                                                           function(x){
-                                                               if(str_detect(x, "^\\.")){
-                                                                   eval(parse(text = str_match(x, "\\.(.+)")[2]))
-                                                               } else x
-                                                           }), collapse = " ")))
+        where_clause <- translate_sql_q(parse(text = expand_string(where)))
         columns <- paste(columns, collapse = ", ")
         sql_query <- paste("SELECT", columns, "FROM", tab, "WHERE", where_clause)
     } else sql_query <- paste("SELECT", columns, "FROM", tab)
@@ -49,7 +47,8 @@ select_events <- function(db = NULL, tab, columns = "*", where = NULL, sql_only 
 
 #' Selects the earliest event grouped by patient
 #' 
-#' This function runs a select_events() query and then groups by patient id and picks only the earliest event for each patient
+#' This function runs a select_events() query and then groups by patient id and picks only the 
+#' earliest event for each patient
 #' 
 #' @export
 #' 
@@ -62,15 +61,19 @@ select_events <- function(db = NULL, tab, columns = "*", where = NULL, sql_only 
 #' @param sql_only logical should the function just return a string of the SQL query?
 #' @return a dataframe or a string representing an sql query
 #' @examples \dontrun{
-#' b1 <- first_events(db, tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode %in% .(a$medcode)")
-#' first_events(tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode %in% c(1, 2, 3, 4)", sql_only = TRUE)
+#' b1 <- first_events(db, tab = "Clinical", columns = c("eventdate", "medcode"), 
+#' where = "medcode %in% .(a$medcode)")
+#' first_events(tab = "Clinical", columns = c("eventdate", "medcode"), 
+#' where = "medcode %in% c(1, 2, 3, 4)", sql_only = TRUE)
 #' }
-first_events <- function(db = NULL, tab, columns = "eventdate", 
-                         where = NULL, sql_only = FALSE, group_column = "patid", date_column = "eventdate"){
+first_events <- function(db = NULL, tab, columns = "eventdate", where = NULL, 
+                         sql_only = FALSE, group_column = "patid", date_column = "eventdate"){
     other_columns <- columns[!columns %in% group_column]
-    outer_columns <- paste(paste0("max(",group_column, ")"), paste(other_columns, collapse = ", "), sep = ", ")
+    outer_columns <- paste(paste0("max(",group_column, ")"), 
+                           paste(other_columns, collapse = ", "), sep = ", ")
     inner_columns <- paste(c(group_column, other_columns), collapse = ", ")
-    inner_query <- select_events(db = db, tab = tab, columns = inner_columns, where = where, sql_only = TRUE)
+    inner_query <- select_events(db = db, tab = tab, columns = inner_columns, 
+                                 where = where, sql_only = TRUE)
     inner_query <- paste(inner_query, sprintf("ORDER BY %s ASC, %s ASC", group_column, date_column))
     outer_query <- paste("SELECT", outer_columns, "FROM (", inner_query, ") GROUP BY", group_column)
     if(sql_only){
@@ -85,7 +88,8 @@ first_events <- function(db = NULL, tab, columns = "eventdate",
 
 #' Selects the earliest event grouped by patient
 #' 
-#' This function runs a select_events() query and then groups by patient id and picks only the latest event for each patient
+#' This function runs a select_events() query and then groups by patient id and picks only the 
+#' latest event for each patient
 #' 
 #' @export
 #' 
@@ -98,15 +102,19 @@ first_events <- function(db = NULL, tab, columns = "eventdate",
 #' @param sql_only logical should the function just return a string of the SQL query?
 #' @return a dataframe or a string representing an sql query
 #' @examples \dontrun{
-#' b2 <- last_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"), where = "medcode %in% .(a$medcode)")
+#' b2 <- last_events(db, tab = "Clinical", other_columns = c("eventdate", "medcode"), 
+#' where = "medcode %in% .(a$medcode)")
 #' }
-last_events <- function(db = NULL, tab, columns = "eventdate", 
-                        where = NULL, sql_only = FALSE, group_column = "patid", date_column = "eventdate"){
+last_events <- function(db = NULL, tab, columns = "eventdate", where = NULL, 
+                        sql_only = FALSE, group_column = "patid", date_column = "eventdate"){
     other_columns <- columns[!columns %in% group_column]
-    outer_columns <- paste(paste0("max(",group_column, ")"), paste(other_columns, collapse = ", "), sep = ", ")
+    outer_columns <- paste(paste0("max(",group_column, ")"), 
+                           paste(other_columns, collapse = ", "), sep = ", ")
     inner_columns <- paste(c(group_column, other_columns), collapse = ", ")
-    inner_query <- select_events(db = db, tab = tab, columns = inner_columns, where = where, sql_only = TRUE)
-    inner_query <- paste(inner_query, sprintf("ORDER BY %s ASC, %s DESC", group_column, date_column))
+    inner_query <- select_events(db = db, tab = tab, columns = inner_columns, 
+                                 where = where, sql_only = TRUE)
+    inner_query <- paste(inner_query, sprintf("ORDER BY %s ASC, %s DESC", 
+                                              group_column, date_column))
     outer_query <- paste("SELECT", outer_columns, "FROM (", inner_query, ") GROUP BY", group_column)
     if(sql_only){
         outer_query

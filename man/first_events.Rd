@@ -25,12 +25,15 @@ first_events(db = NULL, tab, columns = "eventdate", where = NULL,
 a dataframe or a string representing an sql query
 }
 \description{
-This function runs a select_events() query and then groups by patient id and picks only the earliest event for each patient
+This function runs a select_events() query and then groups by patient id and picks only the
+earliest event for each patient
 }
 \examples{
 \dontrun{
-b1 <- first_events(db, tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode \%in\% .(a$medcode)")
-first_events(tab = "Clinical", columns = c("eventdate", "medcode"), where = "medcode \%in\% c(1, 2, 3, 4)", sql_only = TRUE)
+b1 <- first_events(db, tab = "Clinical", columns = c("eventdate", "medcode"),
+where = "medcode \%in\% .(a$medcode)")
+first_events(tab = "Clinical", columns = c("eventdate", "medcode"),
+where = "medcode \%in\% c(1, 2, 3, 4)", sql_only = TRUE)
 }
 }
 

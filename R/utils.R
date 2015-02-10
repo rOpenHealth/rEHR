@@ -88,3 +88,22 @@ wrap_sql_query <- function(query, ...){
 }
 
 
+#' Reads strings and expands sections wrapped in dotted parentheses
+#' 
+#'  This is a kind of inverse of bquote
+#'  @export
+#'  @param s a string
+#'  @param level integer sets the parent frame level for evaluation
+#'  @examples
+#'  a <- runif(10)
+#'  expand_string("The r code is .(a)")
+expand_string <- function(s, level = 3){
+    e <- strsplit(s, "[[:space:]]+")[[1]]
+    paste(lapply(e, 
+                 function(x){
+                     if(str_detect(x, "^\\.")){
+                         eval(parse(text = str_match(x, "\\.(.+)")[2]),
+                              envir = parent.frame(n = level))
+                     } else x
+                 }), collapse = " ")
+}
