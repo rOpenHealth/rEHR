@@ -3,7 +3,7 @@
 \alias{cut_tv}
 \title{cut_tv - Cuts a survival dataset on a time varying variable}
 \usage{
-cut_tv(.data, entry, exit, cut_var, tv_name, cores = 1,
+cut_tv(.data, entry, exit, cut_var, tv_name, cores = 1, id_var,
   on_existing = c("flip", "increment"))
 }
 \arguments{
@@ -22,6 +22,8 @@ event. Column must be numeric.}
 
 \item{cores}{number of mc.cores to use.}
 
+\item{id_var}{name of the variable identifying individual cases}
+
 \item{on_existing}{see details for cutting behaviour}
 }
 \description{
@@ -35,7 +37,51 @@ is already a variable for the time-varying covariate, you can chose to flip the 
 or increment them.  This means the function can be called multiple times to, e.g. deal with
 drugs starting and stopping and also to deal with progression of treatment.
 
-The function can also be parallelised for large datasets and chained with dply workflows.
-arguments should not be quoted
+The function is faster than other cutting methods, does not require conversion to Lexis format,
+and can be parallelised for large datasets and chained with dply workflows.
+Arguments should not be quoted.
+
+This function can deal with the following scenarios (see examples):
+ \itemize{
+ \item{"Binary chronic covariates"}{e.g. The time of diagnosis for a chronic (unresolvable)
+  condition. This requires a single column variable of times from entry in the dataset}
+ \item{"Binary covariates"}{e.g. times of starting and stopping medication.  This requires
+ more than one column variable in the dataset, one for each start or stop event.  The state flips
+ with each new change.}
+ \item{"Incremental time-varying covariates"}{e.g. different stages of a condition.  This
+ requires a single column variable for each incremental stage}
+ \item{"Any combination of the above"}{This is achieved by chaining multiple calls together}
+}
+}
+\examples{
+# A simple example dataset to be cut
+tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(1000, 689, 1000, 874, 777),
+                      event = c(0,1,0,1,1), drug_1 = c(NA, NA, NA, 340, 460),
+                      drug_2 = c(NA, 234, 554, 123, NA),
+                      drug_3_start = c(110, 110,111, 109, 110),
+                      drug_3_stop = c(400, 400, 400, 400, 400),
+                      stage_1 = c(300, NA, NA, NA, NA),
+                      stage_2 = c(450, NA, NA, NA, NA))
+
+# Binary chronic covariates:
+tv_out1 <- cut_tv(tv_test, start, end, drug_1, id_var = id, drug_1_state)
+tv_out1 <- cut_tv(tv_out1, start, end, drug_2, id_var = id, drug_2_state)
+# Binary covariates:
+tv_out3 <- cut_tv(tv_test, start, end, drug_3_start, id_var = id, drug_3_state)
+tv_out3 <- cut_tv(tv_out3, start, end, drug_3_stop, id_var = id, drug_3_state)
+# incremental covariates:
+inc_1 <- cut_tv(tv_test, start, end, stage_1, id_var = id, disease_stage, on_existing = "inc")
+inc_1 <- cut_tv(inc_1, start, end, stage_2, id_var = id, disease_stage, on_existing = "inc")
+# Chaining combinations of the above
+\dontrun{
+library(dplyr)
+tv_all <- tv_test \%>\%
+          cut_tv(start, end, drug_1, id_var = id, drug_1_state) \%>\%
+          cut_tv(start, end, drug_2, id_var = id, drug_2_state) \%>\%
+          cut_tv(start, end, drug_3_start, id_var = id, drug_3_state) \%>\%
+          cut_tv(start, end, drug_3_stop, id_var = id, drug_3_state) \%>\%
+          cut_tv(start, end, stage_1, id_var = id, disease_stage, on_existing = "inc") \%>\%
+          cut_tv(start, end, stage_2, id_var = id, disease_stage, on_existing = "inc")
+}
 }
 

@@ -11,14 +11,16 @@
 #' 
 #' @param lookup a dataframe containing a lookup table
 #' @param keywords character vector containing the keyword terms to search for
-#' @param keyword_field character identifying the field in the lookup table to be searched for keywords
+#' @param keyword_field character identifying the field in the lookup table to be searched 
+#' for keywords
 #' @return a data frame subsetted by keyword
 #' @examples \dontrun{
-#' keywords <- c('oral ulceration', 'mouth ulceration', 'aphthous ulceration', 'oral aphthous ulceration',
-#' 'oral ulcer[s]?', 'mouth ulcer[s]?', 'aphthous ulcer[s]?', 'aphthous stomatitis', "stomatitis", "aphthae", 
-#' 'oral aphthous stomatitis', 'oral aphthous ulcers', 'recurrent oral ulcers', 
-#' 'recurrent mouth ulcers', 'recurrent oral aphthous ulcers', 'recurrent aphthous ulcers', 
-#' 'recurrent aphthous stomatitis', 'recurrent oral aphthous stomatitis')
+#' keywords <- c('oral ulceration', 'mouth ulceration', 'aphthous ulceration', 
+#' 'oral aphthous ulceration','oral ulcer[s]?', 'mouth ulcer[s]?', 'aphthous ulcer[s]?', 
+#' 'aphthous stomatitis', "stomatitis", "aphthae", 'oral aphthous stomatitis', 
+#' 'oral aphthous ulcers', 'recurrent oral ulcers', 'recurrent mouth ulcers', 
+#' 'recurrent oral aphthous ulcers', 'recurrent aphthous ulcers', 'recurrent aphthous stomatitis', 
+#' 'recurrent oral aphthous stomatitis')
 #' a <- extract_keywords(medical, keywords)
 #' }
 extract_keywords <- function(lookup, keywords, keyword_field = "desc"){

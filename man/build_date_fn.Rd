@@ -14,6 +14,6 @@ build_date_fn(start, end)
 a function taking a year as an argument and returning a list of startdates and enddates
 }
 \description{
-This builds functions identical to qof_years but they can be customised to the user's own preferences
+This builds functions identical to qof_years but they can be customised to the user's preferences
 }
 

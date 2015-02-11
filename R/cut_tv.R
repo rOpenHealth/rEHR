@@ -9,10 +9,10 @@
 #' or increment them.  This means the function can be called multiple times to, e.g. deal with
 #' drugs starting and stopping and also to deal with progression of treatment.
 #' 
-#' The function can also be parallelised for large datasets and chained with dply workflows. 
-#' arguments should not be quoted
+#' The function is faster than other cutting methods, does not require conversion to Lexis format,
+#' and can be parallelised for large datasets and chained with dply workflows. 
+#' Arguments should not be quoted.
 #' 
-#' WARNING: THIS CURRENTLY ONLY WORKS FOR SINGLE TIME VARYING COVARIATES
 #' 
 #' @export
 #' 
@@ -25,33 +25,94 @@
 #' event. Column must be numeric.
 #' @param tv_name name for the constructed time-varying covariate
 #' @param cores number of mc.cores to use.
+#' @param id_var name of the variable identifying individual cases
 #' @param on_existing see details for cutting behaviour
+#' @details
+#' This function can deal with the following scenarios (see examples):
+#'  \itemize{
+#'  \item{"Binary chronic covariates"}{e.g. The time of diagnosis for a chronic (unresolvable)
+#'   condition. This requires a single column variable of times from entry in the dataset}
+#'  \item{"Binary covariates"}{e.g. times of starting and stopping medication.  This requires
+#'  more than one column variable in the dataset, one for each start or stop event.  The state flips
+#'  with each new change.}
+#'  \item{"Incremental time-varying covariates"}{e.g. different stages of a condition.  This 
+#'  requires a single column variable for each incremental stage}
+#'  \item{"Any combination of the above"}{This is achieved by chaining multiple calls together}
+#' } 
+#' @examples
+#' # A simple example dataset to be cut
+#' tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(1000, 689, 1000, 874, 777), 
+#'                       event = c(0,1,0,1,1), drug_1 = c(NA, NA, NA, 340, 460),
+#'                       drug_2 = c(NA, 234, 554, 123, NA), 
+#'                       drug_3_start = c(110, 110,111, 109, 110),
+#'                       drug_3_stop = c(400, 400, 400, 400, 400),
+#'                       stage_1 = c(300, NA, NA, NA, NA),
+#'                       stage_2 = c(450, NA, NA, NA, NA))
 #'
-cut_tv <- function(.data, entry, exit, cut_var, tv_name, cores = 1, on_existing = c("flip", "increment")){
+#' # Binary chronic covariates:
+#' tv_out1 <- cut_tv(tv_test, start, end, drug_1, id_var = id, drug_1_state)
+#' tv_out1 <- cut_tv(tv_out1, start, end, drug_2, id_var = id, drug_2_state)
+#' # Binary covariates:
+#' tv_out3 <- cut_tv(tv_test, start, end, drug_3_start, id_var = id, drug_3_state)
+#' tv_out3 <- cut_tv(tv_out3, start, end, drug_3_stop, id_var = id, drug_3_state)
+#' # incremental covariates:
+#' inc_1 <- cut_tv(tv_test, start, end, stage_1, id_var = id, disease_stage, on_existing = "inc")
+#' inc_1 <- cut_tv(inc_1, start, end, stage_2, id_var = id, disease_stage, on_existing = "inc")
+#' # Chaining combinations of the above 
+#' \dontrun{
+#' library(dplyr)
+#' tv_all <- tv_test %>%
+#'           cut_tv(start, end, drug_1, id_var = id, drug_1_state) %>% 
+#'           cut_tv(start, end, drug_2, id_var = id, drug_2_state) %>%
+#'           cut_tv(start, end, drug_3_start, id_var = id, drug_3_state) %>%
+#'           cut_tv(start, end, drug_3_stop, id_var = id, drug_3_state) %>%
+#'           cut_tv(start, end, stage_1, id_var = id, disease_stage, on_existing = "inc") %>%
+#'           cut_tv(start, end, stage_2, id_var = id, disease_stage, on_existing = "inc")
+#' } 
+#' 
+cut_tv <- function(.data, entry, exit, cut_var, tv_name, cores = 1, 
+                   id_var, on_existing = c("flip", "increment")){
     cut_individual <- function(individual){
         if(!tv_name %in% names(individual)){
             individual[[tv_name]] <- 0
         }
-        if(individual[[cut_var]] > individual[[entry]] && individual[[cut_var]] < individual[[exit]]){
-            pat1 <- individual
-            pat1[[exit]] <- individual[[cut_var]] - 1
-            pat2 <- individual
-            pat2[[entry]] <- individual[[cut_var]]
+        for(i in 1:nrow(individual)){
+            if(i == 1){
+                out <- cut_row(individual[i, ], prior_state = 0)
+            } else {
+                out <- bind_rows(out, cut_row(individual[i,], 
+                                              prior_state = slice(out, n())[[tv_name]]))
+            }
+        }
+        out
+    }
+    cut_row <- function(r, prior_state){
+        if(r[[cut_var]] > r[[entry]] && r[[cut_var]] < r[[exit]]){
+            pat1 <- r
+            pat1[[exit]] <- r[[cut_var]] - 1
+            pat2 <- r
+            pat2[[entry]] <- r[[cut_var]]
             if(on_existing == "flip"){
-               # message("flip")
                 if (pat2[[tv_name]] == 0) pat2[[tv_name]]  <- 1 else pat2[[tv_name]] <- 0    
             } else if(on_existing == "increment") {
-            #    message("inc")
                 pat2[[tv_name]]  <- pat2[[tv_name]] + 1
             }
             rbind(pat1, pat2)
-        } else individual
+        } else {
+            if(on_existing == "increment" & r[,tv_name] > 0) {
+                r
+            } else {
+                r[,tv_name] <- prior_state
+                r
+            }
+        } 
     }
     
     entry <- deparse(substitute(entry))
     exit <- deparse(substitute(exit))
     cut_var <- deparse(substitute(cut_var))
     tv_name <- deparse(substitute(tv_name))
+    id_var <- deparse(substitute(id_var))
     on_existing <- match.arg(on_existing)
     
     to_cut <- filter(.data, !is.na(.data[[cut_var]]))
@@ -60,43 +121,17 @@ cut_tv <- function(.data, entry, exit, cut_var, tv_name, cores = 1, on_existing 
         same_state[[tv_name]] <- 0
     }
     bind_rows(same_state,
-              bind_rows(mclapply(1:nrow(to_cut), 
-                                 function(individual){
-                                     cut_individual(to_cut[individual, ])
-                                 }, mc.cores = cores)))
+              bind_rows(mclapply(unique(to_cut[[id_var]]), 
+                                 function(x){
+                                     cut_individual(to_cut[to_cut[[id_var]] == x, ])
+                                 }, mc.cores = cores))) %>%
+        arrange_(id_var, entry)
 }
 
-# tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(1000, 689, 1000, 874, 777), 
-#                       event = c(0,1,0,1,1), drug_1 = c(NA, NA, NA, 340, 460),
-#                       drug_2 = c(NA, 234, 554, 123, NA), 
-#                       drug_3_start = c(110, 110,111, 109, 110),
-#                       drug_3_stop = c(400, 400, 400, 400, 400),
-#                       stage_1 = c(300, NA, NA, NA, NA),
-#                       stage_2 = c(450, NA, NA, NA, NA))
-# 
-# library(testthat)
-# # First tv cov
-# tv_out1 <- cut_tv(tv_test, start, end, drug_1, drug_1_state)
-# # 2nd tv-cov
-# tv_out2 <- cut_tv(tv_out1, start, end, drug_2, drug_2_state)
-# 
-# expect_that(tv_out1$drug_1_state, equals(c(0,0,0,0,1,0,1)))
-# expect_that(tv_out2$drug_2_state, equals(c(0,0,0,0,1,0,1,0,1,1)))
-# 
-# 
-# 
-# 
-# a_tv <- cut_tv(a, start, end, psoriasis, psoriasis_state)
-# a <- filter(cohort, !is.na(eventdate)) %>% slice(1:100) %>% bind_rows(slice(cohort, 1:100)) %>% select( c(1:4, 21,22,25:28)) %>% distinct(patid)
-# a$scrofula <- as.Date(sapply(1:nrow(a), 
-#                              function(x) sample(c(NA, 
-#                                                   random_dates(1, a$start_date[x], 
-#                                                                a$end_date[x])),
-#                                                 size = 1)),origin="1970-01-01")
-# 
-# a$scrofula <- as.numeric(a$scrofula - a$start_date)
-# aa <- a[!is.na(a$psoriasis) & !is.na(a$scrofula),]
-# 
-# tv <- cut_tv(aa,entry=start,exit = end, cut_var=psoriasis, tv_name = psoriasis_state)
-# tv <- cut_tv(tv,entry=start,exit = end, cut_var=scrofula, tv_name = psoriasis_state)
-# 
+
+
+
+
+
+
+
