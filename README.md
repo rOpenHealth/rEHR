@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rOpenHealth/rEHR.png?branch=master)](https://travis-ci.org/rOpenHealth/rEHR)
+
 rEHR
 =====
 

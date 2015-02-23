@@ -10,7 +10,7 @@
 #'
 #'@param df a dataframe of hba1c test scores
 #'@return dataframe with all hba1c values recoded to mmol/mol
-uniform_hba1c_values <- function(df){
+cprd_uniform_hba1c_values <- function(df){
     assert_that(all(c("data2", "data3", "enttype") %in% names(df)))
     df$hba1c_score <- df$data2
     df <- df[complete.cases(df$hba1c_score),]

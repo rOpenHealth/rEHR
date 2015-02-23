@@ -1,9 +1,7 @@
-.Rproj.user
-rCPRD.Rproj
-CPRD
-CPRD/*
+*.Rproj.user
+*.Rproj
 .Rhistory
 .RData
 .Rbuildignore
-testing.R
-data/*
+testing/*
+inst/doc

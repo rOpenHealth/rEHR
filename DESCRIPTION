@@ -1,7 +1,7 @@
 Package: rEHR
-Maintainer: David Springate <daspringate@gmail.com>
-Author: David Springate
-Version: 0.2
+Authors@R: person("David", "Springate", email = "daspringate@gmail.com",
+    role = c("aut", "cre"))
+Version: 0.3
 License: GPL-3
 Title: rEHR
 Description: R tools for processing and extracting clinical information from
@@ -20,3 +20,6 @@ Imports:
 Suggests:
     testthat,
     roxygen2,
+    knitr
+VignetteBuilder: knitr
+LazyData: true
