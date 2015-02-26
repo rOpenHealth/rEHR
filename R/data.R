@@ -77,4 +77,4 @@
 #'     \item{start_date}{start_date for patients - earliest possible birthday}
 #'     \item{end_date}{Latest possible date in the ehr for data collection}
 #' }
-"ehr_definition"
+"ehr_def"

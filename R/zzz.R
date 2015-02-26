@@ -2,6 +2,3 @@
     set_CPRD()
 }
 
-# .onUnload <- function(libname, pkgname){
-#     if(exists(".ehr")) rm(.ehr)
-# }

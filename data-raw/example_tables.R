@@ -77,46 +77,29 @@ betas <- log(c(1.2, 1.4, 1.3, 1.1, 1.2, 1.2, 1.4, 1.1,
                1.7, 1.01, 1.2, 1.4, 1.6, 1.5, 1.1, 1.4, 1.4))
 names(betas) <- names(condition_prevalence)
 
-ehr_definition <- structure(list(
-    patient = list(
-        num = 10000,
-        comorbidity = list(
-            codes = QOF_BRv24,
-            prevalence =  condition_prevalence),
-        sim_params = list(transfer_out_prob = 0.2,
-                          scale = 25000,
-                          weibull_shape = 1,
-                          censor_type = "noninformative",
-                          betas = list(conditions = betas,
-                                       gender = log(0.7),
-                                       baseline = 0.01,
-                                       transfer_out = 3.5))),
-    clinical = list(
-        events_mean = 10),
-    therapy = list(
-        medications_mean = 10),
-    start_date = "1930-01-01",
-    end_date = "2014-06-30",
-    practice = list(num = 100, 
-                    regions = 13,
-                    imd_cats = 5,
-                    early_lcd_prob = 0.1,  # probability of lcd being earlier than end date
-                    early_lcd_range = 2,   # years that it could be early
-                    uts_limit = as.Date("1998-01-01"),
-                    late_uts_prob = 0.5,   #  same for uts
-                    late_uts_range = 3)), 
-    class = c("EHR_definition", "CPRD"))
-#ehr_def <- ehr_definition
 
-use_data(clinical_codes)
-use_data(entity)
-use_data(product)
-use_data(ehr_definition, overwrite = TRUE)
+ehr_def <- define_EHR(patient = list(num = 250,
+                                 comorbidity = list(
+                                     codes = QOF_BRv24,
+                                     prevalence =  condition_prevalence),
+                                 sim_params = list(transfer_out_prob = 0.2,
+                                                   scale = 25000,
+                                                   weibull_shape = 1,
+                                                   censor_type = "noninformative",
+                                                   betas = list(conditions = betas,
+                                                                gender = log(0.7),
+                                                                baseline = 0.01,
+                                                                transfer_out = 3.5))))
+
+use_data(clinical_codes, overwrite = TRUE)
+use_data(entity, overwrite = TRUE)
+use_data(product, overwrite = TRUE)
+use_data(ehr_def, overwrite = TRUE)
 
 
 # build patient table -------------------------------------
 
-ehr_patients <- simulate_ehr_patients(ehr_definition)
+ehr_patients <- simulate_ehr_patients(ehr_def)
 write.table(ehr_patients, "inst/ehr_data/ehr_Patient.txt", sep = "\t")
 
 
@@ -125,22 +108,31 @@ system.file("ehr_data", "ehr_Patient.txt", package = "rEHR")
 
 # checking the data are broadly sane...
 plot(density(as.numeric(pmin(ehr_patients$tod, 
-                             ehr_definition$end_date, na.rm = TRUE) - ehr_patients$crd) / 365.25 ))
+                             ehr_def$end_date, na.rm = TRUE) - ehr_patients$crd) / 365.25 ))
 table(ehr_patients$toreason)
-s <- Surv(as.numeric(ehr_patients$crd - as.Date(ehr_definition$start_date)) / 365.25, 
+s <- Surv(as.numeric(ehr_patients$crd - as.Date(ehr_def$start_date)) / 365.25, 
           as.numeric(pmin(ehr_patients$tod, 
-                          ehr_definition$end_date, na.rm = TRUE) - 
-                         as.Date(ehr_definition$start_date)) / 365.25,
+                          ehr_def$end_date, na.rm = TRUE) - 
+                         as.Date(ehr_def$start_date)) / 365.25,
           ehr_patients$toreason == 1)
 mod1 <- coxph(s ~ gender + chd + heart_failure + stroke + 
                   hypertension + diabetes + copd + epilepsy + hypothyroidism + cancer + 
                   asthma + ckd_stage3 + ckd_stage4 + ckd_stage5 + atrial_fibrilation + 
                   learning_disability + peripheral_arterial_disease + osteoporosis, 
               data = ehr_patients)
-cbind(exp(c(ehr_definition$betas$gender, betas)), exp(mod1$coefficients))
+cbind(exp(c(ehr_def$betas$gender, betas)), exp(mod1$coefficients))
+# reduced size for CRAN - betas are way off - set patient number to 10000 for better estimates
 
 # build practice table -------------------------------
 
-practice <- simulate_ehr_practices(ehr_definition)
+practice <- simulate_ehr_practices(ehr_def)
 write.table(ehr_patients, "inst/ehr_data/ehr_Practice.txt", sep = "\t")
+
+
+# build consultation table -----------------------------
+
+consultation <- simulate_ehr_consultations(ehr_def, patient_table = ehr_patients, cores = 4)
+write.table(consultation, "inst/ehr_data/ehr_Consultation.txt", sep = "\t")
+
+
 
