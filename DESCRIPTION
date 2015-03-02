@@ -20,6 +20,7 @@ Imports:
 Suggests:
     testthat,
     roxygen2,
-    knitr
+    knitr,
+    reshape2
 VignetteBuilder: knitr
 LazyData: true

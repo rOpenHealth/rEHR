@@ -9,8 +9,8 @@ define_EHR(start_date = "1930-01-01", end_date = "2014-06-30",
   = 1, censor_type = "noninformative", betas = list(conditions = NULL, gender =
   log(0.7), baseline = 0.01, transfer_out = 3.5))),
   consultation = list(per_year = 2, type = list(code = 0:1, prob = c(0.2,
-  0.8))), clinical = list(per_consultation = 10),
-  therapy = list(medications_mean = 10), practice = list(num = 100, regions
+  0.8))), clinical = list(mean_events = 1), referral = list(mean_events =
+  0.1), therapy = list(mean_events = 1), practice = list(num = 100, regions
   = 13, imd_cats = 5, early_lcd_prob = 0.1, early_lcd_range = 2, uts_limit =
   as.Date("1998-01-01"), late_uts_prob = 0.5, late_uts_range = 3))
 }
@@ -24,6 +24,8 @@ define_EHR(start_date = "1930-01-01", end_date = "2014-06-30",
 \item{consultation}{list of definitions for consultation file (see details)}
 
 \item{clinical}{list of definitions for clinical file (see details)}
+
+\item{referral}{list of definitions for referral file (see details)}
 
 \item{therapy}{list of definitions for therapy file (see details)}
 

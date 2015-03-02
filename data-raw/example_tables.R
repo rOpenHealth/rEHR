@@ -135,4 +135,19 @@ consultation <- simulate_ehr_consultations(ehr_def, patient_table = ehr_patients
 write.table(consultation, "inst/ehr_data/ehr_Consultation.txt", sep = "\t")
 
 
+# build Clinical events table --------------------------
 
+clinicals <- simulate_ehr_events(ehr_def, consultation, event_type = "clinical", cores = 4)
+write.table(clinicals, "inst/ehr_data/ehr_Clinical.txt", sep = "\t")
+
+# build referral events table --------------------------
+
+referrals <- simulate_ehr_events(ehr_def, consultation, event_type = "referral", cores = 4)
+write.table(referrals, "inst/ehr_data/ehr_Referral.txt", sep = "\t")
+
+
+# build therapy events table ---------------------------
+
+therapies <- simulate_ehr_events(ehr_def, consultation, event_type = "therapy", cores = 4,
+                                 therapy_lookup = product)
+write.table(therapies, "inst/ehr_data/ehr_Therapy.txt", sep = "\t")
