@@ -16,7 +16,8 @@ Imports:
     stringr,
     foreign,
     dplyr,
-    parallel
+    parallel,
+    combinat
 Suggests:
     testthat,
     roxygen2,

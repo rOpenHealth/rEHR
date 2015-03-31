@@ -151,3 +151,10 @@ write.table(referrals, "inst/ehr_data/ehr_Referral.txt", sep = "\t")
 therapies <- simulate_ehr_events(ehr_def, consultation, event_type = "therapy", cores = 4,
                                  therapy_lookup = product)
 write.table(therapies, "inst/ehr_data/ehr_Therapy.txt", sep = "\t")
+
+
+
+
+
+
+

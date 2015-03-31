@@ -21,11 +21,16 @@ set_CPRD <- function(){
     .ehr$practice_id <- "practid"
     # clinical codes
     .ehr$ehr_medcode <- "medcode" # internal medcode name
-    .ehr$lookup_medcode <- "readcode" # external clinical code name
-    # dates
+    .ehr$lookup <- list(codes = "readcode",
+                        terms = "desc",
+                        tests = "description",
+                        drugs = c("productname", "drugsubstance", "bnfchapter"),
+                        drugcodes = "bnfcode")
+     # dates
     .ehr$raw_date_format <- "%d/%m/%Y"
     .ehr$date_fields <- c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod", "deathdate")
-    names(.ehr$date_fields) <- c("event", "entry", "last_coll", "up_to_std", "first_reg", "current_reg", "transfer_out", "death")
+    names(.ehr$date_fields) <- c("event", "entry", "last_coll", "up_to_std", "first_reg",
+                                 "current_reg", "transfer_out", "death")
     .ehr$year_origin <- 1800
     .ehr$event_date <- "eventdate"
     .ehr$birth_year <- "yob"

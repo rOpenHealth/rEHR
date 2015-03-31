@@ -4,7 +4,8 @@
 \title{Find matched controls for a set of cases}
 \usage{
 get_matches(cases, control_pool, n_controls, match_vars, extra_vars, id_var,
-  extra_conditions, cores = 6, replace = TRUE, track = TRUE)
+  extra_conditions, cores = 6, replace = TRUE, track = TRUE,
+  tracker = function(case_num) ".")
 }
 \arguments{
 \item{cases}{dataframe of cases}
@@ -29,6 +30,8 @@ conditions}
 details)}
 
 \item{track}{logical should a dot be printed to std.out for each case?}
+
+\item{tracker}{function to track progress of the function (See details)}
 }
 \description{
 This function will provide a set of matched controls for a given set of cases.
@@ -40,5 +43,6 @@ run on a single core (and more slowly).
 Setting replace == TRUE is thread safe as the same controls can be used for more than one case.
 See Richardson (2004) Occup Environ Med 2004;61:e59 doi:10.1136/oem.2004.014472 for a description
 of IDS matching.
+To track number of cases, set \code{tracker = function() paste0(case_num, ",")}
 }
 

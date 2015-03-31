@@ -3,8 +3,8 @@ title: "rEHR: A package for manipulating and analysing Electronic Health Record 
 author: "David A Springate"
 date: "`r Sys.Date()`"
 output: 
-    rmarkdown::html_document
-bibliography: vignettes/rEHR_references.bib
+    rmarkdown::pdf_document
+bibliography: rEHR_references.bib
 documentclass: article
 abstract: This is the abstract.  
 vignette: >
@@ -15,7 +15,7 @@ vignette: >
 
 # Introduction
 
-To do.
+To do. See @Springate2014 for more details
 
 # The rEHR package
 
