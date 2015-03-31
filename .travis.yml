@@ -1,5 +1,6 @@
 # Sample .travis.yml for R projects from https://github.com/craigcitro/r-travis
 
+sudo: required
 language: c
 
 before_install:
