@@ -151,16 +151,14 @@ get_matches <- function(cases, control_pool, n_controls, match_vars, extra_vars,
 #' @return a dataframe of matched controls
 #' 
 match_on_index <- function(cases, control_pool, index_var, match_vars,
-                                extra_conditions, index_diff_limit = 90, consult_path,
+                                extra_conditions = "", index_diff_limit = 90, consult_path,
                                     n_controls = 5, cores = 6, import_fn = read.delim, ...){
     message("Finding ", nrow(cases), " cases...")
     cons_files <- list.files(consult_path)
-    extra_conditions <- expand_string(extra_conditions)
     bind_rows(mclapply(unique(cases[[ .ehr$practice_id ]]), function(practice){
-        message("practice ", practice)
         p_cases <- filter_(cases, expand_string(".(.ehr$practice_id) == .(practice)"))
         p_controls <- filter_(control_pool, expand_string(".(.ehr$practice_id) == .(practice)"))
-        cons_files[str_detect(cons_files, pattern = str_pad(practice, 3, pad = 0))]
+        #cons_files[str_detect(cons_files, pattern = str_pad(practice, 3, pad = 0))]
         consultations <- import_fn(file.path(consult_path, 
                                              cons_files[str_detect(cons_files, 
                                                                    str_pad(practice, 
@@ -171,11 +169,12 @@ match_on_index <- function(cases, control_pool, index_var, match_vars,
         cat("\nPractice", practice, ":")
         for(case_num in 1:p_num){
             CASE <- p_cases[case_num,]
+            extra_conditions_ <- expand_string(extra_conditions)
             matcher <- lapply(match_vars, function(m) {
                 paste0(m, " == '", CASE[[m]], "'")  
             })
-            if(nchar(extra_conditions)){
-                matcher <- append(matcher, extra_conditions, after = length(matcher))
+            if(nchar(extra_conditions_)){
+                matcher <- append(matcher, extra_conditions_, after = length(matcher))
             }
             id <- CASE[[ .ehr$patient_id]]
             names(id) <- .ehr$patient_id
@@ -195,8 +194,8 @@ match_on_index <- function(cases, control_pool, index_var, match_vars,
                                            by = .ehr$patient_id)
             n_ <- nrow(matched_controls)
             if (n_ == 0){
-                cat("No controls...")
-            } else if (0 < n_ & n_ < n_controls) cat("Only ", n_, "controls...")
+                cat(0)
+            } else if (0 < n_ & n_ < n_controls) cat(n_)
             if(exists("matched_")){
                 control_ids_ <- unique(matched_[[names(id)]])
                 exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
