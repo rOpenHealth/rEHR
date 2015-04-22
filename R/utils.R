@@ -3,7 +3,8 @@
 #' Converts date variables in a dataframe to integers
 #' Integers represent time in days from the supplied origin 
 #' Converts specified numeric values to integer
-#' This function is useful for keeping file sizes down
+#' This function is useful for keeping file sizes down and is used by the to_stata command to 
+#' save to Stata files.
 #' 
 #' @export
 #' 
@@ -31,7 +32,9 @@ compress <- function(dat, origin = "1970-01-01", format = "%Y-%m-%d",
     dat
 }
     
-#' Compresses a dataframe and saves in stata format
+#' Compresses a dataframe and saves in stata format.  Options to save as Stata 12 or 13.
+#' 
+#' Automatically compresses data to reduce file size
 #' 
 #' Defaults to saving compressed dates to integer days from 1960-01-01
 #' which is the standard in stata.
@@ -40,10 +43,19 @@ compress <- function(dat, origin = "1970-01-01", format = "%Y-%m-%d",
 #'  
 #' @param dat dataframe
 #' @param fname character string: filepath to save to
+#' @param stata13 logical Save as Stata13 compatible format?
 #' @param \dots arguments to be passed to compress
-to_stata <- function(dat, fname, ...){
-    write.dta(compress(dat, origin = "1960-01-01", ...), fname)
-    message(sprintf("Dataframe %s exported to %s", deparse(substitute(dat)), fname))
+to_stata <- function(dat, fname, stata13 = FALSE, ...){
+    if(stata13){
+        readstata13::save.dta13(compress(dat, origin = "1960-01-01", ...), fname, compress = TRUE)
+        message(sprintf("Dataframe %s exported to %s (Stata v13 compatable)", 
+                        deparse(substitute(dat)), fname))
+    } else {
+        foreign::write.dta(compress(dat, origin = "1960-01-01", ...), fname)
+        message(sprintf("Dataframe %s exported to %s (Stata v12 compatable)", 
+                        deparse(substitute(dat)), fname))
+        
+    }
 }
 
 #' combines strings and vectors in a sensible way for select queries

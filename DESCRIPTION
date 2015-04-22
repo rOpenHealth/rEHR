@@ -17,7 +17,8 @@ Imports:
     foreign,
     dplyr,
     parallel,
-    combinat
+    combinat,
+    readstata13
 Suggests:
     testthat,
     roxygen2,

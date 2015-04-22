@@ -25,6 +25,7 @@ dataframe
 Converts date variables in a dataframe to integers
 Integers represent time in days from the supplied origin
 Converts specified numeric values to integer
-This function is useful for keeping file sizes down
+This function is useful for keeping file sizes down and is used by the to_stata command to
+save to Stata files.
 }
 
