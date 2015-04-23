@@ -166,7 +166,7 @@ match_on_index <- function(cases, control_pool, index_var, match_vars,
             filter_(expand_string("! .(.ehr$patient_id) %in% .(p_cases[[.ehr$patient_id]])")) 
         if(exists("matched_")) rm(matched_)
         p_num <- nrow(p_cases)
-        cat("\nPractice", practice, ":")
+        cat("Start practice", practice, ".")
         for(case_num in 1:p_num){
             CASE <- p_cases[case_num,]
             extra_conditions_ <- expand_string(extra_conditions)
@@ -195,23 +195,25 @@ match_on_index <- function(cases, control_pool, index_var, match_vars,
             n_ <- nrow(matched_controls)
             if (n_ == 0){
                 cat(0)
-            } else if (0 < n_ & n_ < n_controls) cat(n_)
+                next
+            } else if (0 < n_ & n_ < n_controls){
+                 cat(n_)
+            } else cat(".")
             if(exists("matched_")){
-                control_ids_ <- unique(matched_[[names(id)]])
-                exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
-                p_controls <- p_controls %>% filter_(exclude_str_) 
-                cat(".")
                 matched_ <- bind_rows(matched_, matched_controls %>%
                                           sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
                                           mutate_(matched_case = id))
             } else {
-                cat(".")
-                matched_ <- matched_controls %>%
+                 matched_ <- matched_controls %>%
                     sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
                     mutate_(matched_case = id)
             }
+            control_ids_ <- unique(matched_[[names(id)]])
+            exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
+            p_controls <- p_controls %>% filter_(exclude_str_) 
+            
         }
-        cat("Practice", practice, "exhausted.\n")
+        cat("Practice", practice, "exhausted.")
         matched_
     }, mc.cores = cores))
 }
