@@ -195,7 +195,7 @@ match_on_index <- function(cases, control_pool, index_var, match_vars,
             n_ <- nrow(matched_controls)
             if (n_ == 0){
                 cat(0)
-                next
+                #next
             } else if (0 < n_ & n_ < n_controls){
                  cat(n_)
             } else cat(".")
