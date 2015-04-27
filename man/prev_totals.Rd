@@ -3,8 +3,8 @@
 \alias{prev_totals}
 \title{Calculates the prevalence totals for the output of a data frame of events/patients etc.}
 \usage{
-prev_totals(dat, included_totals = c("year", "practid"), time_var = "year",
-  patient_var = "patid", original_data = TRUE)
+prev_totals(dat, included_totals = c("year", .ehr$practice_id),
+  time_var = "year", person_years = 100)
 }
 \arguments{
 \item{dat}{a dataframe}
@@ -13,15 +13,13 @@ prev_totals(dat, included_totals = c("year", "practid"), time_var = "year",
 
 \item{time_var}{name of the variable determining timepoints}
 
-\item{patient_var}{name of the variable determining patient id for counting}
-
-\item{original_data}{logical should the original data set be included in the output}
+\item{person_years}{numeric multiplier for presentation of prevalence and incidence numbers}
 }
 \value{
 list of aggregates and/or the original data
 }
 \description{
-e.g. Run on the output of a call to select_by_year
+e.g. Run on the output of a call to prev_terms
 }
 \details{
 Outputs totals by aggregated by a time variable and other variables

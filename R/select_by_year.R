@@ -121,7 +121,9 @@ build_date_fn <- function(start, end){
                                         str_pad(start$day, width = 2, side = "left", pad = "0")),
              enddate = sprintf("%d-%s-%s", year + end$offset,
                                str_pad(end$month, width = 2, side = "left", pad = "0"),
-                               str_pad(end$day, width = 2, side = "left", pad = "0")))
+                               str_pad(end$day, width = 2, side = "left", pad = "0")),
+             startoffset = start$offset,
+             endoffset = end$offset)
     }
 }
 
@@ -132,7 +134,9 @@ build_date_fn <- function(start, end){
 #' @param year integer
 qof_years <- function(year){
     list(startdate = paste0(year, "-04-01"),
-         enddate = paste0(year+1, "-03-31"))
+         enddate = paste0(year+1, "-03-31"),
+         startoffset = 0,
+         endoffset = 1)
 }
 
 
@@ -143,7 +147,9 @@ qof_years <- function(year){
 #' @param year integer
 qof_15_months <- function(year){
     list(startdate = paste0(year, "-01-01"),
-         enddate = paste0(year+1, "-03-31"))
+         enddate = paste0(year+1, "-03-31"),
+         startoffset = 0,
+         endoffset = 1)
 }
 
 
@@ -155,5 +161,7 @@ qof_15_months <- function(year){
 #' @param year integer
 standard_years <- function(year){
     list(startdate = paste0(year, "-01-01"),
-         enddate = paste0(year, "-12-31"))
+         enddate = paste0(year, "-12-31"),
+         startoffset = 0,
+         endoffset = 0)
 }
