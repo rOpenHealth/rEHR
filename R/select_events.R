@@ -17,6 +17,7 @@
 #' @param columns character vector of columns to extract from the table "*" means all tables
 #' @param where sting representation of the selection criteria
 #' @param sql_only logical should the function just return a string of the SQL query?
+#' @param convert_dates logical should date fields be converted to R date format?
 #' @return a dataframe or a string representing an sql query
 #' @examples \dontrun{
 #' # medical lookup tables are provided with CPRD
@@ -29,7 +30,8 @@
 #' b1 <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
 #' where = "medcode %in% .(a$medcode) & eventdate < '2000-01-01'")
 #' }
-select_events <- function(db = NULL, tab, columns = "*", where = NULL, sql_only = FALSE){
+select_events <- function(db = NULL, tab, columns = "*", where = NULL, 
+                          sql_only = FALSE, convert_dates = FALSE){
     assert_that(is.character(tab) && length(tab) == 1)
     columns <- paste(columns, collapse = ", ")
     if(is.character(where)){
@@ -40,7 +42,9 @@ select_events <- function(db = NULL, tab, columns = "*", where = NULL, sql_only 
         sql_query
     } else {
         assert_that(class(db) == "SQLiteConnection")
-        sqldf(sql_query, connection = db)
+        if(convert_dates){
+            convert_dates(sqldf(sql_query, connection = db))
+        } else sqldf(sql_query, connection = db)
     }
 }
 

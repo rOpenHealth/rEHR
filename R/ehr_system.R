@@ -34,8 +34,10 @@ set_CPRD <- function(){
     .ehr$year_origin <- 1800
     .ehr$event_date <- "eventdate"
     .ehr$birth_year <- "yob"
+    .ehr$cohort <- list(start_criteria = c("crd", "uts"),
+                        end_criteria = c("tod", "deathdate", "lcd"))
     invisible()
-}
+ }
 
 #' Return the value of an attribute in the .ehr environment
 #' @export

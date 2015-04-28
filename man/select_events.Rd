@@ -4,7 +4,7 @@
 \title{Extracts From the database}
 \usage{
 select_events(db = NULL, tab, columns = "*", where = NULL,
-  sql_only = FALSE)
+  sql_only = FALSE, convert_dates = FALSE)
 }
 \arguments{
 \item{db}{a database connection}
@@ -16,6 +16,8 @@ select_events(db = NULL, tab, columns = "*", where = NULL,
 \item{where}{sting representation of the selection criteria}
 
 \item{sql_only}{logical should the function just return a string of the SQL query?}
+
+\item{convert_dates}{logical should date fields be converted to R date format?}
 }
 \value{
 a dataframe or a string representing an sql query

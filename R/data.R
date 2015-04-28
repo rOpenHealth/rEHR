@@ -59,11 +59,6 @@
 #' @source \url{http://www.jstatsoft.org/v55/c01/paper}
 "repsample_example"
 
-#' Theoretical prevelances rates for 17 QOF conditions
-#'
-#' @format A named character vector of length 17:
-"repsample_example"
-
 
 
 #' An example EHR_definition object for defining parameters for simulating EHR data

@@ -19,8 +19,8 @@ compress <- function(dat, origin = "1970-01-01", format = "%Y-%m-%d",
                                            "frd", "crd", "tod", "deathdate"),
                      integer_fields = c("yob", "practid")){
     date_to_int <- function(x){
-        if(class(x) == "character") x <- as.Date(x, format = format)
-        if(class(x) == "Date") as.integer(x - as.Date(origin))
+        if(is(x, "character")) x <- as.Date(x, format = format)
+        if(is(x, "Date")) as.integer(x - as.Date(origin))
     }
     message("compressing...")
     for(n in intersect(date_fields, names(dat))){
@@ -65,7 +65,7 @@ to_stata <- function(dat, fname, stata13 = FALSE, ...){
 #' e.g. #1
 #' The number in the tag reflects the position of the arguments after the query
 #' The resut of evaluating that argument will then be inserted in place of the tag.
-#' If the result of evaluating the argument is a vectr of length 1, it is inserted as is.
+#' If the result of evaluating the argument is a vector of length 1, it is inserted as is.
 #' If it is a vector of length > 1, it is wrapped in parentheses and comma separated.  
 #' 
 #' Note that this function is for help in constructing raw SQL queries and should not be used as an 
@@ -121,4 +121,26 @@ expand_string <- function(s, level = 3){
                               envir = parent.frame(n = level))
                      } else x
                  }), collapse = " ")
+}
+
+
+#' converts date fields from ISO character string format to R Date format
+#' 
+#' Date fields are determined by the date-fields element in the .ehr definition.  Extra
+#' date fields can be added to the extras argument
+#' @export
+#' 
+#' @param dat a dataframe
+#' @param extras = a character vector of extra columns to convert or NULL for no extras
+convert_dates <- function(dat, extras = NULL){
+    f_dates <- intersect(c(extras, names(dat)), .ehr$date_fields)
+    if(length(f_dates)){
+        message("Converting date columns...")
+        for(column in f_dates){
+            if(!is(dat[[column]], "Date")){
+                dat[[column]] <- as.Date(dat[[column]], origin = "1970-01-01")
+            }
+        }
+    }
+    dat
 }

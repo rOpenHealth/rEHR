@@ -1,7 +1,9 @@
-require(rEHR)
+require(devtools)
+load_all("~/rOpenHealth//rEHR")
 library(rClinicalCodes)
 library(dplyr)
 library(stringr)
+library(survival)
 
 #' This script controls the building of the simulated data sets used to demonstrate rEHR
 #' The simulated dataset follows the structure of CPRD, but it is reduced to its bare essential
@@ -126,7 +128,7 @@ cbind(exp(c(ehr_def$betas$gender, betas)), exp(mod1$coefficients))
 # build practice table -------------------------------
 
 practice <- simulate_ehr_practices(ehr_def)
-write.table(ehr_patients, "inst/ehr_data/ehr_Practice.txt", sep = "\t")
+write.table(practice, "inst/ehr_data/ehr_Practice.txt", sep = "\t")
 
 
 # build consultation table -----------------------------

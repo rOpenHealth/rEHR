@@ -1,3 +1,56 @@
+#' Converts a longitudinal data set from e.g. \code{prev_terms} to a cohort dataset.
+#' The dataset has a single row for each patient and includes only patients in the numerator or 
+#' denominator for whichever cohort type is chosen. Columns are added for start and end dates and 
+#' for start and end times as integer differences from the cohort start date. A binary column is 
+#' added for membership of the case group.   All patients
+#' with start date > end date are removed from the dataset.
+#' 
+#' @export
+#' 
+#' @param dat dataframe as output from a call to \code{prev_terms}
+#' @param cohort_type character either 'incid' or 'prev'.  This selects the numerators and 
+#' denominators for that type of cohort
+#' @param cohort_start ISO date character string for the start of the cohort
+#' @param cohort_end ISO date character string for the end of the cohort
+#' @param diagnosis_start character string for the name of the diagnosis variable used to define the 
+#' start dates, or NULL if the diagnosis date is not to be included in the definition 
+#' of start dates.
+build_cohort <- function(dat, cohort_type = c("incid", "prev"), cohort_start, 
+                         cohort_end, diagnosis_start = "eventdate"){
+    cohort_type <- match.arg(cohort_type)
+    cohort_filter <- wrap_sql_query("#1_num |  #1_denom", cohort_type)
+    cohort_start <- as.Date(cohort_start)
+    cohort_end <- as.Date(cohort_end)
+    end_criteria <- intersect(.ehr$cohort$end_criteria, names(dat))
+    if(!is.null(diagnosis_start)){
+        start_criteria <- c(diagnosis_start, intersect(.ehr$cohort$start_criteria, names(dat)))
+    } else {
+        start_criteria <- intersect(.ehr$cohort$start_criteria, names(dat))
+    }
+    start_q <- paste0("as.Date(pmax(as.Date('", 
+                      cohort_start, "'), ", 
+                      paste(start_criteria, 
+                            collapse = ", ", sep = ","), ", na.rm = TRUE), origin = '1970-01-01')",
+                      collapse = ",")
+    end_q <- paste0("as.Date(pmin(as.Date('", 
+                    cohort_end, "'), ", 
+                    paste(end_criteria, 
+                          collapse = ", ", sep = ","), ", na.rm = TRUE), origin = '1970-01-01')", 
+                    collapse = ",")
+     dat %>% 
+        filter_(cohort_filter) %>% 
+        arrange_(.ehr$patient_id, "desc(year)") %>% 
+        distinct_(.ehr$patient_id)  %>% 
+        mutate_(start_date = start_q,
+                end_date = end_q,
+                start = paste0("as.integer(start_date - as.Date('", cohort_start, "'))"),
+                end = paste0("as.integer(end_date - as.Date('", cohort_start, "'))"),
+                case = sprintf("ifelse(%s_num, 1, 0)", cohort_type)) %>%
+        filter(start < end) 
+        
+                
+}
+
 #' cut_tv - Cuts a survival dataset on a time varying variable
 #'
 #' Survival datasets often have time-varying covariates that need to be dealt with. For example

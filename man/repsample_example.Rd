@@ -21,13 +21,9 @@
 }
 \usage{
 repsample_example
-
-repsample_example
 }
 \description{
 An example dataset to demonstrate the repsample function.  2474 theroetical UK GP Practices.
-
-Theoretical prevelances rates for 17 QOF conditions
 }
 \keyword{datasets}
 

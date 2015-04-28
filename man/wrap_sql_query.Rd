@@ -16,7 +16,7 @@ In the query, can be placed identifier tags which are a hash character followed 
 e.g. #1
 The number in the tag reflects the position of the arguments after the query
 The resut of evaluating that argument will then be inserted in place of the tag.
-If the result of evaluating the argument is a vectr of length 1, it is inserted as is.
+If the result of evaluating the argument is a vector of length 1, it is inserted as is.
 If it is a vector of length > 1, it is wrapped in parentheses and comma separated.
 }
 \details{
