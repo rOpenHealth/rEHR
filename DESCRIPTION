@@ -1,7 +1,7 @@
 Package: rEHR
 Authors@R: person("David", "Springate", email = "daspringate@gmail.com",
     role = c("aut", "cre"))
-Version: 0.3
+Version: 0.4
 License: GPL-3
 Title: rEHR
 Description: R tools for processing and extracting clinical information from
@@ -10,19 +10,19 @@ Licence: GNU GPL3
 Depends:
     R (>= 3.0.2),
     sqldf,
-    RSQLite
+    RSQLite,
+    dplyr
 Imports:
     assertthat,
     stringr,
     foreign,
-    dplyr,
     parallel,
-    combinat,
     readstata13
 Suggests:
     testthat,
     roxygen2,
     knitr,
-    reshape2
+    reshape2,
+    survival
 VignetteBuilder: knitr
 LazyData: true

@@ -6,7 +6,7 @@ dummy index date for controls.}
 \usage{
 match_on_index(cases, control_pool, index_var, match_vars,
   extra_conditions = "", index_diff_limit = 90, consult_path,
-  n_controls = 5, cores = 6, import_fn = read.delim, ...)
+  n_controls = 5, cores = 1, import_fn = read.delim, ...)
 }
 \arguments{
 \item{cases}{A dataframe of cases to which to match controls}

@@ -12,6 +12,10 @@ convert_dates(dat, extras = NULL)
 }
 \description{
 Date fields are determined by the date-fields element in the .ehr definition.  Extra
-date fields can be added to the extras argument
+date fields can be added to the extras argument or by setting `.ehr$date_fields`.
+}
+\seealso{
+get_EHR_value
+set_EHR_value
 }
 

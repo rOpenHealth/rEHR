@@ -127,11 +127,14 @@ expand_string <- function(s, level = 3){
 #' converts date fields from ISO character string format to R Date format
 #' 
 #' Date fields are determined by the date-fields element in the .ehr definition.  Extra
-#' date fields can be added to the extras argument
+#' date fields can be added to the extras argument or by setting `.ehr$date_fields`.
 #' @export
 #' 
 #' @param dat a dataframe
 #' @param extras = a character vector of extra columns to convert or NULL for no extras
+#' @seealso
+#' get_EHR_value
+#' set_EHR_value
 convert_dates <- function(dat, extras = NULL){
     f_dates <- intersect(c(extras, names(dat)), .ehr$date_fields)
     if(length(f_dates)){
@@ -144,3 +147,57 @@ convert_dates <- function(dat, extras = NULL){
     }
     dat
 }
+
+
+#' Exports to a variety of formats based on the file type argument
+#' 
+#' @export
+#' @param x object to be exported
+#' @param file character path to the file to be exported to 
+#' @param \dots arguments to be passed to the export functions
+#' 
+#' File type is based on the file suffix and can be one of "txt", "csv", "rda", "dta".
+#' dta files use foreign::write.dta.  
+#' If a match is not found, the file is written to std.out
+export_fn <- function(x, file, ...){
+    file_type <- str_match(file, "\\.([a-zA-Z]+$)")[,2]
+    switch(file_type, 
+           txt = write.table(x, file = file, ...),
+           csv = write.csv(x, file = file, ...),
+           rda = save(x, file = file, ...),
+           dta = foreign::write.dta(as.data.frame(x), file = file, ...),
+           write.table(x, file = "", ...))
+}
+
+
+#' Exports flat files from the database.  One file per practice
+#' 
+#'  @export
+#'  @param db a database connection
+#'  @param table character the table to be exported
+#'  @param practice_table the table that the practice definitions can be found
+#'  @param out_dir a directory to output to.  This will be created if it does not already exist
+#'  @param file_type the type of file to be saved. This can be one of "txt", "csv", "rda", "dta".
+#'  @param \dots arguments to be passed to export_fn
+#'  
+#'   Defaults to exporting consultation tables for use by \code{match_on_index()}.  the full path 
+#'   to \code{out_dir} will be created if it does not already exist. 
+#' @seealso
+#' match_on_index
+#' export_fn
+flat_files <- function(db, table = "Consultation", practice_table = "Practice", 
+                       out_dir, file_type = c("txt", "csv", "rda", "dta"), ...){
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    file_type <- match.arg(file_type)    
+    practices <- unique(select_events(db, practice_table)[[ .ehr$practice_id]])
+    for (practice in practices){
+        tab <- select_events(db, table, where = ".(.ehr$practice_id) == .(practice)")
+        fname <- file.path(out_dir, paste0("ehr_", table, 
+                                           str_pad(practice, width = 3, 
+                                                   pad = 0), ".", file_type))
+        message("exporting to ", fname, "...")
+        export_fn(tab, file = fname, ...)
+    }
+    message("Done exporting.")
+}
+

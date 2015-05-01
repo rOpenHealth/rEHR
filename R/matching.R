@@ -4,7 +4,6 @@
 #' This function wil perform incidence density sampling or exact sampling up to a supplied number 
 #' of matched controls
 #' 
-#' @export
 #'  
 #' @param matcher list of character strings defining the matching conditions
 #' @param control_pool dataframe of potential controls for matching 
@@ -26,7 +25,7 @@ match_case <- function(matcher, control_pool, n_controls, id, replace){
             mutate_(matched_case = id)
     } else {
         n_ <- nrow(matched_controls) 
-        if(0 < n_ & n_ < n_controls) cat("Only ", n_, "controls for id", id, ".")
+        if(0 < n_ & n_ < n_controls) cat(n_)
         matched_controls <- matched_controls %>% 
             sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
             mutate_(matched_case = id)
@@ -47,63 +46,76 @@ match_case <- function(matcher, control_pool, n_controls, id, replace){
 #' matching
 #' @param extra_vars character vector of other variables to be used in the matching to define other
 #' conditions
-#' @param id_var the variable used to identify an individual case
 #' @param extra_conditions a character vector of length 1 defining further restrictions on matching
 #' @param cores number of cpu cores to be used by multicore (windows users should leave set to 1)
-#' @param replace logical should sampling of controls for each case be done with replacement? (see
-#' details)
+#' @param method The method of selection of controls (see details)
 #' @param track logical should a dot be printed to std.out for each case?
 #' @param tracker function to track progress of the function (See details)
+#' @param diagnosis_date character the name of the variable in the cases and control_pool datasets
+#' containing the date of diagnosis (or other event to base the IDM method on).  If there is no
+#' diagnosis date for a patient, this should be represented by NA
 #' @details
-#' Setting replace == FALSE means that the matched cases are removed from the control pool
+#' Setting method to "exact" means that the matched controls are removed from the control pool
 #' after each case has been matched.  This makes this method not thread safe and so will only 
 #' run on a single core (and more slowly).
-#' Setting replace == TRUE is thread safe as the same controls can be used for more than one case.
+#' Setting method to "incidence_density" is thread safe as the same controls can be used for more than one case.
 #' See Richardson (2004) Occup Environ Med 2004;61:e59 doi:10.1136/oem.2004.014472 for a description 
-#' of IDS matching.
-#' To track number of cases, set \code{tracker = function() paste0(case_num, ",")}
+#' of IDS matching.  Also see the introduction vignette.
+#' The tracker variable allows for different outputs to track the progress of the function.
+#' This is currently set to ouput a dot for every case matched.  A function can be added to the 
+#' argument For a more verbose tracking, e.g. to track number of cases, 
+#' set \code{tracker = function() paste0(case_num, ",")}
 get_matches <- function(cases, control_pool, n_controls, match_vars, extra_vars, 
-                        id_var, extra_conditions, cores = 6, replace = TRUE, track = TRUE, 
-                        tracker = function(case_num) "."){
-      if(replace){
-          message("Running Incident Density Sampling on ", cores, " cpu cores.")
+                        extra_conditions = NULL, cores = 1, 
+                        track = TRUE, tracker = function(case_num) ".",
+                        method = c("incidence_density", "exact"),
+                        diagnosis_date  = NULL){
+    method <- match.arg(method)
+    if(method == "incidence_density"){
+        assert_that(!is.null(diagnosis_date))
+        message("Running Incident Density Sampling on ", cores, " cpu cores.")
+        cases$pcase <- 1
+        control_pool$pcase <- 0
+        control_pool <- bind_rows(cases, control_pool)
+        
         bind_rows(mclapply(1:nrow(cases), function(case_num){
-            case <- cases[case_num,]
-            matcher <- lapply(match_vars, function(m) {
-                paste0(m, " == '", case[[m]], "'")  
-            })
+            CASE <- cases[case_num,]
+            matcher <- c(lapply(match_vars, function(m) {
+                paste0(m, " == '", CASE[[m]], "'")  
+            }), wrap_sql_query("is.na(#1) | #1 > '#2'", diagnosis_date, CASE[[diagnosis_date]]))
             if(!is.null(extra_conditions)) {
                 matcher <- append(matcher, expand_string(extra_conditions))
             }
-            id <- case[[id_var]]
-            names(id) <- id_var
+            id <- CASE[[.ehr$patient_id]]
+            names(id) <- .ehr$patient_id
             if(track) cat(tracker(case_num))
-            match_case(matcher, control_pool, n_controls, id, replace)
+            match_case(matcher, control_pool, n_controls, id, replace = TRUE)
         }, mc.cores = cores))
-    } else {
+    } else if (method == "exact"){
         message("Running on a single core for Unique Matching.\n", 
                 nrow(control_pool), " controls...")
         for(case_num in 1:nrow(cases)){
             if(track) cat(tracker(case_num))
-            case <- cases[case_num,]
+            CASE <- cases[case_num,]
             matcher <- lapply(match_vars, function(m) {
-                paste0(m, " == '", case[[m]], "'")  
+                paste0(m, " == '", CASE[[m]], "'")  
             })
             if(!is.null(extra_conditions)) {
                 matcher <- append(matcher, expand_string(extra_conditions))
             }
-            id <- case[[id_var]]
-            names(id) <- id_var
+            id <- CASE[[.ehr$patient_id]]
+            names(id) <- .ehr$patient_id
             
             if(exists("matched_")){
-                control_ids_ <- unique(matched_[[names(id)]])
-                exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
-                control_pool <- control_pool %>% filter_(exclude_str_) 
-                if(track) cat(nrow(control_pool), " controls.")
-                matched_ <- bind_rows(matched_, match_case(matcher, control_pool, n_controls, id, replace))
+                matched_ <- bind_rows(matched_, match_case(matcher, control_pool, 
+                                                           n_controls, id, replace = FALSE))
             } else {
-                matched_ <- match_case(matcher, control_pool, n_controls, id, replace)
+                matched_ <- match_case(matcher, control_pool, 
+                                       n_controls, id, replace = FALSE)
             }
+            control_ids_ <- unique(matched_[[names(id)]])
+            exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
+            control_pool <- control_pool %>% filter_(exclude_str_) 
         }
         matched_
     }
@@ -152,7 +164,7 @@ get_matches <- function(cases, control_pool, n_controls, match_vars, extra_vars,
 #' 
 match_on_index <- function(cases, control_pool, index_var, match_vars,
                                 extra_conditions = "", index_diff_limit = 90, consult_path,
-                                    n_controls = 5, cores = 6, import_fn = read.delim, ...){
+                                    n_controls = 5, cores = 1, import_fn = read.delim, ...){
     message("Finding ", nrow(cases), " cases...")
     cons_files <- list.files(consult_path)
     bind_rows(mclapply(unique(cases[[ .ehr$practice_id ]]), function(practice){
