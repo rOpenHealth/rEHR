@@ -4,14 +4,16 @@
 #' conversions: mmol/L, mg/dL, fructosamine
 #' Assumes doctor miscoding for values < 20 after previous transformations
 #'
-#' The input dataframe must include the data2, data3 and enttype columns
+#' The input dataframe must include the data2, data3 and enttype columns and the enttype must equal
+#' either 275 (HbA1C) or 356 (Fructosamine) 
 #' 
 #'@export
 #'
 #'@param df a dataframe of hba1c test scores
 #'@return dataframe with all hba1c values recoded to mmol/mol
 cprd_uniform_hba1c_values <- function(df){
-    assert_that(all(c("data2", "data3", "enttype") %in% names(df)))
+    assert_that(all(c("data2", "data3", "enttype") %in% names(df)), 
+                all(df$enttype %in% c(275, 356)))
     df$hba1c_score <- df$data2
     df <- df[complete.cases(df$hba1c_score),]
     # mmol/L to %

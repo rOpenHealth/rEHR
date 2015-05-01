@@ -1,59 +1,506 @@
 ---
-title: "rEHR: A package for manipulating and analysing Electronic Health Record data"
-author: "David A Springate"
+title: "rEHR: An R package for manipulating and analysing Electronic Health Record data"
+author: 
+    - "David A Springate$^{*1}$, Rosa Parisi$^{2}$, ..., Evangelos Kontopantelis$^{1}$"
+    - "$^{1}$Institute of Population Health, University of Manchester"
+    - "$^{2}$Centre for Pharmacoepidemiology and Drug Safety Research, Manchester Pharmacy School, University of Manchester"
+    - "$^{*}$Corresponding Author"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::pdf_document
 bibliography: rEHR_references.bib
 documentclass: article
-abstract: This is the abstract.  
+abstract: Electronic Health Record research is a growing field and is set to expand still further due to advances in analysis methodology and an increasing body of evidence supporting the validity of such studies.  However, data science methodology to enable the rapid processing, cleaning and analysis of these increasingly large datasets is less well developed and commonly used software tools are often inadequate, resulting in bottlenecks in the research workflow and in obstacles to increased transparency and reproducibility of research methods. Preparing a research-ready dataset from an EHR is a complex and time consuming task requiring substantial data science skills, even for simple designs.  In addition, certain aspects of the workflow are highly computationally intensive (for example extraction of longitudinal data and matching controls to a large cohort) - often taking many days or even weeks to run using standard software.   This package simplifies and accelerates the process of extracting ready-for-analysis datasets from EHR databases.  It has a simple import function to a database backend that greatly accelerates data access times.  A set of generic query functions allow users to extract data efficiently without needing detailed knowledge of SQL queries.  Longitudinal data extractions can also be made in a single command, making use of parallel processing.    The package also contains functions for cutting data by time-varying covariates, matching controls to cases, unit conversion and construction of clinical code lists. There are also functions to create a simple simulated EHR for testing purposes.  The package has been tested with one for the largest primary care databases in the world, the Clinical Practice Research Datalink (CPRD), but allows for a common interface to other primary care EHRs. This simplified and accelerated work flow for EHR data extraction results in simpler, cleaner scripts that are more easily debugged, shared and reproduced.  
+
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  
 ---
 
-# Introduction
+```{r global options, include = FALSE,  }
+library(devtools)
+load_all("~/rOpenHealth//rEHR")
+```
 
-To do. See @Springate2014 for more details
+# 1. Introduction
 
-# The rEHR package
+We present the `R` [@R] package `rEHR` for manipulating and analysing Electronic Health Record (EHR) data and demonstrate its use with a simple simulated EHR generated using the package.  `rEHR` is available from the Comprehensive R Archive Network (CRAN) at __[[upload to CRAN!]]__.
 
-To do.
+The UK leads the world in primary care electronic health records (EHR) research, building on the near-universal deployment of EHRs in general practice and the clinical coding performed by general practictioners. The major UK primary care databases (PCD) are: The Clinical Practice Research Datalink (CPRD, previously known as the General Practice Research Database, GPRD), The Health Improvement Network (THIN), QResearch, The Doctors' Independent Network (DIN-LINK) and more recently, Research ONE. These databases hold the full medical records for millions of patients across hundreds of practices over several decades. To date, over 1600 papers have published using these UK PCDs, with well over 150 papers published per year since 2012.  EHR research is set to grow still faster due to advances in analysis methodology (e.g. _ITSpaper_), an increasing body of evidence supporting the validity of such studies (e.g. @Reeves2014, @Springate2015) and efforts to improve transparency and reproducibility (@Springate2014).
 
-## Setting EHR type
+Despite the research interest in EHRs in general and PCDs in particular, data science methodology to enable the rapid processing, cleaning and analysis of these increasingly large datasets is less well developed and commonly used software tools are often inadequate, resulting in bottlenecks in the research workflow and in obstacles to increased transparency and reproducibility of research methods. PCDs such as CPRD store data in complex relational and nested structures, and preparing an analysis-ready dataset requires substantial data science skills, even for simple designs.  This complexity is an inevitable consequence of the wide range of information contained withing these databases, which detail the full primary care history for every patient, including coded data for all diagnoses, prescriptions, referrals and test results for all consultations. To manage this vast wealth of data requires a relational structure based on multiple tables, classifications and terminologies (e.g. Read codes for diagnoses and referrals, product codes for prescriptions). To extract relevant data, research teams have to complete a sequence of non-trivial technical tasks. The more complex the research design the more steps are required to obtain the final dataset. For example, investigating drug outcomes typically involves constructing complex definitions of codes for diagnosis, drug exposure (may be varying over time), mortality, and possible confounding factors (e.g. comorbidities, additional medications, gender, age, referrals, date of diagnosis, etc.). In addition, certain aspects of the workflow are highly computationally intensive (for example extraction of longitudinal data and matching controls to a large cohort) - often taking many days or even weeks to run using standard software. Although more powerful computers and servers help (and are practically a prerequisite for working with data of this size), an inefficient and slow program running on a fast server will still be inefficient and slow. Some 'how-to' papers exist for good practice in observational data management but they address only some of the issues or focus on specific applications [@Danaei2013; @Dave2009; @Overhage2013; @Perlis2012]. At the same time there is a wealth of health informatics and computer science literature on how to make these research processes more transparent, reducing the duplication of effort and improving the consistency of data processing [@Ainsworth2012; @Bechhofer2013].  Finally, several software packages exist for speeding up data analysis, but these are generic, do not apply directly to EHR manipulation and may require specialist knowledge to effectively use (e.g. `dplyr` [@dplyr] for fast manipulation of dataframes `sqldf` [@sqldf] for database integration and `parallel` in base `R` for parallel processing).
 
-To do.
+`rEHR` simplifies and accelerates the process of extracting ready-for-analysis datasets from EHR databases.  In section 2 we provide instructions on loading the software and importing flat text files of the kind supplied by EHR providers into a local SQL database. In section 3 we describe the basic query operations provided by the package, the building of longitudinal data and calculation of prevalence and incidence statistics.  In section 4 we convert the longitudinal data from the previous section to a cohort dataset suitable for survival analysis and illustrate algorithms to match controls to cases and to cut cohort data by time-varying covariates. In section 5 we briefly discuss some miscellaneous functions provided in the package.  In the final section we discuss the `.ehr` environment used to define the EHR database being used and how this can be set to work with different databases.
 
-## Importing EHR data
+We have provided a number of simulated flat files to demonstrate the functions provided with the package.
 
-To do.
+# 2. Importing EHR data
 
-## Querying the database
+rEHR is installed and loaded in the usual way:
 
-To do.
+```{r, eval = TRUE, message = FALSE, warning = FALSE} 
+if(! "rEHR" %in% rownames(installed.packages())) install.packages("rEHR")
+library(rEHR)
+```
 
-## Creating an longitudinal dataset
+The development version of the package is available from [Github][github] and is accessible via the devtools [@devtools] package:
 
-To do.
-
-## Incidence and prevalence
-
-To do.
-
-
-## Survival data - matching and time-varying covariates
-
-To do.
+```{r, eval = FALSE}
+library(devtools)
+install_github("rOpenHealth/rEHR")
+library(rEHR)
+```
 
 
+
+EHR data are stored as relational databases but are most commonly made available to researchers in the form of 'flat' text files.  This has the advantage of easier access for simple tasks and, for example, viewing the files in a spreadsheet program.  However, most non-trivial operations require researchers to iterate over a series of (potentially large) different groups of files.  For example here we present pseudocode for a simple workflow leading to the production of a dataset of prevalent cases for a condition such as diabetes:
+
+```{r pseudocode_algo, eval = FALSE}
+# Pseudocode prevalent cases algorithm
+define a list of clinical codes for the condition
+for each practice:
+    load clinical events files (clinical, referral, drugs etc.)
+    select clinical events matching the clinical code list
+    load patient and practice files
+    for each year:
+        select active patients
+        select events in year
+        merge active patients and events in year according to condition algorithm
+    combine all years in practice
+Combine patients in all practices
+
+```
+
+Each level of iteration (represented by the nested `for loops`) and each type of file (e.g. clinical, referral, drugs etc.) in the above algorithm introduces the opportunity for bugs to creep into extraction code, while the repeated opening and closing of multiple text files, combined with the inherent inefficiency of for loops in `R` often result in slow, error prone code.  The `rEHR` package allows researchers to first automatically import these flat files into a SQLite database and then use predefined functions to query this database efficiently and precisely. We use SQLite databases for a variety of reasons:
+
+* SQLite databases are stored as files in the directory system of the computer and require no installation setup.  SQLite3 is installed automatically as a result of installing the dependencies for the package
+* SQLite files are stored efficiently and are relatively small compared to text files
+* The SQL language has been optimised for very rapid and efficient queries of SQLite files, resulting in much faster queries than would be available to multiple flat files
+* Working with SQLite databases allows users to use some very well developed tools that are already available to the `R` community such as `sqldf` [@sqldf] and `RSQLite` [@RSQLite] if they are familiar with `R` SQL integration tools.  These tools also allow for more specific tool functions to be built to shield users from the complexities of SQL queries.
+
+```{r, message = FALSE}
+## Use the simulated ehr files supplied with the package to build our database
+ehr_path <- dirname(system.file("ehr_data", "ehr_Clinical.txt", package = "rEHR"))
+## create a new database connection to a temporary file
+db <- database(tempfile(fileext = ".sqlite"))
+## Import multiple data files into the database
+import_CPRD_data(db, data_dir = ehr_path,
+                 filetypes = c("Clinical", "Consultation", 
+                               "Patient", "Practice", 
+                               "Referral"),
+                 dateformat = "%Y-%m-%d", 
+                 yob_origin = 1800,
+                 regex = "ehr",
+                 recursive = TRUE)
+## Individual files can also be added:
+add_to_database(db, files = system.file("ehr_data", "ehr_Therapy.txt", package = "rEHR"), 
+                table_name = "Therapy", dateformat = "%Y-%m-%d")
+## Use the overloaded `head` function to view a list of 
+## tables or the head of individual tables:
+head(db)
+head(db, table = "Clinical")
+```
+
+The `import_CPRD_data` and `add_to_database` functions are able to import tab-delimited text files or zipped tab-delimited text-files.  By default, all date strings are converted to R dates with standard ISO format ("%Y-%m-%d").  A `regex` argument should be supplied to match a common prefix to the filenames, separated from the file type by an underscore. 
+
+# 3. Querying the database
+
+## Selecting all events
+
+Once EHR data has been imported to the database, the `rEHR` package has a number of flexible built-in querying functions for extracting data. These functions are much faster to execute and less error prone than having to loop through hundreds of text files. 
+
+
+The primary generic query function is `select_events()` and is able to select all the events in a database table matching a provided `where` argument.  This function is also called by the other more specific query functions. An example set of lists of clinical codes for a number of medical conditions is provided with the package (`data(clinical_codes)`). `select_events()` returns a dataframe of extracted data.
+
+```{r, message = FALSE} 
+diabetes_codes <- clinical_codes[clinical_codes$list == "Diabetes",]
+select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
+              where = "medcode %in% .(diabetes_codes$medcode) & 
+                       eventdate < '2006-01-01' & eventdate >= '2005-01-01'")
+```
+
+The `where` argument is equivalent to the WHERE clause in SQL, in that it is used to select subsets of the data table.  The user must supply a string representation of valid `R` code, which is then translated  to SQL via the `dplyr::translate_sql_q` function.  There are two important caveats to this:
+
+1. If an element of the clause represents an R object to be accessed (such as the elements of a vector) it must be wrapped in a `.()` (See the example above). String elements wrapped in `.()` are processed by the `expand_string` function before being passed to `dplyr::translate_sql_q`.
+2. Dates should seperately quoted and entered in ISO format ('%Y-%m-%d').  This is because dates are stored as ISO text in the database, not as r Date types.
+
+If the argument `sql_only == TRUE`, the function only generates the SQL needed for the query, rather than running the query itself.  In this way, `select_events` can be used as the base for more complex query functions.  The results of this function can also then be passed to `temp_table()` to create temporary tables where it is not desirable to keep large query results in RAM. For example:
+
+```{r}
+Asthma_codes <- clinical_codes[clinical_codes$list == "Asthma",]
+q <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
+              where = "medcode %in% .(Asthma_codes$medcode)", 
+              sql_only = TRUE)
+temp_table(db, tab_name = "Asthma", select_query = q)
+head(db, temp = TRUE)
+head(db, table = "Asthma")
+```
+
+### Using raw SQL queries
+
+Since EHR data is stored as a standard SQLite database, users can alternatively make SQL queries to the database using `sqldf`, which is imported into the namespace on loading of the `rEHR` package:
+
+```{r, message = FALSE}
+sqldf("SELECT patid, practid, gender, yob, deathdate from Patient WHERE 
+          deathdate IS NOT NULL LIMIT 6", 
+      connection = db)
+```
+
+There are two methods for including `R` objects in raw SQL strings.  First, wrapping the string in a call to `expand_string()` allows for the `.()` notation to be used as in `where` arguments to `select_events()` based functions.  Alternatively, a helper function, `wrap_sql_query()` is provided that functions in a similar way to `base::sprintf` but formats objects according to SQL syntax. If the result of evaluating the argument is a vector of length 1, it is inserted as is; if it is a vector of length > 1, it is wrapped in parentheses and comma separated.  
+ 
+
+```{r}
+medcodes1 <- 1:5
+practice <- 255
+expand_string("SELECT * FROM clinical WHERE practid == .(practice)")
+wrap_sql_query("SELECT * FROM clinical WHERE practid == #1 AND medcodes in #2", 
+               practice, medcodes1)
+```
+
+## Selecting first or last events
+
+Frequently, users need to find the first clinical event for a given patient (e.g. to identify dates of diagnosis of chronic diseases) or the most recent clinical event (e.g. to identify if a drug therapy has been prescribed within a certain time period). `rEHR` provides convenience functions for these common situations.  The functions run a `select_events()` query and then group by patient id and selects only the earliest/latest event for each patient:
+
+```{r}
+first_DM <- first_events(db, tab = "Clinical", 
+                         columns = c("patid", "eventdate", "medcode"), 
+              where = "medcode %in% .(diabetes_codes$medcode)")
+last_DM <- last_events(db, tab = "Clinical", 
+                       columns = c("patid", "eventdate", "medcode"), 
+              where = "medcode %in% .(diabetes_codes$medcode)")
+head(first_DM)
+head(last_DM)
+```
+
+## Querying longitudinal data with `select_by_year()`
+
+Researchers will often want to extract data over a range of different time-points, for example they may want to calculate the prevalence of a condition and how this changes through time.  When working with flat text files, this must be done with a complex nested loop that is both slow and error-prone.  The `select_by_year()` function provides a simple interface to extract longitudinal data.  On posix-compliant computers (Linux, BSD, Mac), this function can make use of parallel processes to select data for different years concurrently, greatly accelerating the extraction process on multicore machines. The function runs a series of selects over a year range and collects in a list of dataframes
+
+The function applies a database select over a range of years and outputs as a list or a dataframe. Either a database object or a path to a database file can be supplied. If multiple cores are being used (i.e. cores > 1), a path to a database file must be used because the same database connection cannot be used across threads.  In this case, a new database connection is made with every fork. Note that when working with temporary tables, `cores` must be set to 1 and the open database connection must be set with `db`. This is because the use of `parallel::mclapply` means that new database connections need to be started for each fork and temporary files are only available inside the same connection.
+
+Queries can be made against multiple tables, assuming that the columns being extracted are present in all tables. The  `columns` argument is a character vector of column names to be selected. The individual elements can be of arbitrary length.  This means it is possible to insert SQL clauses e.g. "DISTINCT patid".
+
+A numeric vector of years is passed to the `year_range` argument to specify the years to select data for. Selection is done according to the function passed to the `selector_fn` argument. `select_events` is the default but `first_events` and `last_events` can also be used, as well as custom selection functions. The `where` argument works in the same way as in `select_events` except that year-start and year-end criteria can be added as 'STARTDATE' and 'ENDDATE'. These are translated to the correct year- start and end dates.  Different start and end dates can be specified by supplying a function to the `year_fn` argument.  This function must accept a single year argument and return a list with two elements - "startdate" and "enddate", each of which must be date characters in posix format (i.e. "%Y-%m-%d").  Three functions are provided to define years (`standard_years` for 1st January to 31st December, `qof_years` for UK financial years as used in the UK Quality and Outcomes Framework [@Roland2004] and `qof_15_months` for the period starting 1st January in the year in question and finishing on the 31st March the following year) and a convenience function, `build_date_fn()` is provided to which users can supply lists of year offsets, months and days for year- start and end to return a function that can be supplied as the `year_fn` argument.  Finally the user can set the `as_list` argument to determine whether data from each year is returned as a seperate list element or as a single data frame.  
+
+
+### Selecting prevalent and incident events
+
+To show the utility of the package we demonstrate how one might extract an incident and prevalent cohort of diabetes patients from the simulated example data. Prevalent events for a chronic condition are selected by the earliest diagnostic event prior to the end of the time period in question.  The denominator for the calculation of the prevalence is the total number of patients registered at that time point. 
+
+```{r prevalence}
+# Select all patients with current registration date (crd) < the start date 
+# for each year.
+registered_patients <- select_by_year(db = db, 
+                         tables = "patient", 
+                         columns = c("patid", "practid", "gender", 
+                                     "yob", "crd", "tod", "deathdate"), 
+                         where = "crd < STARTDATE",
+                         year_range = c(2008:2012), 
+                         year_fn = standard_years)
+str(registered_patients)
+table(registered_patients$year)
+```
+
+Notice that `select_by_year` returns a dataframe in long form, with a year column for the longitudinal component.  Next we calculate the incident cases, which are those patients with first diganoses at any point before the end of the year in question, plus the dates for the first diagnoses.  In this case we include events matching our list of diabetes clinical codes in either clinical or referral files.  Because we only want the first diagnosis dates we set the `selector_fn` argument to `first_events`: 
+
+```{r}
+incident_cases <- select_by_year(db = db, 
+                                      tables = c("Clinical", "Referral"), 
+                                      columns = c("patid", "eventdate", "medcode"), 
+                                      where = "medcode %in% .(diabetes_codes$medcode) & 
+                                               eventdate <= ENDDATE",
+                                      year_range = c(2008:2012), 
+                                      year_fn = standard_years, 
+                                      selector_fn = first_events)
+str(incident_cases)
+```
+
+Note that in this case extra columns have been added for both year and table, to identify the table the event was found in. Beacuse events were taken from more than one table (Clinicals and Referrals), the incident_cases dataframe should be sorted and duplicates removed to ensure that only thes first events are kept. The two datasets are then merged to give the dataset from which the denominators and numerators can be calculated. The `dplyr` package is imported to the namespace when the `rEHR` package is loaded. This simplifies and accelerates merging operations and is an important part of the `rEHR` workflow:
+
+```{r, message = FALSE} 
+## Remove duplicates across clinical and referral tables:
+incident_cases %>%
+    group_by(patid, year) %>%
+    arrange(eventdate) %>%
+    distinct() %>%
+    ungroup -> incident_cases
+## All patients are kept (equivalent to merge(all.x = TRUE))
+prevalence_dat <- left_join(registered_patients, incident_cases)
+```
+
+Prevalence and incidence can be calculated by the built-in functions `prev_terms()` and `prev_totals()`. `prev_terms()` adds logical columns for membership of incidence and prevalence denominators as well as a column for the contribution of the individual to that year's followup time. `prev_totals()` summarises this information to calculate the denominators and numerators for prevalence and incidence, according to the users' grouping factors. The criteria for membership of the incidence and prevalence numerators and denominators as well as for followup time are shown in table 1.
+
+
+|Column                |Definition                                                                      |
+|:---------------------|:-------------------------------------------------------------------------------|
+|Incident Numerator    |existing event date + event occurs within year + transfer out date > event date |
+|Incident Denominator  |No events in previous years + transfer out date > year start date               |
+|Prevalent Numerator   |existing event date + transfer out date > event date                            |
+|Prevalent Denominator |transfer out date > year start date                                             |
+|Followup              |minimum of (year end date, transfer out date, death date) - year start date     |
+
+table 1: Definitions of incidence and prevalence terms
+
+
+```{r, message = FALSE}
+prevalence_dat <- prev_terms(prevalence_dat)
+totals <- prev_totals(prevalence_dat)
+totals$prevalence$year_counts
+totals$incidence$year_counts
+```
+
+Here we see that, in our simulated dataset, we have a diabetes prevalence of `r round(totals$prevalence$year_counts$prevalence[1], 1)`% in `r totals$prevalence$year_counts$year[1]` raising to `r round(totals$prevalence$year_counts$prevalence[5], 1)`% in `r totals$prevalence$year_counts$year[5]` and an incidence of `r round(totals$incidence$year_counts$incidence[1], 1)`% in `r totals$incidence$year_counts$year[1]` dropping to `r round(totals$incidence$year_counts$incidence[5], 1)`% in `r totals$incidence$year_counts$year[5]`.
+
+
+# 4. Building cohorts, matching and time-varying covariates
+
+In this section we demonstrate how to convert the longitudinal data from the previous section to a cohort dataset suitable for survival analysis and also illustrate algorithms to match controls to cases and to cut cohort data by time-varying covariates. 
+
+One of the most common uses of EHR data in research is to build cohorts for survival analyses. The longitudinal data in the previous section is easily converted to survival cohort format using the `build_cohort()` function. This returns a dataset with a single row for each patient and includes only patients in the numerator or denominator for whichever cohort type is chosen (either incident or prevalent cohorts). Columns are added for start and end dates and for start and end times as integer differences from the cohort start date. A binary column is added to indicate membership of the case group.  All patients with start dates greater than their end dates are removed from the dataset. The diagnosis_start argument is used to include the diagnosis date in the definition of the start dates for the patients.  If it is not required for the diagnosis date to be included in the start date definition, this argument can be set to `NULL`. Here, we will first merge in practice data (i.e. dates for when practices are deemed to be up to standard) and then construct the cohort: 
+
+```{r, message = FALSE}
+practices <- select_events(db = db, tab = "Practice", convert_dates = TRUE)
+prevalence_dat <- left_join(prevalence_dat, practices)
+
+cohort <- build_cohort(prevalence_dat, cohort_type = "prev", 
+                       cohort_start = "2006-01-01", cohort_end = "2012-12-31", 
+                       diagnosis_start = "eventdate")
+```
+
+The cohort is now ready for analysis. e.g. 
+```{r, message = FALSE}
+## Add a logical column for death during cohort
+cohort$death <- with(cohort, 
+                     ifelse(!is.null(deathdate) & 
+                                (deathdate > as.Date("2006-01-01") & 
+                                     deathdate < as.Date("2012-12-31")), 
+                            1, 0))
+cohort$death[is.na(cohort$death)] <- 0
+
+library(survival)
+surv_obj <- with(cohort, Surv(start, end, death))
+coxph(surv_obj ~ gender + case, data = cohort)
+```
+
+## Matching
+
+Matching cases to controls is an important pre-analysis step.  The `rEHR` package provided three methods for matching cases to controls:
+
+1. Incidence density matching (IDM)
+2. Exact matching 
+3. Matching on a dummy index date sourced from consultation files
+
+### Incidence density matching
+
+This is performed using the `get_matches()` function. With IDM, controls are selected for a particular case at the time of diagnosis (or other event such as death) from from other members of the cohort who, at that time, do not have the diagnosis.  The IDM sampling procedure allows the same patient to be selected as a control for more than one case, thus providing a full set controls for each case while still producing unbiased estimates of risk [@Richardson2004; @Reeves2014]. This also means that the matching procedure can be parallelised to increase computational efficiency.
+
+```{r, message  = FALSE}
+cohort2 <- build_cohort(prevalence_dat, cohort_type = "incid", 
+                        cohort_start = "2006-01-01", cohort_end = "2012-12-31", 
+                        diagnosis_start = "eventdate")
+IDM_controls <- get_matches(cases = filter(cohort2, case == 1), 
+                            control_pool = filter(cohort2, case == 0), 
+                            match_vars = c("gender", "region"),
+                            n_controls = 4, cores = 2, 
+                            method = "incidence_density", diagnosis_date  = "eventdate")
+```
+
+In this example matching scenario, `r nrow(IDM_controls)` controls were matched to `r nrow(filter(cohort2, case == 1))` cases, which is `r nrow(IDM_controls)/nrow(filter(cohort2, case == 1))` controls matched to each case.
+
+In all of the matching algorithms, matching is performed by default on categories selected in the `match_vars` argument.  However, more complex matching strategies can also be employed via the `extra_conditions` argument.  You can wrap calls to expressions in dotted brackets to automatically expand them.  This is particularly useful  when you want to find the value for each individual case. Each case is denoted by `CASE`, e.g. `"start_date < .(CASE$start_date)"` will ensure the start date for controls is prior to the start date for the matched case. The following code also selects controls whose birth year (`yob`) is within 2 years either side of their matched case:
+
+```{r, message = FALSE}
+
+IDM_controls2 <- get_matches(cases = filter(cohort2, case == 1), 
+                             control_pool = filter(cohort2, case == 0), 
+                             match_vars = c("gender", "region"),
+                             extra_conditions = "yob >= ( .(CASE$yob) - 2) & 
+                             yob <= ( .(CASE$yob) + 2)",
+                             n_controls = 4, cores = 2, 
+                             method = "incidence_density", diagnosis_date  = "eventdate")
+```
+
+### Exact matching
+
+Exact matching only matches controls from the control pool, unlike in IDM matching. Also, matched controls are removed from the control pool after each case has been matched, so each control can be used a maximum of one time. Therefore it is possible to have fewer matched controls for some cases than are requested via the `n_controls` argument.  Because the control pool is being altered for every case, exact matching is not thread safe and so will only run on a single core. The `cores` and `diagnosis_date` arguments are ignored when this method is selected.  
+
+```{r, message  = FALSE, results = 'hide'}
+exact_controls3 <- get_matches(cases = filter(cohort2, case == 1), 
+                            control_pool = filter(cohort2, case == 0), 
+                            match_vars = c("gender", "region"),
+                            n_controls = 4, cores = 2, 
+                            method = "exact", diagnosis_date  = "eventdate")
+```
+
+In a small cohort, this can rapidly reduce the control pool, leading to many cases without matches. In this example, `r nrow(filter(cohort2, case == 1, patid %in% exact_controls3$matched_case))` out of `r nrow(filter(cohort2, case == 1))` were matched with mean `r round(nrow(exact_controls3)/nrow(filter(cohort2, case == 1, patid %in% exact_controls3$matched_case)), 1)` controls matched to every case.
+
+### Matching on a dummy index date sourced from consultation files
+
+A common matching approach is to match on an index date (e.g. ), for example the diagnosis date of the cases. There are several reasons for matching on index_date:
+
+1. It ensures cases and controls are followed-up for the same amount of time on average. Not including an index date for controls may result in them being, on average, in the cohort for longer than the cases because their cohort start date is not constrained by the index date.
+2. There is a possible reduction of detection bias, for example if cases are expected to visit their doctors more often becuase they have more co-morbidities. 
+3. If controls are known to have attended their practice at around the same time as their matched case, it is likely they will experience similar conditions in terms of practice policy and active GPs
+4. Patients who, though registered, have no records of contact with the medical system ("Ghost patients") are excluded
+
+However, the controls will often not have the same index to match on (this is true by definition if the diagnosis date is used).  In this situation, it is common to match on a dummy index date which may be a clinical event or interaction in the control's electronic health record that occurs around the same time as the index date of the case [@Parisi2015; @Gelfand2006].  The `match_on_index()` function allows for matching on an arbitrary number of categrorical `match_var` variables and on continuous variables via the `extra_conditions` argument in the same way as the `get_matches()` function above. In addition, a supplied index date for each case is is matched to event dates in a series of consultation files (1 file for each practice), providing a dummy index date for controls of a consultaton date within `index_diff_limit` days of the matched case's index date.
+
+Note that the consultaton files must be in flat-file format, i.e. not as part of the database, but as text (or other filetype, e.g stata dta) files.  This is the data format provided by CPRD [@CPRD].  Although in most situations it is more efficient to process EHR data in SQL databases, as in the earlier functions described here, consultation tables are often very large and searching these for every case in a large cohort would be very slow.  By processing consultation files that have been split by practice, it is possble to search for matches a practice at a time which is both efficient and allows for parallel processing to speed the process up still further.  For convenience, a function `flat_files()` is provided that can export a database table to flat files split by practice in a format of their choosing. The `match_on_index()` function has an `import_fn` argument to use different file formats (e.g. `foreign::read.dta` or `readstata13::read.dta13` for Stata 12 or Stata 13 file).
+
+```{r, message = FALSE, results = 'hide'}
+consultation_dir <- "~/R/rEHR_testing"
+flat_files(db, out_dir = consultation_dir, file_type = "csv")
+index_controls <- match_on_index(cases = filter(cohort2, case == 1), 
+                                 control_pool = filter(cohort2, case == 0),
+                                 index_var = "eventdate", 
+                                 match_vars = c("gender", "region"),
+                                 index_diff_limit = 90, 
+                                 consult_path = consultation_dir,
+                                 n_controls = 4,
+                                 import_fn = function(x) convert_dates(read.csv(x)))
+unlink(consultation_dir, recursive = TRUE) # clean up constructed dirs after analysis
+```
+
+This function performs matching that is still more conservative than the previous methods, since it requires matching of patients within the same practice and with consultation dates near the index date.  In the test example above, no matched controls were found which is not surprising with a control pool of only `r nrow(filter(cohort2, case == 0))`. In practice this method is only appropriate where there is a control pool of hundreds of thousands or even millions of patients. If too few controls are found, the constraint can be relaxed by setting a higher `index_diff_limit`.  Setting this to an arbitrarily high value effectively means that matching is not done on index date, but just on practice and the other user-specified matching variables.  Users may find that this is a more efficent way to perform exact matching than using the `get_matches()` function.  The author has used this method to accelerate matching runs with several million controls that previously took days or weeks to minutes or a few hours.
+
+## Time-varying covariates
+
+Often, researchers want to cut a survival cohort by time-varying covariates.  In this situation, individual patients may run over more than one row in the cohort dataset. For example, a drug exposure may occur after the entry into the cohort and one might be interested in how this might affect the outcome. In this situation, it is useful to have a pre-exposure and post-exposure time period in the dataset.
+
+The `cut_tv()` function cuts up a dataset based on times supplied for the time-varying covariate. If there is already a variable for the time-varying covariate, you can chose to flip the existing values or increment them.  This means the function can be called multiple times to, e.g. deal with drugs starting and stopping and also to model the progression of treatment. Other packages implement similar functions (e.g. the `cutLexis` function from the `Epi` package [@Epi]). The `cut_tv()` function is considerably faster than other cutting methods (particularly on large datasetss), does not require conversion of the dataset to other formats (such as `Lexis`), can be parallelised on posix compliant machines and is designed to be chained with `dplyr` workflows using the `%>%` operator. `cut_tv()` can deal with the following scenarios:
+
+* __Binary chronic covariates__ e.g. The time of diagnosis for a chronic (unresolvable) condition. This requires a single column variable of times from entry in the dataset
+* __Binary covariates__ e.g. times of starting and stopping medication.  This requires more than one column variable in the dataset, one for each start or stop event.  The state flips with each new change.
+* __Incremental time-varying covariates__ e.g. different stages of a condition.  This requires a single column variable for each incremental stage
+* __Any combination of the above__ This is achieved by chaining multiple calls together
+
+One must supply a dataframe, variable names for entry and exit times, the time-varying covariate, the patient id and the constructed variable.  Also one supplies the number of processor cores to run the function on and the behaviour of the function if the constructed variable already exists (either to flip from 1-0 or to increment by one). Here we demonstrate the different scenarios with a small sample dataset:
+
+```{r}
+tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(1000, 689, 1000, 874, 777), 
+                   event = c(0,1,0,1,1), drug_1 = c(NA, NA, NA, 340, 460),
+                   drug_2 = c(NA, 234, 554, 123, NA), 
+                   drug_3_start = c(110, 110,111, 109, 110),
+                   drug_3_stop = c(400, 400, 400, 400, 400),
+                   stage_1 = c(300, NA, NA, NA, NA),
+                      stage_2 = c(450, NA, NA, NA, NA))
+
+## Multiple binary chronic covariates:
+tv_out1 <- cut_tv(tv_test, 
+                  entry = start, 
+                  exit =  end, 
+                  cut_var = drug_1, 
+                  id_var = id, 
+                  tv_name = drug_1_state)
+tv_out1 <- cut_tv(tv_out1, start, end, drug_2, id_var = id, drug_2_state)
+head(tv_out1)
+## Binary covariates:
+tv_out3 <- cut_tv(tv_test, start, end, drug_3_start, id_var = id, drug_3_state)
+tv_out3 <- cut_tv(tv_out3, start, end, drug_3_stop, id_var = id, drug_3_state)
+head(tv_out3)
+## incremental covariates:
+inc_1 <- cut_tv(tv_test, start, end, stage_1, id_var = id, disease_stage, 
+                on_existing = "inc")
+inc_1 <- cut_tv(inc_1, start, end, stage_2, id_var = id, disease_stage, 
+                on_existing = "inc")
+head(inc_1)
+## Chaining combinations of the above using %>%
+library(dplyr)
+tv_test %>%
+    cut_tv(start, end, drug_1, id_var = id, drug_1_state) %>% 
+    cut_tv(start, end, drug_2, id_var = id, drug_2_state) %>%
+    cut_tv(start, end, drug_3_start, id_var = id, drug_3_state) %>%
+    cut_tv(start, end, drug_3_stop, id_var = id, drug_3_state) %>%
+    cut_tv(start, end, stage_1, id_var = id, disease_stage, on_existing = "inc") %>%
+    cut_tv(start, end, stage_2, id_var = id, disease_stage, on_existing = "inc") %>%
+    head
+
+```
+
+# 5. Miscellaneous functions
+
+In this section we briefly discuss some miscellaneous functions provided in the package.  
+ 
 ## Unit conversion
 
-To do.
+HbA1C tests for glycated haemoglobin are one of the best recorded clinical tests in UK primary care databases, to a large extent because of testing being incentivised under the UK Quality and Outcomes Framework pay-for-performance scheme [@Roland2004; @Kontopantelis2014]. However, HbA1C data is not recorded in CPRD consistently. Measurements may have been made in mmol/mol, mmol/L or mg/dL.  Also the closely analogous fructosamine test can also be converted into the same units for direct comparison.  The CPRD-specific `cprd_uniform_hba1c_values()` function accepts a single argument of a dataframe in the CPRD "Additional" table form containing only entity types for HbA1C and Fructosamine and converts any HbA1C and fructosamine values to a comon mmol/mol scale. Once this conversion has taken place, the function also removes obvious mis-coding errors that are far outside the possible range. A dataframe is returned with an extra column `hba1c_score`
+
+## Exporting data to Stata format
+
+Sometimes researchers may need to share data with others in the same group who may not have `R` expertise. We have provided the `to_stata` function to export dataframes to stata dta format.  This function compresses a dataframe to reduce file size in the following ways:
+
+1. Date variables (as specified by the `date_fields` argument) are converted to integer days from 1960-01-01 to avoid compatibility issues between `R` and Stata.  An alternative origin can be set with the `origin` argument
+2. Fields specified in the `integer_fields` are converted from numeric to integer 
+
+the `stata13` boolean argument indicates whether files should be stored in Stata13 format (Using `readstata13::savedta13`) or in Stata 12 compatible format (using `foreign::write.dta`).  The former includes a further compression step, similar to the `compress` command in Stata.
+
+## Working with temporary database tables
+
+The size of EHR databases may require keeping intermediate data extractions as database tables, rather than as in-memory `R` dataframes. For example, extractions of clinical events for a common condition such as diabetes or asthma will require the extraction of millions of rows of data. These may be easily stored as temporary database tables. This is also useful if you are working with a protected database that you only have read-only access to.   The `rEHR` package has a suite of functions to deal with temporary database tables:
+
+* `temp_table()` is used to construct temporary tables and is illustrated in section 3
+* `append_to_temp_table()` appends rows to a temporary table based on a specified select statement
+* `to_temp_table()` exports a dataframe to a temporary database table
+* `drop_temp_table()` checks if a temporary table exists and then deletes if it does
+* `drop_all_temp_tables()` drops all temporary tables from the database
+
+Note that temporary tables are only associated with the currently open database connection.  This means that functions capable of parallel processing (e.g. `select_by_year()`) can only be used in the single core mode (i.e. set `cores = 1`) since multicore processes open up multiple parallel connections.
 
 
-## Practice Sampling
+# 6. Setting EHR type
 
-To do.
+In the final section we discuss the `.ehr` environment used to define the EHR database being used and how this can be set to work with different databases.
+
+In many of the functions in this package, specific tables and variables in the database need to be accessed.  A particular database system, such as CPRD, will have its own schema describing the organisation of the data within it.  To simplify the functions in this package, we have opted to include an interface to the database schema in the form of an environment, `.ehr`, that is accessed by the various analysis functions in order to extract the correct data from the correct place in the database. This is effectively a list of attributes relating to the EHR system being used.  For example there is an attribute specifying the patient id variable in the database. By default, a schema environment for CPRD is loaded when the package is loaded via a call to `set_CPRD()`.  we have provided accessor functions to get and set attributes in the `.ehr` environment. It is preferable to use these accessor functions rather than setting elements directly.  A list of all of the attributes is provided by the `list_EHR_attributes()` function. For example:
+
+```{r}
+list_EHR_attributes()
+```
+
+The values of individual attributes can be accessed with the `get_EHR_attribute()` function:
+
+```{r}
+get_EHR_attribute(patient_id) # gives the attribute for patient ids
+get_EHR_attribute(date_fields) # fields in the database stored as dates
+get_EHR_attribute(cohort) # variables used in cohort construction
+```
+
+Individual attribute values can be set using the `set_EHR_Attribute()` function:
+
+```{r}
+set_EHR_attribute(patient_id, value = "PATIENT") # set the patient id attribute
+get_EHR_attribute(patient_id)
+```
+
+The default settings can be reverted to using the `set_CPRD()` function:
+
+```{r}
+set_CPRD()
+get_EHR_attribute(patient_id)
+```
+
+The `.ehr` environments will allow for the simple definition of interfaces to other EHR systems, via the construction of new setting functions. 
+
+# 7. Conclusion
+
+Working with EHR data requires a combination of computational and statistical expertise.  The `rEHR` package greatly simplifies and accelerates the extraction and processing of data from EHR databases, allowing researchers to devote more time to the statistical analysis of results. The workflow is straightforward - amounting to a flat series of function calls, rather than a complex set of nested loops, errors will be much more easily spotted and fixed. The combination of use of SQL databases, optimised data manipulation packages and multicore functionality results in code that runs many times faster than code that is commonly written for these tasks.  Although this package is currently only tested with CPRD data, the `.ehr` environment system will allow it to be easily linked to other EHR databases.
+
+Future versions of the `rEHR` software will include:
+
+* Implementaion of the `repsample` algorithm for representative sampling of practices [@Kontopantelis2013]
+* Iterative proportional fitting for matching on population characteristics between different EHR databases (@Springate2015 Appendix 2)
+* A robust algorithm for determining smoking status
+* Functions for constructing draft lists of clinical codes
+* interfaces to other EHR systems, in particular UK primary care databases such as The Health Improvement Network, QResearch and ResearchOne.
+* Uniform units functions for other clinical tests such as blood pressure, cholesterol and serum creatine
+
+# Acknowledgements
+
+This work was funded by the National Institute for Health Research (NIHR) School for Primary Care as part of the project "An analytical framework for increasing the efficiency and validity of research using primary care databases" 
 
 # References
+
+
+[github]: http://www.github.com "Github"

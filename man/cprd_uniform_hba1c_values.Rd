@@ -17,6 +17,7 @@ conversions: mmol/L, mg/dL, fructosamine
 Assumes doctor miscoding for values < 20 after previous transformations
 }
 \details{
-The input dataframe must include the data2, data3 and enttype columns
+The input dataframe must include the data2, data3 and enttype columns and the enttype must equal
+either 275 (HbA1C) or 356 (Fructosamine)
 }
 
