@@ -21,4 +21,8 @@ install_github("rEHR", "rOpenHealth")
 require(rEHR)
 ```
 
-See the [vignette](https://github.com/rOpenHealth/rEHR/blob/master/vignettes/introduction-to-rehr.pdf) for full usage details. Issues can be reported [here](https://github.com/rOpenHealth/rEHR/issues).
+See the [vignette](https://github.com/rOpenHealth/rEHR/blob/master/vignettes/introduction-to-rehr.pdf) for full usage details. 
+
+Clinical code list construction functions have been absorbed from the [rpcdsearch](https://github.com/rOpenHealth/rpcdsearch) package.  See the [Codelist construction vignette](https://github.com/rOpenHealth/rEHR/blob/master/vignettes/codelists.pdf) for more details.
+
+Issues can be reported [here](https://github.com/rOpenHealth/rEHR/issues).

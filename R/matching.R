@@ -3,7 +3,7 @@
 #' Helper function for get_matches()
 #' This function wil perform incidence density sampling or exact sampling up to a supplied number 
 #' of matched controls
-#' 
+#'  
 #'  
 #' @param matcher list of character strings defining the matching conditions
 #' @param control_pool dataframe of potential controls for matching 

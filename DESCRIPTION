@@ -17,9 +17,12 @@ Imports:
     stringr,
     foreign,
     parallel,
-    readstata13
+    readstata13,
+    combinat,
+    xlsx
 Suggests:
     testthat,
+    devtools,
     roxygen2,
     knitr,
     reshape2,

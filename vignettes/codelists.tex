@@ -1,0 +1,281 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={David A Springate\^{}\{*1\}, Ivan Olier\^{}\{2\}, Evangelos Kontopantelis\^{}\{1\}; \^{}\{1\}Institute of Population Health, University of Manchester; \^{}\{2\}Institute of Biotechnology, University of Manchester; \^{}\{*\}Corresponding Author},
+            pdftitle={Working with clinical code lists with rEHR},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+\setlength{\droptitle}{-2em}
+  \title{Working with clinical code lists with rEHR}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{David A Springate\(^{*1}\), Ivan Olier\(^{2}\), Evangelos
+Kontopantelis\(^{1}\) \\ \(^{1}\)Institute of Population Health, University of Manchester \\ \(^{2}\)Institute of Biotechnology, University of Manchester \\ \(^{*}\)Corresponding Author}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{2015-07-29}
+
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The rEHR package provides functions to identify relevant code lists and
+to automate the construction of clinical code lists.
+\end{abstract}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"devtools"}\NormalTok{)}
+\KeywordTok{require}\NormalTok{(devtools)}
+\KeywordTok{install_github}\NormalTok{(}\StringTok{"rEHR"}\NormalTok{, }\StringTok{"rpcdsearch"}\NormalTok{)}
+\KeywordTok{require}\NormalTok{(rpcdsearch)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Building draft definition
+lists}\label{building-draft-definition-lists}
+
+Definition lists can be defined for:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  clinical terms (by either text search or searching for matching
+  clinical codes)
+\item
+  test terms (by text search)
+\item
+  medications (by either text search or product code)
+\end{itemize}
+
+Building definition lists is a two stage process:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  The search is defined by instantiating an object of class
+  \texttt{MedicalDefinition}, containing the terms to be searched for in
+  the lookup tables
+\item
+  A \texttt{definition\_search} is performed on the
+  \texttt{MedicalDefinition} object and the relevant lookup tables to
+  return a list of matching dataframes
+\end{enumerate}
+
+A \texttt{MedicalDefinition} object can be either made using terms
+defined within \texttt{R} or with terms imported from an external csv
+file
+
+\subsection{Defining searches within
+R}\label{defining-searches-within-r}
+
+Use the \texttt{MedicalDefinition} constructor function to generate
+search definitions. This takes the following arguments:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{terms} a list of character vectors representing clinical
+  search terms or NULL
+\item
+  \texttt{codes} list of character vectors representing clinical code
+  terms or NULL
+\item
+  \texttt{tests} list of character vectors representing test search
+  terms or NULL
+\item
+  \texttt{drugs} list of character vectors representing drug search
+  terms or NULL
+\item
+  \texttt{drugcodes} list of character vectors representing drug product
+  code terms or NULL
+\end{itemize}
+
+vectors of length \textgreater{} 1 are searched for together (AND), in
+any order. Different vectors in the same list are searched for
+seperately (OR). Placing a ``-'' character at the start of a character
+vector element excludes that terms from the search.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# vectors of length > 1 are combined as a single AND expression}
+\CommentTok{# "-" excludes that term from the search}
+\NormalTok{def <-}\StringTok{ }\KeywordTok{MedicalDefinition}\NormalTok{(}\DataTypeTok{terms =} \KeywordTok{list}\NormalTok{(}\StringTok{"peripheral vascular disease"}\NormalTok{, }\StringTok{"peripheral gangrene"}\NormalTok{, }\StringTok{"-wrong answer"}\NormalTok{,}
+                      \StringTok{"intermittent claudication"}\NormalTok{, }\StringTok{"thromboangiitis obliterans"}\NormalTok{,}
+                      \StringTok{"thromboangiitis obliterans"}\NormalTok{, }\StringTok{"diabetic peripheral angiopathy"}\NormalTok{,}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"diabetes"}\NormalTok{, }\StringTok{"peripheral angiopathy"}\NormalTok{),  }\CommentTok{# combined as a single AND expression}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"diabetes"}\NormalTok{, }\StringTok{"peripheral angiopathy"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"buerger"}\NormalTok{,  }\StringTok{"disease presenile_gangrene"}\NormalTok{),}
+                      \StringTok{"thromboangiitis obliterans"}\NormalTok{,}
+                      \StringTok{"-rubbish"}\NormalTok{, }\CommentTok{# exclusion}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"percutaneous_transluminal_angioplasty"}\NormalTok{, }\StringTok{"artery"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"bypass"}\NormalTok{, }\StringTok{"iliac_artery"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"bypass"}\NormalTok{, }\StringTok{"femoral_artery"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"femoral_artery"} \NormalTok{, }\StringTok{"occlusion"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"popliteal_artery"}\NormalTok{, }\StringTok{"occlusion"}\NormalTok{),}
+                      \StringTok{"dissecting_aortic_aneurysm"}\NormalTok{, }\StringTok{"peripheral_angiopathic_disease"}\NormalTok{,}
+                      \StringTok{"acrocyanosis"}\NormalTok{, }\StringTok{"acroparaesthesia"}\NormalTok{, }\StringTok{"erythrocyanosis"}\NormalTok{,}
+                      \StringTok{"erythromelalgia"}\NormalTok{, }\StringTok{"ABPI"}\NormalTok{,}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"ankle"}\NormalTok{, }\StringTok{"brachial"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"ankle"}\NormalTok{, }\StringTok{"pressure"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"left"}\NormalTok{, }\StringTok{"brachial"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"left"}\NormalTok{, }\StringTok{"pressure"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\StringTok{"brachial"}\NormalTok{),}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\StringTok{"pressure"}\NormalTok{)),}
+         \DataTypeTok{codes =} \KeywordTok{list}\NormalTok{(}\StringTok{"G73"}\NormalTok{),}
+         \DataTypeTok{tests =} \OtherTok{NULL}\NormalTok{,}
+         \DataTypeTok{drugs =} \KeywordTok{list}\NormalTok{(}\StringTok{"insulin"}\NormalTok{, }\StringTok{"diabet"}\NormalTok{, }\StringTok{"aspirin"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+When searching for codes, a range of clinical codes can be searched for
+by providing two codes seperated by a hyphen. e.g. \texttt{E114-E117z}.
+
+\subsection{importing searches via a csv
+file}\label{importing-searches-via-a-csv-file}
+
+Searches can be imported from a csv file in
+\href{https://github.com/rOpenHealth/rpcdsearch/blob/master/inst/extdata/example_search.csv}{this
+format}
+
+The first column in every row determines the list that the term applies
+to and the second column determines whether the term should be included
+or excluded. Note that the csv does not have to be a valid format for
+conversion to a dataframe. Extra columns can be used to include terms to
+be combined as an AND expression with the other terms on that row. The
+title row can also be ommitted. You can use standard regex escape
+patterns in the term definitions.
+
+The data is called into \texttt{R} in the following way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Using the example search definition provided with the package}
+\NormalTok{def2 <-}\StringTok{ }\KeywordTok{import_definitions}\NormalTok{(}\KeywordTok{system.file}\NormalTok{(}\StringTok{"extdata"}\NormalTok{, }\StringTok{"example_search.csv"}\NormalTok{, }\DataTypeTok{package =} \StringTok{"rpcdsearch"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Running searches}\label{running-searches}
+
+Once a search has been defined, the relevant lookup tables should be
+called in. Note that these lookup tables are not provided with the
+package and will be specific to the users EHR database. These examples
+are using CPRD lookups and EHR definitions (See the
+\href{https://github.com/rOpenHealth/rpcdsearch/blob/master/R/ehr_system.R}{ehr\_system}
+code for details of how the interface with CPRD is implemented).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Use fileEncoding="latin1" to avoid any issues with non-ascii characters}
+\NormalTok{medical_table <-}\StringTok{ }\KeywordTok{read.delim}\NormalTok{(}\StringTok{"Lookups//medical.txt"}\NormalTok{, }\DataTypeTok{fileEncoding=}\StringTok{"latin1"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{drug_table <-}\StringTok{ }\KeywordTok{read.delim}\NormalTok{(}\StringTok{"Lookups/product.txt"}\NormalTok{, }\DataTypeTok{fileEncoding=}\StringTok{"latin1"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+And the search can be run:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{draft_lists <-}\StringTok{ }\KeywordTok{build_definition_lists}\NormalTok{(def, }\DataTypeTok{medical_table =} \NormalTok{medical_table,}\DataTypeTok{drug_table =} \NormalTok{drug_table)}
+\end{Highlighting}
+\end{Shaded}
+
+This returns a list of dataframes for each of the provided search lists.
+If \texttt{terms} and \texttt{codes} are provided in the definition, it
+also contains a \texttt{combined\_terms\_codes} data frame which is a
+combination of \texttt{terms} and \texttt{codes} with duplicate rows
+removed.
+
+\section{Exporting code lists}\label{exporting-code-lists}
+
+The code lists produced by \texttt{build\_definition\_lists} will often
+want to be reviewed by clinicians or non-technical researchers. To
+facilitate this, there is an \texttt{export\_definition\_search}
+function to export the code lists as an Excel file, with each list
+occupying a tab in the file. To export a code list:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out_file <-}\StringTok{ "def_searches.xlsx"}
+\KeywordTok{export_definition_search}\NormalTok{(draft_lists, out_file)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}

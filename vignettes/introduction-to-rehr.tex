@@ -1,0 +1,1600 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{longtable,booktabs}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={David A Springate\^{}\{*1\}, Rosa Parisi\^{}\{2\}, \ldots{}, Evangelos Kontopantelis\^{}\{1\}; \^{}\{1\}Institute of Population Health, University of Manchester; \^{}\{2\}Centre for Pharmacoepidemiology and Drug Safety Research, Manchester Pharmacy School, University of Manchester; \^{}\{*\}Corresponding Author},
+            pdftitle={rEHR: An R package for manipulating and analysing Electronic Health Record data},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+\setlength{\droptitle}{-2em}
+  \title{rEHR: An R package for manipulating and analysing Electronic Health
+Record data}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{David A Springate\(^{*1}\), Rosa Parisi\(^{2}\), \ldots{}, Evangelos
+Kontopantelis\(^{1}\) \\ \(^{1}\)Institute of Population Health, University of Manchester \\ \(^{2}\)Centre for Pharmacoepidemiology and Drug Safety Research,
+Manchester Pharmacy School, University of Manchester \\ \(^{*}\)Corresponding Author}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{2015-05-12}
+
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Electronic Health Record research is a growing field and is set to
+expand still further due to advances in analysis methodology and an
+increasing body of evidence supporting the validity of such studies.
+However, data science methodology to enable the rapid processing,
+cleaning and analysis of these increasingly large datasets is less well
+developed and commonly used software tools are often inadequate,
+resulting in bottlenecks in the research workflow and in obstacles to
+increased transparency and reproducibility of research methods.
+Preparing a research-ready dataset from an EHR is a complex and time
+consuming task requiring substantial data science skills, even for
+simple designs. In addition, certain aspects of the workflow are highly
+computationally intensive (for example extraction of longitudinal data
+and matching controls to a large cohort) - often taking many days or
+even weeks to run using standard software. This package simplifies and
+accelerates the process of extracting ready-for-analysis datasets from
+EHR databases. It has a simple import function to a database backend
+that greatly accelerates data access times. A set of generic query
+functions allow users to extract data efficiently without needing
+detailed knowledge of SQL queries. Longitudinal data extractions can
+also be made in a single command, making use of parallel processing. The
+package also contains functions for cutting data by time-varying
+covariates, matching controls to cases, unit conversion and construction
+of clinical code lists. There are also functions to create a simple
+simulated EHR for testing purposes. The package has been tested with one
+for the largest primary care databases in the world, the Clinical
+Practice Research Datalink (CPRD), but allows for a common interface to
+other primary care EHRs. This simplified and accelerated work flow for
+EHR data extraction results in simpler, cleaner scripts that are more
+easily debugged, shared and reproduced.
+\end{abstract}
+
+\section{1. Introduction}\label{introduction}
+
+We present the \texttt{R} (R Core Team 2014) package \texttt{rEHR} for
+manipulating and analysing Electronic Health Record (EHR) data and
+demonstrate its use with a simple simulated EHR generated using the
+package. \texttt{rEHR} is available from the Comprehensive R Archive
+Network (CRAN) at \textbf{{[}{[}upload to CRAN!{]}{]}}.
+
+The UK leads the world in primary care electronic health records (EHR)
+research, building on the near-universal deployment of EHRs in general
+practice and the clinical coding performed by general practictioners.
+The major UK primary care databases (PCD) are: The Clinical Practice
+Research Datalink (CPRD, previously known as the General Practice
+Research Database, GPRD), The Health Improvement Network (THIN),
+QResearch, The Doctors' Independent Network (DIN-LINK) and more
+recently, Research ONE. These databases hold the full medical records
+for millions of patients across hundreds of practices over several
+decades. To date, over 1600 papers have published using these UK PCDs,
+with well over 150 papers published per year since 2012. EHR research is
+set to grow still faster due to advances in analysis methodology (e.g.
+\emph{ITSpaper}), an increasing body of evidence supporting the validity
+of such studies (e.g. Reeves et al. (2014), Springate et al. (2015)) and
+efforts to improve transparency and reproducibility (D. A. Springate et
+al. (2014)).
+
+Despite the research interest in EHRs in general and PCDs in particular,
+data science methodology to enable the rapid processing, cleaning and
+analysis of these increasingly large datasets is less well developed and
+commonly used software tools are often inadequate, resulting in
+bottlenecks in the research workflow and in obstacles to increased
+transparency and reproducibility of research methods. PCDs such as CPRD
+store data in complex relational and nested structures, and preparing an
+analysis-ready dataset requires substantial data science skills, even
+for simple designs. This complexity is an inevitable consequence of the
+wide range of information contained withing these databases, which
+detail the full primary care history for every patient, including coded
+data for all diagnoses, prescriptions, referrals and test results for
+all consultations. To manage this vast wealth of data requires a
+relational structure based on multiple tables, classifications and
+terminologies (e.g.~Read codes for diagnoses and referrals, product
+codes for prescriptions). To extract relevant data, research teams have
+to complete a sequence of non-trivial technical tasks. The more complex
+the research design the more steps are required to obtain the final
+dataset. For example, investigating drug outcomes typically involves
+constructing complex definitions of codes for diagnosis, drug exposure
+(may be varying over time), mortality, and possible confounding factors
+(e.g.~comorbidities, additional medications, gender, age, referrals,
+date of diagnosis, etc.). In addition, certain aspects of the workflow
+are highly computationally intensive (for example extraction of
+longitudinal data and matching controls to a large cohort) - often
+taking many days or even weeks to run using standard software. Although
+more powerful computers and servers help (and are practically a
+prerequisite for working with data of this size), an inefficient and
+slow program running on a fast server will still be inefficient and
+slow. Some `how-to' papers exist for good practice in observational data
+management but they address only some of the issues or focus on specific
+applications (Danaei et al. 2013; Davé and Petersen 2009; J. M. Overhage
+and Overhage 2013; Perlis et al. 2012). At the same time there is a
+wealth of health informatics and computer science literature on how to
+make these research processes more transparent, reducing the duplication
+of effort and improving the consistency of data processing (Ainsworth,
+Cunningham, and Buchan 2012; Bechhofer et al. 2013). Finally, several
+software packages exist for speeding up data analysis, but these are
+generic, do not apply directly to EHR manipulation and may require
+specialist knowledge to effectively use (e.g. \texttt{dplyr} (Wickham
+and Francois 2015) for fast manipulation of dataframes \texttt{sqldf}
+(Grothendieck 2014) for database integration and \texttt{parallel} in
+base \texttt{R} for parallel processing).
+
+\texttt{rEHR} simplifies and accelerates the process of extracting
+ready-for-analysis datasets from EHR databases. In section 2 we provide
+instructions on loading the software and importing flat text files of
+the kind supplied by EHR providers into a local SQL database. In section
+3 we describe the basic query operations provided by the package, the
+building of longitudinal data and calculation of prevalence and
+incidence statistics. In section 4 we convert the longitudinal data from
+the previous section to a cohort dataset suitable for survival analysis
+and illustrate algorithms to match controls to cases and to cut cohort
+data by time-varying covariates. In section 5 we briefly discuss some
+miscellaneous functions provided in the package. In the final section we
+discuss the \texttt{.ehr} environment used to define the EHR database
+being used and how this can be set to work with different databases.
+
+We have provided a number of simulated flat files to demonstrate the
+functions provided with the package.
+
+\section{2. Importing EHR data}\label{importing-ehr-data}
+
+rEHR is installed and loaded in the usual way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{if(!}\StringTok{ "rEHR"} \NormalTok{%in%}\StringTok{ }\KeywordTok{rownames}\NormalTok{(}\KeywordTok{installed.packages}\NormalTok{())) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"rEHR"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(rEHR)}
+\end{Highlighting}
+\end{Shaded}
+
+The development version of the package is available from
+\href{http://www.github.com}{Github} and is accessible via the devtools
+(Wickham and Chang 2014) package:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(devtools)}
+\KeywordTok{install_github}\NormalTok{(}\StringTok{"rOpenHealth/rEHR"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(rEHR)}
+\end{Highlighting}
+\end{Shaded}
+
+EHR data are stored as relational databases but are most commonly made
+available to researchers in the form of `flat' text files. This has the
+advantage of easier access for simple tasks and, for example, viewing
+the files in a spreadsheet program. However, most non-trivial operations
+require researchers to iterate over a series of (potentially large)
+different groups of files. For example here we present pseudocode for a
+simple workflow leading to the production of a dataset of prevalent
+cases for a condition such as diabetes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Pseudocode prevalent cases algorithm}
+\NormalTok{define a list of clinical codes for the condition}
+\NormalTok{for each practice:}
+\StringTok{    }\NormalTok{load clinical events }\KeywordTok{files} \NormalTok{(clinical, referral, drugs etc.)}
+    \NormalTok{select clinical events matching the clinical code list}
+    \NormalTok{load patient and practice files}
+    \NormalTok{for each year:}
+\StringTok{        }\NormalTok{select active patients}
+        \NormalTok{select events in year}
+        \NormalTok{merge active patients and events in year according to condition algorithm}
+    \NormalTok{combine all years in practice}
+\NormalTok{Combine patients in all practices}
+\end{Highlighting}
+\end{Shaded}
+
+Each level of iteration (represented by the nested \texttt{for loops})
+and each type of file (e.g.~clinical, referral, drugs etc.) in the above
+algorithm introduces the opportunity for bugs to creep into extraction
+code, while the repeated opening and closing of multiple text files,
+combined with the inherent inefficiency of for loops in \texttt{R} often
+result in slow, error prone code. The \texttt{rEHR} package allows
+researchers to first automatically import these flat files into a SQLite
+database and then use predefined functions to query this database
+efficiently and precisely. We use SQLite databases for a variety of
+reasons:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  SQLite databases are stored as files in the directory system of the
+  computer and require no installation setup. SQLite3 is installed
+  automatically as a result of installing the dependencies for the
+  package
+\item
+  SQLite files are stored efficiently and are relatively small compared
+  to text files
+\item
+  The SQL language has been optimised for very rapid and efficient
+  queries of SQLite files, resulting in much faster queries than would
+  be available to multiple flat files
+\item
+  Working with SQLite databases allows users to use some very well
+  developed tools that are already available to the \texttt{R} community
+  such as \texttt{sqldf} (Grothendieck 2014) and \texttt{RSQLite}
+  (James, Falcon, and SQLite 2013) if they are familiar with \texttt{R}
+  SQL integration tools. These tools also allow for more specific tool
+  functions to be built to shield users from the complexities of SQL
+  queries.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Use the simulated ehr files supplied with the package to build our database}
+\NormalTok{ehr_path <-}\StringTok{ }\KeywordTok{dirname}\NormalTok{(}\KeywordTok{system.file}\NormalTok{(}\StringTok{"ehr_data"}\NormalTok{, }\StringTok{"ehr_Clinical.txt"}\NormalTok{, }\DataTypeTok{package =} \StringTok{"rEHR"}\NormalTok{))}
+\NormalTok{## create a new database connection to a temporary file}
+\NormalTok{db <-}\StringTok{ }\KeywordTok{database}\NormalTok{(}\KeywordTok{tempfile}\NormalTok{(}\DataTypeTok{fileext =} \StringTok{".sqlite"}\NormalTok{))}
+\NormalTok{## Import multiple data files into the database}
+\KeywordTok{import_CPRD_data}\NormalTok{(db, }\DataTypeTok{data_dir =} \NormalTok{ehr_path,}
+                 \DataTypeTok{filetypes =} \KeywordTok{c}\NormalTok{(}\StringTok{"Clinical"}\NormalTok{, }\StringTok{"Consultation"}\NormalTok{, }
+                               \StringTok{"Patient"}\NormalTok{, }\StringTok{"Practice"}\NormalTok{, }
+                               \StringTok{"Referral"}\NormalTok{),}
+                 \DataTypeTok{dateformat =} \StringTok{"%Y-%m-%d"}\NormalTok{, }
+                 \DataTypeTok{yob_origin =} \DecValTok{1800}\NormalTok{,}
+                 \DataTypeTok{regex =} \StringTok{"ehr"}\NormalTok{,}
+                 \DataTypeTok{recursive =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{## Individual files can also be added:}
+\KeywordTok{add_to_database}\NormalTok{(db, }\DataTypeTok{files =} \KeywordTok{system.file}\NormalTok{(}\StringTok{"ehr_data"}\NormalTok{, }\StringTok{"ehr_Therapy.txt"}\NormalTok{, }\DataTypeTok{package =} \StringTok{"rEHR"}\NormalTok{), }
+                \DataTypeTok{table_name =} \StringTok{"Therapy"}\NormalTok{, }\DataTypeTok{dateformat =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\NormalTok{## Use the overloaded `head` function to view a list of }
+\NormalTok{## tables or the head of individual tables:}
+\KeywordTok{head}\NormalTok{(db)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    type         name     tbl_name
+## 1 table     Clinical     Clinical
+## 2 table Consultation Consultation
+## 3 table      Patient      Patient
+## 4 table     Practice     Practice
+## 5 table     Referral     Referral
+## 6 table      Therapy      Therapy
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(db, }\DataTypeTok{table =} \StringTok{"Clinical"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   patid  eventdate constype consid medcode        comorbidity practid
+## 1  1001 2003-08-25        0      4   69753       hypertension       1
+## 2  1001 2004-04-13        1      5   96277 atrial_fibrilation       1
+## 3  1001 2004-04-13        1      5    2212 atrial_fibrilation       1
+## 4  1001 2004-04-13        1      5   96076 atrial_fibrilation       1
+## 5  1001 2005-02-08        1      6   23579                chd       1
+## 6  1001 2005-02-18        1      7   16059       hypertension       1
+\end{verbatim}
+
+The \texttt{import\_CPRD\_data} and \texttt{add\_to\_database} functions
+are able to import tab-delimited text files or zipped tab-delimited
+text-files. By default, all date strings are converted to R dates with
+standard ISO format (``\%Y-\%m-\%d''). A \texttt{regex} argument should
+be supplied to match a common prefix to the filenames, separated from
+the file type by an underscore.
+
+\section{3. Querying the database}\label{querying-the-database}
+
+\subsection{Selecting all events}\label{selecting-all-events}
+
+Once EHR data has been imported to the database, the \texttt{rEHR}
+package has a number of flexible built-in querying functions for
+extracting data. These functions are much faster to execute and less
+error prone than having to loop through hundreds of text files.
+
+The primary generic query function is \texttt{select\_events()} and is
+able to select all the events in a database table matching a provided
+\texttt{where} argument. This function is also called by the other more
+specific query functions. An example set of lists of clinical codes for
+a number of medical conditions is provided with the package
+(\texttt{data(clinical\_codes)}). \texttt{select\_events()} returns a
+dataframe of extracted data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diabetes_codes <-}\StringTok{ }\NormalTok{clinical_codes[clinical_codes$list ==}\StringTok{ "Diabetes"}\NormalTok{,]}
+\KeywordTok{select_events}\NormalTok{(db, }\DataTypeTok{tab =} \StringTok{"Clinical"}\NormalTok{, }\DataTypeTok{columns =} \KeywordTok{c}\NormalTok{(}\StringTok{"patid"}\NormalTok{, }\StringTok{"eventdate"}\NormalTok{, }\StringTok{"medcode"}\NormalTok{), }
+              \DataTypeTok{where =} \StringTok{"medcode %in% .(diabetes_codes$medcode) & }
+\StringTok{                       eventdate < '2006-01-01' & eventdate >= '2005-01-01'"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   patid  eventdate medcode
+## 1  3012 2005-09-30     273
+## 2  1037 2005-04-08     277
+## 3  1038 2005-05-19     273
+## 4  1091 2005-05-27     351
+## 5  1091 2005-07-25     351
+## 6  1097 2005-03-10     273
+\end{verbatim}
+
+The \texttt{where} argument is equivalent to the WHERE clause in SQL, in
+that it is used to select subsets of the data table. The user must
+supply a string representation of valid \texttt{R} code, which is then
+translated to SQL via the \texttt{dplyr::translate\_sql\_q} function.
+There are two important caveats to this:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  If an element of the clause represents an R object to be accessed
+  (such as the elements of a vector) it must be wrapped in a
+  \texttt{.()} (See the example above). String elements wrapped in
+  \texttt{.()} are processed by the \texttt{expand\_string} function
+  before being passed to \texttt{dplyr::translate\_sql\_q}.
+\item
+  Dates should seperately quoted and entered in ISO format
+  (`\%Y-\%m-\%d'). This is because dates are stored as ISO text in the
+  database, not as r Date types.
+\end{enumerate}
+
+If the argument \texttt{sql\_only == TRUE}, the function only generates
+the SQL needed for the query, rather than running the query itself. In
+this way, \texttt{select\_events} can be used as the base for more
+complex query functions. The results of this function can also then be
+passed to \texttt{temp\_table()} to create temporary tables where it is
+not desirable to keep large query results in RAM. For example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Asthma_codes <-}\StringTok{ }\NormalTok{clinical_codes[clinical_codes$list ==}\StringTok{ "Asthma"}\NormalTok{,]}
+\NormalTok{q <-}\StringTok{ }\KeywordTok{select_events}\NormalTok{(db, }\DataTypeTok{tab =} \StringTok{"Clinical"}\NormalTok{, }\DataTypeTok{columns =} \KeywordTok{c}\NormalTok{(}\StringTok{"patid"}\NormalTok{, }\StringTok{"eventdate"}\NormalTok{, }\StringTok{"medcode"}\NormalTok{), }
+              \DataTypeTok{where =} \StringTok{"medcode %in% .(Asthma_codes$medcode)"}\NormalTok{, }
+              \DataTypeTok{sql_only =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{temp_table}\NormalTok{(db, }\DataTypeTok{tab_name =} \StringTok{"Asthma"}\NormalTok{, }\DataTypeTok{select_query =} \NormalTok{q)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Temporary table 'Asthma' created
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(db, }\DataTypeTok{temp =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    type   name tbl_name
+## 1 table Asthma   Asthma
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(db, }\DataTypeTok{table =} \StringTok{"Asthma"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   patid  eventdate medcode
+## 1  1025 2014-04-11    1105
+## 2  1035 2012-03-05    1116
+## 3  2065 2006-03-20    1095
+\end{verbatim}
+
+\subsubsection{Using raw SQL queries}\label{using-raw-sql-queries}
+
+Since EHR data is stored as a standard SQLite database, users can
+alternatively make SQL queries to the database using \texttt{sqldf},
+which is imported into the namespace on loading of the \texttt{rEHR}
+package:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sqldf}\NormalTok{(}\StringTok{"SELECT patid, practid, gender, yob, deathdate from Patient WHERE }
+\StringTok{          deathdate IS NOT NULL LIMIT 6"}\NormalTok{, }
+      \DataTypeTok{connection =} \NormalTok{db)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   patid practid gender  yob  deathdate
+## 1  1003       3      0 1983 2001-11-16
+## 2  3015      15      1 1995 2000-05-09
+## 3  2016      16      1 1959 2002-10-28
+## 4  1018      18      0 1992 2009-12-29
+## 5  2020      20      1 1956 2002-11-29
+## 6  1023      23      0 1983 2013-03-24
+\end{verbatim}
+
+There are two methods for including \texttt{R} objects in raw SQL
+strings. First, wrapping the string in a call to
+\texttt{expand\_string()} allows for the \texttt{.()} notation to be
+used as in \texttt{where} arguments to \texttt{select\_events()} based
+functions. Alternatively, a helper function, \texttt{wrap\_sql\_query()}
+is provided that functions in a similar way to \texttt{base::sprintf}
+but formats objects according to SQL syntax. If the result of evaluating
+the argument is a vector of length 1, it is inserted as is; if it is a
+vector of length \textgreater{} 1, it is wrapped in parentheses and
+comma separated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{medcodes1 <-}\StringTok{ }\DecValTok{1}\NormalTok{:}\DecValTok{5}
+\NormalTok{practice <-}\StringTok{ }\DecValTok{255}
+\KeywordTok{expand_string}\NormalTok{(}\StringTok{"SELECT * FROM clinical WHERE practid == .(practice)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "SELECT * FROM clinical WHERE practid == 255"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{wrap_sql_query}\NormalTok{(}\StringTok{"SELECT * FROM clinical WHERE practid == #1 AND medcodes in #2"}\NormalTok{, }
+               \NormalTok{practice, medcodes1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "SELECT * FROM clinical WHERE practid == 255 AND medcodes in ( 1, 2, 3, 4, 5 )"
+\end{verbatim}
+
+\subsection{Selecting first or last
+events}\label{selecting-first-or-last-events}
+
+Frequently, users need to find the first clinical event for a given
+patient (e.g.~to identify dates of diagnosis of chronic diseases) or the
+most recent clinical event (e.g.~to identify if a drug therapy has been
+prescribed within a certain time period). \texttt{rEHR} provides
+convenience functions for these common situations. The functions run a
+\texttt{select\_events()} query and then group by patient id and selects
+only the earliest/latest event for each patient:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{first_DM <-}\StringTok{ }\KeywordTok{first_events}\NormalTok{(db, }\DataTypeTok{tab =} \StringTok{"Clinical"}\NormalTok{, }
+                         \DataTypeTok{columns =} \KeywordTok{c}\NormalTok{(}\StringTok{"patid"}\NormalTok{, }\StringTok{"eventdate"}\NormalTok{, }\StringTok{"medcode"}\NormalTok{), }
+              \DataTypeTok{where =} \StringTok{"medcode %in% .(diabetes_codes$medcode)"}\NormalTok{)}
+\NormalTok{last_DM <-}\StringTok{ }\KeywordTok{last_events}\NormalTok{(db, }\DataTypeTok{tab =} \StringTok{"Clinical"}\NormalTok{, }
+                       \DataTypeTok{columns =} \KeywordTok{c}\NormalTok{(}\StringTok{"patid"}\NormalTok{, }\StringTok{"eventdate"}\NormalTok{, }\StringTok{"medcode"}\NormalTok{), }
+              \DataTypeTok{where =} \StringTok{"medcode %in% .(diabetes_codes$medcode)"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(first_DM)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   patid  eventdate medcode
+## 1  1004 2007-12-25     351
+## 2  1005 2004-08-31     351
+## 3  1008 2002-03-02     351
+## 4  1010 2014-04-11     351
+## 5  1012 2012-05-28     351
+## 6  1015 2008-08-16     351
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(last_DM)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   patid  eventdate medcode
+## 1  1004 2007-12-25     351
+## 2  1005 2009-03-09     351
+## 3  1008 2002-03-02     351
+## 4  1010 2014-04-11     351
+## 5  1012 2013-02-14     351
+## 6  1015 2013-08-17     273
+\end{verbatim}
+
+\subsection{Querying longitudinal data with
+\texttt{select\_by\_year()}}\label{querying-longitudinal-data-with-selectux5fbyux5fyear}
+
+Researchers will often want to extract data over a range of different
+time-points, for example they may want to calculate the prevalence of a
+condition and how this changes through time. When working with flat text
+files, this must be done with a complex nested loop that is both slow
+and error-prone. The \texttt{select\_by\_year()} function provides a
+simple interface to extract longitudinal data. On posix-compliant
+computers (Linux, BSD, Mac), this function can make use of parallel
+processes to select data for different years concurrently, greatly
+accelerating the extraction process on multicore machines. The function
+runs a series of selects over a year range and collects in a list of
+dataframes
+
+The function applies a database select over a range of years and outputs
+as a list or a dataframe. Either a database object or a path to a
+database file can be supplied. If multiple cores are being used
+(i.e.~cores \textgreater{} 1), a path to a database file must be used
+because the same database connection cannot be used across threads. In
+this case, a new database connection is made with every fork. Note that
+when working with temporary tables, \texttt{cores} must be set to 1 and
+the open database connection must be set with \texttt{db}. This is
+because the use of \texttt{parallel::mclapply} means that new database
+connections need to be started for each fork and temporary files are
+only available inside the same connection.
+
+Queries can be made against multiple tables, assuming that the columns
+being extracted are present in all tables. The \texttt{columns} argument
+is a character vector of column names to be selected. The individual
+elements can be of arbitrary length. This means it is possible to insert
+SQL clauses e.g. ``DISTINCT patid''.
+
+A numeric vector of years is passed to the \texttt{year\_range} argument
+to specify the years to select data for. Selection is done according to
+the function passed to the \texttt{selector\_fn} argument.
+\texttt{select\_events} is the default but \texttt{first\_events} and
+\texttt{last\_events} can also be used, as well as custom selection
+functions. The \texttt{where} argument works in the same way as in
+\texttt{select\_events} except that year-start and year-end criteria can
+be added as `STARTDATE' and `ENDDATE'. These are translated to the
+correct year- start and end dates. Different start and end dates can be
+specified by supplying a function to the \texttt{year\_fn} argument.
+This function must accept a single year argument and return a list with
+two elements - ``startdate'' and ``enddate'', each of which must be date
+characters in posix format (i.e. ``\%Y-\%m-\%d''). Three functions are
+provided to define years (\texttt{standard\_years} for 1st January to
+31st December, \texttt{qof\_years} for UK financial years as used in the
+UK Quality and Outcomes Framework (Roland 2004) and
+\texttt{qof\_15\_months} for the period starting 1st January in the year
+in question and finishing on the 31st March the following year) and a
+convenience function, \texttt{build\_date\_fn()} is provided to which
+users can supply lists of year offsets, months and days for year- start
+and end to return a function that can be supplied as the
+\texttt{year\_fn} argument. Finally the user can set the
+\texttt{as\_list} argument to determine whether data from each year is
+returned as a seperate list element or as a single data frame.
+
+\subsubsection{Selecting prevalent and incident
+events}\label{selecting-prevalent-and-incident-events}
+
+To show the utility of the package we demonstrate how one might extract
+an incident and prevalent cohort of diabetes patients from the simulated
+example data. Prevalent events for a chronic condition are selected by
+the earliest diagnostic event prior to the end of the time period in
+question. The denominator for the calculation of the prevalence is the
+total number of patients registered at that time point.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Select all patients with current registration date (crd) < the start date }
+\CommentTok{# for each year.}
+\NormalTok{registered_patients <-}\StringTok{ }\KeywordTok{select_by_year}\NormalTok{(}\DataTypeTok{db =} \NormalTok{db, }
+                         \DataTypeTok{tables =} \StringTok{"patient"}\NormalTok{, }
+                         \DataTypeTok{columns =} \KeywordTok{c}\NormalTok{(}\StringTok{"patid"}\NormalTok{, }\StringTok{"practid"}\NormalTok{, }\StringTok{"gender"}\NormalTok{, }
+                                     \StringTok{"yob"}\NormalTok{, }\StringTok{"crd"}\NormalTok{, }\StringTok{"tod"}\NormalTok{, }\StringTok{"deathdate"}\NormalTok{), }
+                         \DataTypeTok{where =} \StringTok{"crd < STARTDATE"}\NormalTok{,}
+                         \DataTypeTok{year_range =} \KeywordTok{c}\NormalTok{(}\DecValTok{2008}\NormalTok{:}\DecValTok{2012}\NormalTok{), }
+                         \DataTypeTok{year_fn =} \NormalTok{standard_years)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using open database connection
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(registered_patients)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Classes 'tbl_df', 'tbl' and 'data.frame':    1005 obs. of  8 variables:
+##  $ patid    : int  1001 1002 2002 3002 4002 1003 2003 1004 2004 3004 ...
+##  $ practid  : int  1 2 2 2 2 3 3 4 4 4 ...
+##  $ gender   : int  1 1 1 1 0 0 1 0 1 1 ...
+##  $ yob      : num  1989 1942 1965 1959 1932 ...
+##  $ crd      : chr  "1998-03-22" "2003-07-10" "1997-10-15" "1981-09-01" ...
+##  $ tod      : chr  NA NA NA NA ...
+##  $ deathdate: chr  NA NA NA NA ...
+##  $ year     : int  2008 2008 2008 2008 2008 2008 2008 2008 2008 2008 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(registered_patients$year)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 2008 2009 2010 2011 2012 
+##  189  195  201  206  214
+\end{verbatim}
+
+Notice that \texttt{select\_by\_year} returns a dataframe in long form,
+with a year column for the longitudinal component. Next we calculate the
+incident cases, which are those patients with first diganoses at any
+point before the end of the year in question, plus the dates for the
+first diagnoses. In this case we include events matching our list of
+diabetes clinical codes in either clinical or referral files. Because we
+only want the first diagnosis dates we set the \texttt{selector\_fn}
+argument to \texttt{first\_events}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{incident_cases <-}\StringTok{ }\KeywordTok{select_by_year}\NormalTok{(}\DataTypeTok{db =} \NormalTok{db, }
+                                      \DataTypeTok{tables =} \KeywordTok{c}\NormalTok{(}\StringTok{"Clinical"}\NormalTok{, }\StringTok{"Referral"}\NormalTok{), }
+                                      \DataTypeTok{columns =} \KeywordTok{c}\NormalTok{(}\StringTok{"patid"}\NormalTok{, }\StringTok{"eventdate"}\NormalTok{, }\StringTok{"medcode"}\NormalTok{), }
+                                      \DataTypeTok{where =} \StringTok{"medcode %in% .(diabetes_codes$medcode) & }
+\StringTok{                                               eventdate <= ENDDATE"}\NormalTok{,}
+                                      \DataTypeTok{year_range =} \KeywordTok{c}\NormalTok{(}\DecValTok{2008}\NormalTok{:}\DecValTok{2012}\NormalTok{), }
+                                      \DataTypeTok{year_fn =} \NormalTok{standard_years, }
+                                      \DataTypeTok{selector_fn =} \NormalTok{first_events)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using open database connection
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(incident_cases)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Classes 'tbl_df', 'tbl' and 'data.frame':    262 obs. of  5 variables:
+##  $ patid    : int  1004 1005 1008 1015 1025 1035 1037 1038 1043 1047 ...
+##  $ eventdate: chr  "2007-12-25" "2004-08-31" "2002-03-02" "2008-08-16" ...
+##  $ medcode  : int  351 351 351 351 351 293 277 273 351 257 ...
+##  $ table    : chr  "Clinical" "Clinical" "Clinical" "Clinical" ...
+##  $ year     : int  2008 2008 2008 2008 2008 2008 2008 2008 2008 2008 ...
+\end{verbatim}
+
+Note that in this case extra columns have been added for both year and
+table, to identify the table the event was found in. Beacuse events were
+taken from more than one table (Clinicals and Referrals), the
+incident\_cases dataframe should be sorted and duplicates removed to
+ensure that only thes first events are kept. The two datasets are then
+merged to give the dataset from which the denominators and numerators
+can be calculated. The \texttt{dplyr} package is imported to the
+namespace when the \texttt{rEHR} package is loaded. This simplifies and
+accelerates merging operations and is an important part of the
+\texttt{rEHR} workflow:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Remove duplicates across clinical and referral tables:}
+\NormalTok{incident_cases %>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(patid, year) %>%}
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(eventdate) %>%}
+\StringTok{    }\KeywordTok{distinct}\NormalTok{() %>%}
+\StringTok{    }\NormalTok{ungroup ->}\StringTok{ }\NormalTok{incident_cases}
+\NormalTok{## All patients are kept (equivalent to merge(all.x = TRUE))}
+\NormalTok{prevalence_dat <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(registered_patients, incident_cases)}
+\end{Highlighting}
+\end{Shaded}
+
+Prevalence and incidence can be calculated by the built-in functions
+\texttt{prev\_terms()} and \texttt{prev\_totals()}.
+\texttt{prev\_terms()} adds logical columns for membership of incidence
+and prevalence denominators as well as a column for the contribution of
+the individual to that year's followup time. \texttt{prev\_totals()}
+summarises this information to calculate the denominators and numerators
+for prevalence and incidence, according to the users' grouping factors.
+The criteria for membership of the incidence and prevalence numerators
+and denominators as well as for followup time are shown in table 1.
+
+\begin{longtable}[c]{@{}ll@{}}
+\toprule
+Column & Definition\tabularnewline
+\midrule
+\endhead
+Incident Numerator & existing event date + event occurs within year +
+transfer out date \textgreater{} event date\tabularnewline
+Incident Denominator & No events in previous years + transfer out date
+\textgreater{} year start date\tabularnewline
+Prevalent Numerator & existing event date + transfer out date
+\textgreater{} event date\tabularnewline
+Prevalent Denominator & transfer out date \textgreater{} year start
+date\tabularnewline
+Followup & minimum of (year end date, transfer out date, death date) -
+year start date\tabularnewline
+\bottomrule
+\end{longtable}
+
+table 1: Definitions of incidence and prevalence terms
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prevalence_dat <-}\StringTok{ }\KeywordTok{prev_terms}\NormalTok{(prevalence_dat)}
+\NormalTok{totals <-}\StringTok{ }\KeywordTok{prev_totals}\NormalTok{(prevalence_dat)}
+\NormalTok{totals$prevalence$year_counts}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [5 x 4]
+## 
+##   year numerator denominator prevalence
+## 1 2008        31    174.6721   17.74754
+## 2 2009        35    179.3785   19.51181
+## 3 2010        41    183.1403   22.38721
+## 4 2011        50    185.4182   26.96607
+## 5 2012        55    191.5838   28.70806
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{totals$incidence$year_counts}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [5 x 4]
+## 
+##   year numerator denominator incidence
+## 1 2008         4    143.9014  2.779680
+## 2 2009         3    144.4983  2.076149
+## 3 2010         4    142.2806  2.811345
+## 4 2011         7    135.5893  5.162648
+## 5 2012         5    137.4675  3.637224
+\end{verbatim}
+
+Here we see that, in our simulated dataset, we have a diabetes
+prevalence of 17.7\% in 2008 raising to 28.7\% in 2012 and an incidence
+of 2.8\% in 2008 dropping to 3.6\% in 2012.
+
+\section{4. Building cohorts, matching and time-varying
+covariates}\label{building-cohorts-matching-and-time-varying-covariates}
+
+In this section we demonstrate how to convert the longitudinal data from
+the previous section to a cohort dataset suitable for survival analysis
+and also illustrate algorithms to match controls to cases and to cut
+cohort data by time-varying covariates.
+
+One of the most common uses of EHR data in research is to build cohorts
+for survival analyses. The longitudinal data in the previous section is
+easily converted to survival cohort format using the
+\texttt{build\_cohort()} function. This returns a dataset with a single
+row for each patient and includes only patients in the numerator or
+denominator for whichever cohort type is chosen (either incident or
+prevalent cohorts). Columns are added for start and end dates and for
+start and end times as integer differences from the cohort start date. A
+binary column is added to indicate membership of the case group. All
+patients with start dates greater than their end dates are removed from
+the dataset. The diagnosis\_start argument is used to include the
+diagnosis date in the definition of the start dates for the patients. If
+it is not required for the diagnosis date to be included in the start
+date definition, this argument can be set to \texttt{NULL}. Here, we
+will first merge in practice data (i.e.~dates for when practices are
+deemed to be up to standard) and then construct the cohort:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{practices <-}\StringTok{ }\KeywordTok{select_events}\NormalTok{(}\DataTypeTok{db =} \NormalTok{db, }\DataTypeTok{tab =} \StringTok{"Practice"}\NormalTok{, }\DataTypeTok{convert_dates =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{prevalence_dat <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(prevalence_dat, practices)}
+
+\NormalTok{cohort <-}\StringTok{ }\KeywordTok{build_cohort}\NormalTok{(prevalence_dat, }\DataTypeTok{cohort_type =} \StringTok{"prev"}\NormalTok{, }
+                       \DataTypeTok{cohort_start =} \StringTok{"2006-01-01"}\NormalTok{, }\DataTypeTok{cohort_end =} \StringTok{"2012-12-31"}\NormalTok{, }
+                       \DataTypeTok{diagnosis_start =} \StringTok{"eventdate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The cohort is now ready for analysis. e.g.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Add a logical column for death during cohort}
+\NormalTok{cohort$death <-}\StringTok{ }\KeywordTok{with}\NormalTok{(cohort, }
+                     \KeywordTok{ifelse}\NormalTok{(!}\KeywordTok{is.null}\NormalTok{(deathdate) &}\StringTok{ }
+\StringTok{                                }\NormalTok{(deathdate >}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"2006-01-01"}\NormalTok{) &}\StringTok{ }
+\StringTok{                                     }\NormalTok{deathdate <}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"2012-12-31"}\NormalTok{)), }
+                            \DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{))}
+\NormalTok{cohort$death[}\KeywordTok{is.na}\NormalTok{(cohort$death)] <-}\StringTok{ }\DecValTok{0}
+
+\KeywordTok{library}\NormalTok{(survival)}
+\NormalTok{surv_obj <-}\StringTok{ }\KeywordTok{with}\NormalTok{(cohort, }\KeywordTok{Surv}\NormalTok{(start, end, death))}
+\KeywordTok{coxph}\NormalTok{(surv_obj ~}\StringTok{ }\NormalTok{gender +}\StringTok{ }\NormalTok{case, }\DataTypeTok{data =} \NormalTok{cohort)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Call:
+## coxph(formula = surv_obj ~ gender + case, data = cohort)
+## 
+## 
+##          coef exp(coef) se(coef)      z    p
+## gender  0.506     1.659    0.837  0.605 0.55
+## case   -0.645     0.524    1.081 -0.597 0.55
+## 
+## Likelihood ratio test=0.81  on 2 df, p=0.667  n= 199, number of events= 7
+\end{verbatim}
+
+\subsection{Matching}\label{matching}
+
+Matching cases to controls is an important pre-analysis step. The
+\texttt{rEHR} package provided three methods for matching cases to
+controls:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Incidence density matching (IDM)
+\item
+  Exact matching
+\item
+  Matching on a dummy index date sourced from consultation files
+\end{enumerate}
+
+\subsubsection{Incidence density
+matching}\label{incidence-density-matching}
+
+This is performed using the \texttt{get\_matches()} function. With IDM,
+controls are selected for a particular case at the time of diagnosis (or
+other event such as death) from from other members of the cohort who, at
+that time, do not have the diagnosis. The IDM sampling procedure allows
+the same patient to be selected as a control for more than one case,
+thus providing a full set controls for each case while still producing
+unbiased estimates of risk (Richardson 2004; Reeves et al. 2014). This
+also means that the matching procedure can be parallelised to increase
+computational efficiency.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cohort2 <-}\StringTok{ }\KeywordTok{build_cohort}\NormalTok{(prevalence_dat, }\DataTypeTok{cohort_type =} \StringTok{"incid"}\NormalTok{, }
+                        \DataTypeTok{cohort_start =} \StringTok{"2006-01-01"}\NormalTok{, }\DataTypeTok{cohort_end =} \StringTok{"2012-12-31"}\NormalTok{, }
+                        \DataTypeTok{diagnosis_start =} \StringTok{"eventdate"}\NormalTok{)}
+\NormalTok{IDM_controls <-}\StringTok{ }\KeywordTok{get_matches}\NormalTok{(}\DataTypeTok{cases =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{1}\NormalTok{), }
+                            \DataTypeTok{control_pool =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{0}\NormalTok{), }
+                            \DataTypeTok{match_vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"gender"}\NormalTok{, }\StringTok{"region"}\NormalTok{),}
+                            \DataTypeTok{n_controls =} \DecValTok{4}\NormalTok{, }\DataTypeTok{cores =} \DecValTok{2}\NormalTok{, }
+                            \DataTypeTok{method =} \StringTok{"incidence_density"}\NormalTok{, }\DataTypeTok{diagnosis_date  =} \StringTok{"eventdate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+In this example matching scenario, 92 controls were matched to 23 cases,
+which is 4 controls matched to each case.
+
+In all of the matching algorithms, matching is performed by default on
+categories selected in the \texttt{match\_vars} argument. However, more
+complex matching strategies can also be employed via the
+\texttt{extra\_conditions} argument. You can wrap calls to expressions
+in dotted brackets to automatically expand them. This is particularly
+useful when you want to find the value for each individual case. Each
+case is denoted by \texttt{CASE}, e.g.
+\texttt{"start\_date \textless{} .(CASE\$start\_date)"} will ensure the
+start date for controls is prior to the start date for the matched case.
+The following code also selects controls whose birth year (\texttt{yob})
+is within 2 years either side of their matched case:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{IDM_controls2 <-}\StringTok{ }\KeywordTok{get_matches}\NormalTok{(}\DataTypeTok{cases =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{1}\NormalTok{), }
+                             \DataTypeTok{control_pool =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{0}\NormalTok{), }
+                             \DataTypeTok{match_vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"gender"}\NormalTok{, }\StringTok{"region"}\NormalTok{),}
+                             \DataTypeTok{extra_conditions =} \StringTok{"yob >= ( .(CASE$yob) - 2) & }
+\StringTok{                             yob <= ( .(CASE$yob) + 2)"}\NormalTok{,}
+                             \DataTypeTok{n_controls =} \DecValTok{4}\NormalTok{, }\DataTypeTok{cores =} \DecValTok{2}\NormalTok{, }
+                             \DataTypeTok{method =} \StringTok{"incidence_density"}\NormalTok{, }\DataTypeTok{diagnosis_date  =} \StringTok{"eventdate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Exact matching}\label{exact-matching}
+
+Exact matching only matches controls from the control pool, unlike in
+IDM matching. Also, matched controls are removed from the control pool
+after each case has been matched, so each control can be used a maximum
+of one time. Therefore it is possible to have fewer matched controls for
+some cases than are requested via the \texttt{n\_controls} argument.
+Because the control pool is being altered for every case, exact matching
+is not thread safe and so will only run on a single core. The
+\texttt{cores} and \texttt{diagnosis\_date} arguments are ignored when
+this method is selected.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{exact_controls3 <-}\StringTok{ }\KeywordTok{get_matches}\NormalTok{(}\DataTypeTok{cases =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{1}\NormalTok{), }
+                            \DataTypeTok{control_pool =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{0}\NormalTok{), }
+                            \DataTypeTok{match_vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"gender"}\NormalTok{, }\StringTok{"region"}\NormalTok{),}
+                            \DataTypeTok{n_controls =} \DecValTok{4}\NormalTok{, }\DataTypeTok{cores =} \DecValTok{2}\NormalTok{, }
+                            \DataTypeTok{method =} \StringTok{"exact"}\NormalTok{, }\DataTypeTok{diagnosis_date  =} \StringTok{"eventdate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+In a small cohort, this can rapidly reduce the control pool, leading to
+many cases without matches. In this example, 19 out of 23 were matched
+with mean 3.6 controls matched to every case.
+
+\subsubsection{Matching on a dummy index date sourced from consultation
+files}\label{matching-on-a-dummy-index-date-sourced-from-consultation-files}
+
+A common matching approach is to match on an index date (e.g. ), for
+example the diagnosis date of the cases. There are several reasons for
+matching on index\_date:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  It ensures cases and controls are followed-up for the same amount of
+  time on average. Not including an index date for controls may result
+  in them being, on average, in the cohort for longer than the cases
+  because their cohort start date is not constrained by the index date.
+\item
+  There is a possible reduction of detection bias, for example if cases
+  are expected to visit their doctors more often becuase they have more
+  co-morbidities.
+\item
+  If controls are known to have attended their practice at around the
+  same time as their matched case, it is likely they will experience
+  similar conditions in terms of practice policy and active GPs
+\item
+  Patients who, though registered, have no records of contact with the
+  medical system (``Ghost patients'') are excluded
+\end{enumerate}
+
+However, the controls will often not have the same index to match on
+(this is true by definition if the diagnosis date is used). In this
+situation, it is common to match on a dummy index date which may be a
+clinical event or interaction in the control's electronic health record
+that occurs around the same time as the index date of the case (Parisi
+et al. 2015; Gelfand et al. 2006). The \texttt{match\_on\_index()}
+function allows for matching on an arbitrary number of categrorical
+\texttt{match\_var} variables and on continuous variables via the
+\texttt{extra\_conditions} argument in the same way as the
+\texttt{get\_matches()} function above. In addition, a supplied index
+date for each case is is matched to event dates in a series of
+consultation files (1 file for each practice), providing a dummy index
+date for controls of a consultaton date within
+\texttt{index\_diff\_limit} days of the matched case's index date.
+
+Note that the consultaton files must be in flat-file format, i.e.~not as
+part of the database, but as text (or other filetype, e.g stata dta)
+files. This is the data format provided by CPRD (``Clinical Practice
+Research Datalink (CPRD) GOLD''). Although in most situations it is more
+efficient to process EHR data in SQL databases, as in the earlier
+functions described here, consultation tables are often very large and
+searching these for every case in a large cohort would be very slow. By
+processing consultation files that have been split by practice, it is
+possble to search for matches a practice at a time which is both
+efficient and allows for parallel processing to speed the process up
+still further. For convenience, a function \texttt{flat\_files()} is
+provided that can export a database table to flat files split by
+practice in a format of their choosing. The \texttt{match\_on\_index()}
+function has an \texttt{import\_fn} argument to use different file
+formats (e.g. \texttt{foreign::read.dta} or
+\texttt{readstata13::read.dta13} for Stata 12 or Stata 13 file).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{consultation_dir <-}\StringTok{ "~/R/rEHR_testing"}
+\KeywordTok{flat_files}\NormalTok{(db, }\DataTypeTok{out_dir =} \NormalTok{consultation_dir, }\DataTypeTok{file_type =} \StringTok{"csv"}\NormalTok{)}
+\NormalTok{index_controls <-}\StringTok{ }\KeywordTok{match_on_index}\NormalTok{(}\DataTypeTok{cases =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{1}\NormalTok{), }
+                                 \DataTypeTok{control_pool =} \KeywordTok{filter}\NormalTok{(cohort2, case ==}\StringTok{ }\DecValTok{0}\NormalTok{),}
+                                 \DataTypeTok{index_var =} \StringTok{"eventdate"}\NormalTok{, }
+                                 \DataTypeTok{match_vars =} \KeywordTok{c}\NormalTok{(}\StringTok{"gender"}\NormalTok{, }\StringTok{"region"}\NormalTok{),}
+                                 \DataTypeTok{index_diff_limit =} \DecValTok{90}\NormalTok{, }
+                                 \DataTypeTok{consult_path =} \NormalTok{consultation_dir,}
+                                 \DataTypeTok{n_controls =} \DecValTok{4}\NormalTok{,}
+                                 \DataTypeTok{import_fn =} \NormalTok{function(x) }\KeywordTok{convert_dates}\NormalTok{(}\KeywordTok{read.csv}\NormalTok{(x)))}
+\KeywordTok{unlink}\NormalTok{(consultation_dir, }\DataTypeTok{recursive =} \OtherTok{TRUE}\NormalTok{) }\CommentTok{# clean up constructed dirs after analysis}
+\end{Highlighting}
+\end{Shaded}
+
+This function performs matching that is still more conservative than the
+previous methods, since it requires matching of patients within the same
+practice and with consultation dates near the index date. In the test
+example above, no matched controls were found which is not surprising
+with a control pool of only 143. In practice this method is only
+appropriate where there is a control pool of hundreds of thousands or
+even millions of patients. If too few controls are found, the constraint
+can be relaxed by setting a higher \texttt{index\_diff\_limit}. Setting
+this to an arbitrarily high value effectively means that matching is not
+done on index date, but just on practice and the other user-specified
+matching variables. Users may find that this is a more efficent way to
+perform exact matching than using the \texttt{get\_matches()} function.
+The author has used this method to accelerate matching runs with several
+million controls that previously took days or weeks to minutes or a few
+hours.
+
+\subsection{Time-varying covariates}\label{time-varying-covariates}
+
+Often, researchers want to cut a survival cohort by time-varying
+covariates. In this situation, individual patients may run over more
+than one row in the cohort dataset. For example, a drug exposure may
+occur after the entry into the cohort and one might be interested in how
+this might affect the outcome. In this situation, it is useful to have a
+pre-exposure and post-exposure time period in the dataset.
+
+The \texttt{cut\_tv()} function cuts up a dataset based on times
+supplied for the time-varying covariate. If there is already a variable
+for the time-varying covariate, you can chose to flip the existing
+values or increment them. This means the function can be called multiple
+times to, e.g.~deal with drugs starting and stopping and also to model
+the progression of treatment. Other packages implement similar functions
+(e.g.~the \texttt{cutLexis} function from the \texttt{Epi} package
+(Bendix Carstensen and Hills 2014)). The \texttt{cut\_tv()} function is
+considerably faster than other cutting methods (particularly on large
+datasetss), does not require conversion of the dataset to other formats
+(such as \texttt{Lexis}), can be parallelised on posix compliant
+machines and is designed to be chained with \texttt{dplyr} workflows
+using the \texttt{\%\textgreater{}\%} operator. \texttt{cut\_tv()} can
+deal with the following scenarios:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{Binary chronic covariates} e.g.~The time of diagnosis for a
+  chronic (unresolvable) condition. This requires a single column
+  variable of times from entry in the dataset
+\item
+  \textbf{Binary covariates} e.g.~times of starting and stopping
+  medication. This requires more than one column variable in the
+  dataset, one for each start or stop event. The state flips with each
+  new change.
+\item
+  \textbf{Incremental time-varying covariates} e.g.~different stages of
+  a condition. This requires a single column variable for each
+  incremental stage
+\item
+  \textbf{Any combination of the above} This is achieved by chaining
+  multiple calls together
+\end{itemize}
+
+One must supply a dataframe, variable names for entry and exit times,
+the time-varying covariate, the patient id and the constructed variable.
+Also one supplies the number of processor cores to run the function on
+and the behaviour of the function if the constructed variable already
+exists (either to flip from 1-0 or to increment by one). Here we
+demonstrate the different scenarios with a small sample dataset:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tv_test <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{id =} \DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{, }\DataTypeTok{start =} \KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{), }\DataTypeTok{end =} \KeywordTok{c}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\DecValTok{689}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DecValTok{874}\NormalTok{, }\DecValTok{777}\NormalTok{), }
+                   \DataTypeTok{event =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{drug_1 =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\DecValTok{340}\NormalTok{, }\DecValTok{460}\NormalTok{),}
+                   \DataTypeTok{drug_2 =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{234}\NormalTok{, }\DecValTok{554}\NormalTok{, }\DecValTok{123}\NormalTok{, }\OtherTok{NA}\NormalTok{), }
+                   \DataTypeTok{drug_3_start =} \KeywordTok{c}\NormalTok{(}\DecValTok{110}\NormalTok{, }\DecValTok{110}\NormalTok{,}\DecValTok{111}\NormalTok{, }\DecValTok{109}\NormalTok{, }\DecValTok{110}\NormalTok{),}
+                   \DataTypeTok{drug_3_stop =} \KeywordTok{c}\NormalTok{(}\DecValTok{400}\NormalTok{, }\DecValTok{400}\NormalTok{, }\DecValTok{400}\NormalTok{, }\DecValTok{400}\NormalTok{, }\DecValTok{400}\NormalTok{),}
+                   \DataTypeTok{stage_1 =} \KeywordTok{c}\NormalTok{(}\DecValTok{300}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{),}
+                      \DataTypeTok{stage_2 =} \KeywordTok{c}\NormalTok{(}\DecValTok{450}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{))}
+
+\NormalTok{## Multiple binary chronic covariates:}
+\NormalTok{tv_out1 <-}\StringTok{ }\KeywordTok{cut_tv}\NormalTok{(tv_test, }
+                  \DataTypeTok{entry =} \NormalTok{start, }
+                  \DataTypeTok{exit =}  \NormalTok{end, }
+                  \DataTypeTok{cut_var =} \NormalTok{drug_1, }
+                  \DataTypeTok{id_var =} \NormalTok{id, }
+                  \DataTypeTok{tv_name =} \NormalTok{drug_1_state)}
+\NormalTok{tv_out1 <-}\StringTok{ }\KeywordTok{cut_tv}\NormalTok{(tv_out1, start, end, drug_2, }\DataTypeTok{id_var =} \NormalTok{id, drug_2_state)}
+\KeywordTok{head}\NormalTok{(tv_out1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [6 x 12]
+## 
+##   id start  end event drug_1 drug_2 drug_3_start drug_3_stop stage_1
+## 1  1     0 1000     0     NA     NA          110         400     300
+## 2  2     0  233     1     NA    234          110         400      NA
+## 3  2   234  689     1     NA    234          110         400      NA
+## 4  3     0  553     0     NA    554          111         400      NA
+## 5  3   554 1000     0     NA    554          111         400      NA
+## 6  4     0  122     1    340    123          109         400      NA
+## Variables not shown: stage_2 (dbl), drug_1_state (dbl), drug_2_state (dbl)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Binary covariates:}
+\NormalTok{tv_out3 <-}\StringTok{ }\KeywordTok{cut_tv}\NormalTok{(tv_test, start, end, drug_3_start, }\DataTypeTok{id_var =} \NormalTok{id, drug_3_state)}
+\NormalTok{tv_out3 <-}\StringTok{ }\KeywordTok{cut_tv}\NormalTok{(tv_out3, start, end, drug_3_stop, }\DataTypeTok{id_var =} \NormalTok{id, drug_3_state)}
+\KeywordTok{head}\NormalTok{(tv_out3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [6 x 11]
+## 
+##   id start  end event drug_1 drug_2 drug_3_start drug_3_stop stage_1
+## 1  1     0  109     0     NA     NA          110         400     300
+## 2  1   110  399     0     NA     NA          110         400     300
+## 3  1   400 1000     0     NA     NA          110         400     300
+## 4  2     0  109     1     NA    234          110         400      NA
+## 5  2   110  399     1     NA    234          110         400      NA
+## 6  2   400  689     1     NA    234          110         400      NA
+## Variables not shown: stage_2 (dbl), drug_3_state (dbl)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## incremental covariates:}
+\NormalTok{inc_1 <-}\StringTok{ }\KeywordTok{cut_tv}\NormalTok{(tv_test, start, end, stage_1, }\DataTypeTok{id_var =} \NormalTok{id, disease_stage, }
+                \DataTypeTok{on_existing =} \StringTok{"inc"}\NormalTok{)}
+\NormalTok{inc_1 <-}\StringTok{ }\KeywordTok{cut_tv}\NormalTok{(inc_1, start, end, stage_2, }\DataTypeTok{id_var =} \NormalTok{id, disease_stage, }
+                \DataTypeTok{on_existing =} \StringTok{"inc"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(inc_1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [6 x 11]
+## 
+##   id start  end event drug_1 drug_2 drug_3_start drug_3_stop stage_1
+## 1  1     0  299     0     NA     NA          110         400     300
+## 2  1   300  449     0     NA     NA          110         400     300
+## 3  1   450 1000     0     NA     NA          110         400     300
+## 4  2     0  689     1     NA    234          110         400      NA
+## 5  3     0 1000     0     NA    554          111         400      NA
+## 6  4     0  874     1    340    123          109         400      NA
+## Variables not shown: stage_2 (dbl), disease_stage (dbl)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Chaining combinations of the above using %>%}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\NormalTok{tv_test %>%}
+\StringTok{    }\KeywordTok{cut_tv}\NormalTok{(start, end, drug_1, }\DataTypeTok{id_var =} \NormalTok{id, drug_1_state) %>%}\StringTok{ }
+\StringTok{    }\KeywordTok{cut_tv}\NormalTok{(start, end, drug_2, }\DataTypeTok{id_var =} \NormalTok{id, drug_2_state) %>%}
+\StringTok{    }\KeywordTok{cut_tv}\NormalTok{(start, end, drug_3_start, }\DataTypeTok{id_var =} \NormalTok{id, drug_3_state) %>%}
+\StringTok{    }\KeywordTok{cut_tv}\NormalTok{(start, end, drug_3_stop, }\DataTypeTok{id_var =} \NormalTok{id, drug_3_state) %>%}
+\StringTok{    }\KeywordTok{cut_tv}\NormalTok{(start, end, stage_1, }\DataTypeTok{id_var =} \NormalTok{id, disease_stage, }\DataTypeTok{on_existing =} \StringTok{"inc"}\NormalTok{) %>%}
+\StringTok{    }\KeywordTok{cut_tv}\NormalTok{(start, end, stage_2, }\DataTypeTok{id_var =} \NormalTok{id, disease_stage, }\DataTypeTok{on_existing =} \StringTok{"inc"}\NormalTok{) %>%}
+\StringTok{    }\NormalTok{head}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [6 x 14]
+## 
+##   id start  end event drug_1 drug_2 drug_3_start drug_3_stop stage_1
+## 1  1     0  109     0     NA     NA          110         400     300
+## 2  1   110  299     0     NA     NA          110         400     300
+## 3  1   300  399     0     NA     NA          110         400     300
+## 4  1   400  449     0     NA     NA          110         400     300
+## 5  1   450 1000     0     NA     NA          110         400     300
+## 6  2     0  109     1     NA    234          110         400      NA
+## Variables not shown: stage_2 (dbl), drug_1_state (dbl), drug_2_state
+##   (dbl), drug_3_state (dbl), disease_stage (dbl)
+\end{verbatim}
+
+\section{5. Miscellaneous functions}\label{miscellaneous-functions}
+
+In this section we briefly discuss some miscellaneous functions provided
+in the package.
+
+\subsection{Unit conversion}\label{unit-conversion}
+
+HbA1C tests for glycated haemoglobin are one of the best recorded
+clinical tests in UK primary care databases, to a large extent because
+of testing being incentivised under the UK Quality and Outcomes
+Framework pay-for-performance scheme (Roland 2004; Kontopantelis et al.
+2014). However, HbA1C data is not recorded in CPRD consistently.
+Measurements may have been made in mmol/mol, mmol/L or mg/dL. Also the
+closely analogous fructosamine test can also be converted into the same
+units for direct comparison. The CPRD-specific
+\texttt{cprd\_uniform\_hba1c\_values()} function accepts a single
+argument of a dataframe in the CPRD ``Additional'' table form containing
+only entity types for HbA1C and Fructosamine and converts any HbA1C and
+fructosamine values to a comon mmol/mol scale. Once this conversion has
+taken place, the function also removes obvious mis-coding errors that
+are far outside the possible range. A dataframe is returned with an
+extra column \texttt{hba1c\_score}
+
+\subsection{Exporting data to Stata
+format}\label{exporting-data-to-stata-format}
+
+Sometimes researchers may need to share data with others in the same
+group who may not have \texttt{R} expertise. We have provided the
+\texttt{to\_stata} function to export dataframes to stata dta format.
+This function compresses a dataframe to reduce file size in the
+following ways:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Date variables (as specified by the \texttt{date\_fields} argument)
+  are converted to integer days from 1960-01-01 to avoid compatibility
+  issues between \texttt{R} and Stata. An alternative origin can be set
+  with the \texttt{origin} argument
+\item
+  Fields specified in the \texttt{integer\_fields} are converted from
+  numeric to integer
+\end{enumerate}
+
+the \texttt{stata13} boolean argument indicates whether files should be
+stored in Stata13 format (Using \texttt{readstata13::savedta13}) or in
+Stata 12 compatible format (using \texttt{foreign::write.dta}). The
+former includes a further compression step, similar to the
+\texttt{compress} command in Stata.
+
+\subsection{Working with temporary database
+tables}\label{working-with-temporary-database-tables}
+
+The size of EHR databases may require keeping intermediate data
+extractions as database tables, rather than as in-memory \texttt{R}
+dataframes. For example, extractions of clinical events for a common
+condition such as diabetes or asthma will require the extraction of
+millions of rows of data. These may be easily stored as temporary
+database tables. This is also useful if you are working with a protected
+database that you only have read-only access to. The \texttt{rEHR}
+package has a suite of functions to deal with temporary database tables:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{temp\_table()} is used to construct temporary tables and is
+  illustrated in section 3
+\item
+  \texttt{append\_to\_temp\_table()} appends rows to a temporary table
+  based on a specified select statement
+\item
+  \texttt{to\_temp\_table()} exports a dataframe to a temporary database
+  table
+\item
+  \texttt{drop\_temp\_table()} checks if a temporary table exists and
+  then deletes if it does
+\item
+  \texttt{drop\_all\_temp\_tables()} drops all temporary tables from the
+  database
+\end{itemize}
+
+Note that temporary tables are only associated with the currently open
+database connection. This means that functions capable of parallel
+processing (e.g. \texttt{select\_by\_year()}) can only be used in the
+single core mode (i.e.~set \texttt{cores = 1}) since multicore processes
+open up multiple parallel connections.
+
+\section{6. Setting EHR type}\label{setting-ehr-type}
+
+In the final section we discuss the \texttt{.ehr} environment used to
+define the EHR database being used and how this can be set to work with
+different databases.
+
+In many of the functions in this package, specific tables and variables
+in the database need to be accessed. A particular database system, such
+as CPRD, will have its own schema describing the organisation of the
+data within it. To simplify the functions in this package, we have opted
+to include an interface to the database schema in the form of an
+environment, \texttt{.ehr}, that is accessed by the various analysis
+functions in order to extract the correct data from the correct place in
+the database. This is effectively a list of attributes relating to the
+EHR system being used. For example there is an attribute specifying the
+patient id variable in the database. By default, a schema environment
+for CPRD is loaded when the package is loaded via a call to
+\texttt{set\_CPRD()}. we have provided accessor functions to get and set
+attributes in the \texttt{.ehr} environment. It is preferable to use
+these accessor functions rather than setting elements directly. A list
+of all of the attributes is provided by the
+\texttt{list\_EHR\_attributes()} function. For example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{list_EHR_attributes}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "birth_year"      "cohort"          "date_fields"    
+##  [4] "ehr_medcode"     "EHR_name"        "event_date"     
+##  [7] "lookup"          "patient_id"      "practice_id"    
+## [10] "raw_date_format" "tables"          "year_origin"
+\end{verbatim}
+
+The values of individual attributes can be accessed with the
+\texttt{get\_EHR\_attribute()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_EHR_attribute}\NormalTok{(patient_id) }\CommentTok{# gives the attribute for patient ids}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "patid"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_EHR_attribute}\NormalTok{(date_fields) }\CommentTok{# fields in the database stored as dates}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        event        entry    last_coll    up_to_std    first_reg 
+##  "eventdate"    "sysdate"        "lcd"        "uts"        "frd" 
+##  current_reg transfer_out        death 
+##        "crd"        "tod"  "deathdate"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_EHR_attribute}\NormalTok{(cohort) }\CommentTok{# variables used in cohort construction}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $start_criteria
+## [1] "crd" "uts"
+## 
+## $end_criteria
+## [1] "tod"       "deathdate" "lcd"
+\end{verbatim}
+
+Individual attribute values can be set using the
+\texttt{set\_EHR\_Attribute()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set_EHR_attribute}\NormalTok{(patient_id, }\DataTypeTok{value =} \StringTok{"PATIENT"}\NormalTok{) }\CommentTok{# set the patient id attribute}
+\KeywordTok{get_EHR_attribute}\NormalTok{(patient_id)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "PATIENT"
+\end{verbatim}
+
+The default settings can be reverted to using the \texttt{set\_CPRD()}
+function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set_CPRD}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using CPRD settings
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_EHR_attribute}\NormalTok{(patient_id)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "patid"
+\end{verbatim}
+
+The \texttt{.ehr} environments will allow for the simple definition of
+interfaces to other EHR systems, via the construction of new setting
+functions.
+
+\section{7. Conclusion}\label{conclusion}
+
+Working with EHR data requires a combination of computational and
+statistical expertise. The \texttt{rEHR} package greatly simplifies and
+accelerates the extraction and processing of data from EHR databases,
+allowing researchers to devote more time to the statistical analysis of
+results. The workflow is straightforward - amounting to a flat series of
+function calls, rather than a complex set of nested loops, errors will
+be much more easily spotted and fixed. The combination of use of SQL
+databases, optimised data manipulation packages and multicore
+functionality results in code that runs many times faster than code that
+is commonly written for these tasks. Although this package is currently
+only tested with CPRD data, the \texttt{.ehr} environment system will
+allow it to be easily linked to other EHR databases.
+
+Future versions of the \texttt{rEHR} software will include:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Implementaion of the \texttt{repsample} algorithm for representative
+  sampling of practices (Kontopantelis 2013)
+\item
+  Iterative proportional fitting for matching on population
+  characteristics between different EHR databases (Springate et al.
+  (2015) Appendix 2)
+\item
+  A robust algorithm for determining smoking status
+\item
+  Functions for constructing draft lists of clinical codes
+\item
+  interfaces to other EHR systems, in particular UK primary care
+  databases such as The Health Improvement Network, QResearch and
+  ResearchOne.
+\item
+  Uniform units functions for other clinical tests such as blood
+  pressure, cholesterol and serum creatine
+\end{itemize}
+
+\section{Acknowledgements}\label{acknowledgements}
+
+This work was funded by the National Institute for Health Research
+(NIHR) School for Primary Care as part of the project ``An analytical
+framework for increasing the efficiency and validity of research using
+primary care databases''
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+Ainsworth, John, James Cunningham, and Iain Buchan. 2012. ``ELab:
+Bringing Together People, Data and Methods to Enhance Knowledge
+Discovery in Healthcare Settings.'' \emph{Studies in Health Technology
+and Informatics} 175: 39--48.
+
+Bechhofer, Sean, Iain Buchan, David De Roure, Paolo Missier, John
+Ainsworth, Jiten Bhagat, Philip Couch, et al. 2013. ``Why Linked Data Is
+Not Enough for Scientists.'' \emph{Future Generation Computer Systems}
+29 (2). Elsevier: 599--611.
+
+Bendix Carstensen, Esa Laara, Martyn Plummer, and Michael Hills. 2014.
+\emph{Epi: A Package for Statistical Analysis in Epidemiology}.
+\url{http://CRAN.R-project.org/package=Epi}.
+
+``Clinical Practice Research Datalink (CPRD) GOLD.''
+\url{http://www.cprd.com/dataAccess/default.asp\#OnlineDataGOLD}.
+
+Danaei, Goodarz, Luis A García Rodríguez, Oscar Fernández Cantero, Roger
+Logan, and Miguel A Hernán. 2013. ``Observational Data for Comparative
+Effectiveness Research: An Emulation of Randomised Trials of Statins and
+Primary Prevention of Coronary Heart Disease.'' \emph{Statistical
+Methods in Medical Research} 22 (1): 70--96.
+doi:\href{http://dx.doi.org/10.1177/0962280211403603}{10.1177/0962280211403603}.
+
+Davé, Shreya, and Irene Petersen. 2009. ``Creating Medical and Drug Code
+Lists to Identify Cases in Primary Care Databases.''
+\emph{Pharmacoepidemiology and Drug Safety} 18 (8). John Wiley \& Sons,
+Ltd.: 704--7.
+doi:\href{http://dx.doi.org/10.1002/pds.1770}{10.1002/pds.1770}.
+
+Gelfand, Joel M, Andrea L Neimann, Daniel B Shin, Xingmei Wang, David J
+Margolis, and Andrea B Troxel. 2006. ``Risk of Myocardial Infarction in
+Patients with Psoriasis.'' \emph{Jama} 296 (14). American Medical
+Association: 1735--41.
+
+Grothendieck, G. 2014. \emph{Sqldf: Perform SQL Selects on R Data
+Frames}. \url{http://CRAN.R-project.org/package=sqldf}.
+
+James, David A., Seth Falcon, and the authors of SQLite. 2013.
+\emph{RSQLite: SQLite Interface for R}.
+\url{http://CRAN.R-project.org/package=RSQLite}.
+
+Kontopantelis, Evangelos. 2013. ``A Greedy Algorithm for Representative
+Sampling: Repsample in Stata.'' \emph{Journal of Statistical Software}
+55 (1).
+
+Kontopantelis, Evangelos, David A Springate, David Reeves, Darren M
+Ashcroft, Martin Rutter, Iain Buchan, and Tim Doran. 2014. ``Glucose,
+Blood Pressure and Cholesterol Levels and Their Relationships to
+Clinical Outcomes in Type 2 Diabetes: A Retrospective Cohort Study.''
+\emph{Diabetologia}. Springer, 1--14.
+
+Overhage, J Marc, and Lauren M Overhage. 2013. ``Sensible Use of
+Observational Clinical Data.'' \emph{Statistical Methods in Medical
+Research} 22 (1): 7--13.
+doi:\href{http://dx.doi.org/10.1177/0962280211403598}{10.1177/0962280211403598}.
+
+Parisi, Rosa, Martin K Rutter, Mark Lunt, Helen S Young, Deborah PM
+Symmons, Christopher EM Griffiths, and Darren M Ashcroft. 2015.
+``Psoriasis and the Risk of Major Cardiovascular Events: Cohort Study
+Using the Clinical Practice Research Datalink.'' \emph{Journal of
+Investigative Dermatology}. Nature Publishing Group.
+
+Perlis, R. H., D. V. Iosifescu, V. M. Castro, S. N. Murphy, V. S.
+Gainer, J. Minnier, T. Cai, et al. 2012. ``Using Electronic Medical
+Records to Enable Large-Scale Studies in Psychiatry: Treatment Resistant
+Depression as a Model.'' \emph{Psychological Medicine} 42 (01): 41--50.
+doi:\href{http://dx.doi.org/10.1017/S0033291711000997}{10.1017/S0033291711000997}.
+
+R Core Team. 2014. \emph{R: A Language and Environment for Statistical
+Computing}. Vienna, Austria: R Foundation for Statistical Computing.
+\url{http://www.R-project.org/}.
+
+Reeves, David, David A Springate, Darren M Ashcroft, Ronan Ryan, Tim
+Doran, Richard Morris, Ivan Olier, and Evangelos Kontopantelis. 2014.
+``Can Analyses of Electronic Patient Records Be Independently and
+Externally Validated? The Effect of Statins on the Mortality of Patients
+with Ischaemic Heart Disease: A Cohort Study with Nested Case--control
+Analysis.'' \emph{BMJ Open} 4 (4).
+doi:\href{http://dx.doi.org/10.1136/bmjopen-2014-004952}{10.1136/bmjopen-2014-004952}.
+
+Richardson, D B. 2004. ``An Incidence Density Sampling Program for
+Nested Case-Control Analyses.'' \emph{Occupational and Environmental
+Medicine} 61 (12): e59.
+doi:\href{http://dx.doi.org/10.1136/oem.2004.014472}{10.1136/oem.2004.014472}.
+
+Roland, Martin. 2004. ``Linking Physicians' Pay to the Quality of
+Care---a Major Experiment in the United Kingdom.'' \emph{New England
+Journal of Medicine} 351: 1448--54.
+
+Springate, David A, Darren M Ashcroft, Evangelos Kontopantelis, Tim
+Doran, Ronan Ryan, and David Reeves. 2015. ``Can Analyses of Electronic
+Patient Records Be Independently and Externally Validated? Study 2---the
+Effect of \(B\)-Adrenoceptor Blocker Therapy on Cancer Survival: A
+Retrospective Cohort Study.'' \emph{BMJ Open} 5 (4).
+doi:\href{http://dx.doi.org/10.1136/bmjopen-2014-007299}{10.1136/bmjopen-2014-007299}.
+
+Springate, David A., Evangelos Kontopantelis, Darren M. Ashcroft, Ivan
+Olier, Rosa Parisi, Edmore Chamapiwa, and David Reeves. 2014.
+``ClinicalCodes: An Online Clinical Codes Repository to Improve the
+Validity and Reproducibility of Research Using Electronic Medical
+Records.'' \emph{PLoS ONE} 9 (6). Public Library of Science: e99825.
+doi:\href{http://dx.doi.org/10.1371/journal.pone.0099825}{10.1371/journal.pone.0099825}.
+
+Wickham, Hadley, and Winston Chang. 2014. \emph{Devtools: Tools to Make
+Developing R Code Easier}.
+\url{http://CRAN.R-project.org/package=devtools}.
+
+Wickham, Hadley, and Romain Francois. 2015. \emph{Dplyr: A Grammar of
+Data Manipulation}. \url{http://CRAN.R-project.org/package=dplyr}.
+
+\end{document}
