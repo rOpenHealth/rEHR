@@ -9,6 +9,9 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
+  - sh -e /etc/init.d/xvfb start
+  - sudo R CMD javareconf
+  - ./travis-tool.sh install_r_binary rjava
   - ./travis-tool.sh install_deps
 
 script: ./travis-tool.sh run_tests
