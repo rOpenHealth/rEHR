@@ -87,7 +87,11 @@ select_by_year <- function(dbname = NULL, db = NULL, tables, columns = "*", wher
         } else {
             year_out <- selector_fn(db = db, tab = tables, columns = columns, where = where_year, 
                                     sql_only = FALSE, ...)
-            year_out$year <- year
+            if(nrow(year_out)){
+                year_out$year <- year
+            } else {
+                year_out <- NULL
+            }
             if(cores > 1) dbDisconnect(db)
             year_out
         }
