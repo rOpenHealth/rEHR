@@ -76,16 +76,20 @@ select_by_year <- function(dbname = NULL, db = NULL, tables, columns = "*", wher
         where_year <- str_replace_all(where_year, "ENDDATE", sprintf("'%s'", this_year$enddate))
         if(length(tables) > 1){
             year_out <- bind_rows(lapply(tables, function(tab){
-                out <- selector_fn(db = db, tab = tab, columns = columns, where = where_year, 
+                out <- selector_fn(db = db, 
+                                   tab = tab, columns = columns, where = where_year, 
                                    sql_only = FALSE, ...)
-                out$table <- tab
+                if(nrow(out)){
+                    out$table <- tab    
+                } else out <- NULL
                 out
             }))
-            year_out$year <- year
+            if(nrow(year_out)) year_out$year <- year
             if(cores > 1) dbDisconnect(db)
             year_out
         } else {
-            year_out <- selector_fn(db = db, tab = tables, columns = columns, where = where_year, 
+            year_out <- selector_fn(db = db, 
+                                    tab = tables, columns = columns, where = where_year, 
                                     sql_only = FALSE, ...)
             if(nrow(year_out)){
                 year_out$year <- year
