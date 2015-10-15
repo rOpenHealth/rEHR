@@ -63,16 +63,17 @@ add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_
     for(f in files){
         if(str_detect(f, "zip$")){
             message(sprintf("Unzipping %s...", f), appendLF = FALSE)
-            dat <- read_zip(f)
+            dat <- read_zip(f, stringsAsFactors = FALSE)
         } else {
             message(sprintf("Reading %s...", f), appendLF = FALSE)
-            dat <- read.delim(f)
+            dat <- read.delim(f, stringsAsFactors = FALSE)
         }
         f_dates <- intersect(names(dat), date_fields)
         if(length(f_dates)){
             message(" Converting date formats...", appendLF = FALSE)
             for(column in f_dates){
-                dat[[column]] <- as.character(as.Date(dat[[column]], format = dateformat))
+                dat[[column]] <- as.character(as.Date(as.character(dat[[column]]), 
+                                                      format = dateformat))
             }
         }
         if("yob" %in% names(dat)) dat$yob <- dat$yob + yob_origin
