@@ -1,0 +1,17 @@
+definition,status,items,
+terms,include,peripheral vascular disease,
+terms,include,peripheral gangrene,
+terms,exclude,wrong answer,
+terms,include,thromboangiitis obliterans,
+terms,include,thromboangiitis obliterans,
+terms,include,diabetic peripheral angiopathy,
+terms,include,diabetes,peripheral angiopathy
+terms,include,diabetes,peripheral angiopathy
+terms,include,buerger,disease presenile_gangrene
+terms,include,thromboangiitis obliterans,
+terms,exclude,rubbish,
+codes,include,G73,
+drugs,include,insulin,
+drugs,include,diabet,
+drugs,include,aspirin,
+terms,exclude,cakes,pies

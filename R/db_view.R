@@ -2,7 +2,7 @@
 ##' 
 ##' If just a database connection is selected, returns a dataframe of table names
 ##' If a table name is also supplied, the first n rows from this table are output
-##' @export head.SQLiteConnection
+##' @export 
 ##' 
 ##' @method head SQLiteConnection
 ##'

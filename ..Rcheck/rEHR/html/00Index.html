@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: rEHR</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+<h1> rEHR
+<img class="toplogo" src="../../../doc/html/logo.jpg" alt="[R logo]">
+</h1>
+<hr>
+<div align="center">
+<a href="../../../doc/html/packages.html"><img src="../../../doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
+<a href="../../../doc/html/index.html"><img src="../../../doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
+</div><h2>Documentation for package &lsquo;rEHR&rsquo; version 1.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td width="25%"><a href="rEHR.html">rEHR-package</a></td>
+<td>The rEHR package.</td></tr>
+<tr><td width="25%"><a href="add_to_database.html">add_to_database</a></td>
+<td>Adds a series of files to a database</td></tr>
+<tr><td width="25%"><a href="append_to_temp_table.html">append_to_temp_table</a></td>
+<td>Appends rows to a temporary table</td></tr>
+<tr><td width="25%"><a href="build_cohort.html">build_cohort</a></td>
+<td>Converts a longitudinal data set from e.g. 'prev_terms' to a cohort dataset. The dataset has a single row for each patient and includes only patients in the numerator or denominator for whichever cohort type is chosen. Columns are added for start and end dates and for start and end times as integer differences from the cohort start date. A binary column is added for membership of the case group.  All patients with start date &gt; end date are removed from the dataset.</td></tr>
+<tr><td width="25%"><a href="build_date_fn.html">build_date_fn</a></td>
+<td>Function to build start/enddate helper fuctions</td></tr>
+<tr><td width="25%"><a href="clinical_codes.html">clinical_codes</a></td>
+<td>Clinical codes for 17 QOF conditions, smoking and HbA1c</td></tr>
+<tr><td width="25%"><a href="compress.html">compress</a></td>
+<td>Compresses a dataframe to make more efficient use of resources</td></tr>
+<tr><td width="25%"><a href="convert_dates.html">convert_dates</a></td>
+<td>converts date fields from ISO character string format to R Date format</td></tr>
+<tr><td width="25%"><a href="cprd_uniform_hba1c_values.html">cprd_uniform_hba1c_values</a></td>
+<td>Transforms hba1c values to mmol/mol</td></tr>
+<tr><td width="25%"><a href="cut_tv.html">cut_tv</a></td>
+<td>cut_tv - Cuts a survival dataset on a time varying variable</td></tr>
+<tr><td width="25%"><a href="database.html">database</a></td>
+<td>Wrapper for dbConnect</td></tr>
+<tr><td width="25%"><a href="define_EHR.html">define_EHR</a></td>
+<td>Construct an EHR_definition object.</td></tr>
+<tr><td width="25%"><a href="definition_search.html">definition_search</a></td>
+<td>This function is used to build new definition lists based on medical definitions</td></tr>
+<tr><td width="25%"><a href="drop_all_temp_tables.html">drop_all_temp_tables</a></td>
+<td>drops all temporary tables from the database</td></tr>
+<tr><td width="25%"><a href="drop_temp_table.html">drop_temp_table</a></td>
+<td>Checks if a temporary table exists and then deletes if it does</td></tr>
+<tr><td width="25%"><a href="ehr_def.html">ehr_def</a></td>
+<td>An example EHR_definition object for defining parameters for simulating EHR data</td></tr>
+<tr><td width="25%"><a href="entity.html">entity</a></td>
+<td>A sample of 6 clinical tests and meaures used in UK primary care</td></tr>
+<tr><td width="25%"><a href="expand_string.html">expand_string</a></td>
+<td>Reads strings and expands sections wrapped in dotted parentheses</td></tr>
+<tr><td width="25%"><a href="export_definition_search.html">export_definition_search</a></td>
+<td>Exports definition searches to an excel file</td></tr>
+<tr><td width="25%"><a href="export_fn.html">export_fn</a></td>
+<td>Exports to a variety of formats based on the file type argument</td></tr>
+<tr><td width="25%"><a href="extract_keywords.html">extract_keywords</a></td>
+<td>Function to extract rows from a lookup table based on keywords</td></tr>
+<tr><td width="25%"><a href="first_events.html">first_events</a></td>
+<td>Selects the earliest event grouped by patient</td></tr>
+<tr><td width="25%"><a href="flat_files.html">flat_files</a></td>
+<td>Exports flat files from the database.  One file per practice</td></tr>
+<tr><td width="25%"><a href="get_EHR_attribute.html">get_EHR_attribute</a></td>
+<td>Return the value of an attribute in the .ehr environment</td></tr>
+<tr><td width="25%"><a href="get_matches.html">get_matches</a></td>
+<td>Find matched controls for a set of cases</td></tr>
+<tr><td width="25%"><a href="head.SQLiteConnection.html">head.SQLiteConnection</a></td>
+<td>head for 'SQLiteConnection' object</td></tr>
+<tr><td width="25%"><a href="import_CPRD_data.html">import_CPRD_data</a></td>
+<td>Imports all selected CPRD data into an sqlite database</td></tr>
+<tr><td width="25%"><a href="import_definitions.html">import_definitions</a></td>
+<td>Imports definitions to be searched from a csv file into a MedicalDefinition object</td></tr>
+<tr><td width="25%"><a href="last_events.html">last_events</a></td>
+<td>Selects the earliest event grouped by patient</td></tr>
+<tr><td width="25%"><a href="list_EHR_attributes.html">list_EHR_attributes</a></td>
+<td>Lists all of the EHR attribute names in .ehr</td></tr>
+<tr><td width="25%"><a href="match_case.html">match_case</a></td>
+<td>Selected controls matching a list of variables from a case</td></tr>
+<tr><td width="25%"><a href="match_on_index.html">match_on_index</a></td>
+<td>Function for performing matching of controls to cases using the consultation files to generate a dummy index date for controls.</td></tr>
+<tr><td width="25%"><a href="medcodes_to_read.html">medcodes_to_read</a></td>
+<td>Translate CPRD medcodes to Read/Oxmis</td></tr>
+<tr><td width="25%"><a href="MedicalDefinition.html">MedicalDefinition</a></td>
+<td>Constructor function for MedicalDefinition class</td></tr>
+<tr><td width="25%"><a href="patients_in_window.html">patients_in_window</a></td>
+<td>Select patients alive and registered between certain dates</td></tr>
+<tr><td width="25%"><a href="patients_per_medcode.html">patients_per_medcode</a></td>
+<td>Produce a dataset of CPRD medcodes with frequencies of patients in the clinical table</td></tr>
+<tr><td width="25%"><a href="prev_terms.html">prev_terms</a></td>
+<td>This function adds columns enabling one to calculate numerators and denominators for prevalence and incidence.</td></tr>
+<tr><td width="25%"><a href="prev_totals.html">prev_totals</a></td>
+<td>Calculates the prevalence totals for the output of a data frame of events/patients etc.</td></tr>
+<tr><td width="25%"><a href="print.EHR_definition.html">print.EHR_definition</a></td>
+<td>Tools for describing EMR_description objects.</td></tr>
+<tr><td width="25%"><a href="print.MedicalDefinition.html">print.MedicalDefinition</a></td>
+<td>Basic print method for medical definition classes</td></tr>
+<tr><td width="25%"><a href="product.html">product</a></td>
+<td>A sample of 500 medicines used in UK primary care</td></tr>
+<tr><td width="25%"><a href="qof_15_months.html">qof_15_months</a></td>
+<td>Helper function providing startdate and enddate for a given year</td></tr>
+<tr><td width="25%"><a href="qof_years.html">qof_years</a></td>
+<td>Helper function providing startdate and enddate for a given year</td></tr>
+<tr><td width="25%"><a href="random_dates.html">random_dates</a></td>
+<td>Generates random dates between a start and end day.</td></tr>
+<tr><td width="25%"><a href="read_to_medcodes.html">read_to_medcodes</a></td>
+<td>Translate Read/Oxmis codes to CPRD medcodes</td></tr>
+<tr><td width="25%"><a href="read_zip.html">read_zip</a></td>
+<td>Reads a zipped data file to a dataframe</td></tr>
+<tr><td width="25%"><a href="rEHR.html">rEHR</a></td>
+<td>The rEHR package.</td></tr>
+<tr><td width="25%"><a href="repsample_example.html">repsample_example</a></td>
+<td>An example dataset to demonstrate the repsample function.  2474 theroetical UK GP Practices.</td></tr>
+<tr><td width="25%"><a href="select_by_year.html">select_by_year</a></td>
+<td>Runs a series of selects over a year range and collects in a list of dataframes</td></tr>
+<tr><td width="25%"><a href="select_events.html">select_events</a></td>
+<td>Extracts From the database</td></tr>
+<tr><td width="25%"><a href="set_CPRD.html">set_CPRD</a></td>
+<td>Sets EHR metadata to CPRD format When this is run, most functions in rEHR act as though the EHR database is CPRD</td></tr>
+<tr><td width="25%"><a href="set_EHR_attribute.html">set_EHR_attribute</a></td>
+<td>Sets the value of an attribute in the .ehr environment</td></tr>
+<tr><td width="25%"><a href="simulate_ehr_consultations.html">simulate_ehr_consultations</a></td>
+<td>Generates simulated GP consultation tables.</td></tr>
+<tr><td width="25%"><a href="simulate_ehr_events.html">simulate_ehr_events</a></td>
+<td>Generate simulated events tables</td></tr>
+<tr><td width="25%"><a href="simulate_ehr_patients.html">simulate_ehr_patients</a></td>
+<td>Generate a dataframe of simulated patients with exit dates based on presented comorbidities.</td></tr>
+<tr><td width="25%"><a href="simulate_ehr_practices.html">simulate_ehr_practices</a></td>
+<td>generates a simulated dataframe of primary care practices in the same format as is used in CPRD</td></tr>
+<tr><td width="25%"><a href="standard_years.html">standard_years</a></td>
+<td>Helper function providing startdate and enddate for a given year</td></tr>
+<tr><td width="25%"><a href="surv_sims.html">surv_sims</a></td>
+<td>Function to simulate survival data.</td></tr>
+<tr><td width="25%"><a href="temp_location.html">temp_location</a></td>
+<td>Sets location of the db temporary store for temporary tables</td></tr>
+<tr><td width="25%"><a href="temp_table.html">temp_table</a></td>
+<td>Creates a temporary table in the database</td></tr>
+<tr><td width="25%"><a href="to_stata.html">to_stata</a></td>
+<td>Compresses a dataframe and saves in stata format.  Options to save as Stata 12 or 13.</td></tr>
+<tr><td width="25%"><a href="to_temp_table.html">to_temp_table</a></td>
+<td>Send a dataframe to a temporary table in the database</td></tr>
+<tr><td width="25%"><a href="wrap_sql_query.html">wrap_sql_query</a></td>
+<td>combines strings and vectors in a sensible way for select queries</td></tr>
+</table>
+</body></html>

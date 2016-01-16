@@ -1,0 +1,118 @@
+MedicalDefinition       Constructor function for MedicalDefinition
+                        class
+add_to_database         Adds a series of files to a database
+append_to_temp_table    Appends rows to a temporary table
+build_cohort            Converts a longitudinal data set from e.g.
+                        'prev_terms' to a cohort dataset. The dataset
+                        has a single row for each patient and includes
+                        only patients in the numerator or denominator
+                        for whichever cohort type is chosen. Columns
+                        are added for start and end dates and for start
+                        and end times as integer differences from the
+                        cohort start date. A binary column is added for
+                        membership of the case group.  All patients
+                        with start date > end date are removed from the
+                        dataset.
+build_date_fn           Function to build start/enddate helper fuctions
+clinical_codes          Clinical codes for 17 QOF conditions, smoking
+                        and HbA1c
+compress                Compresses a dataframe to make more efficient
+                        use of resources
+convert_dates           converts date fields from ISO character string
+                        format to R Date format
+cprd_uniform_hba1c_values
+                        Transforms hba1c values to mmol/mol
+cut_tv                  cut_tv - Cuts a survival dataset on a time
+                        varying variable
+database                Wrapper for dbConnect
+define_EHR              Construct an EHR_definition object.
+definition_search       This function is used to build new definition
+                        lists based on medical definitions
+drop_all_temp_tables    drops all temporary tables from the database
+drop_temp_table         Checks if a temporary table exists and then
+                        deletes if it does
+ehr_def                 An example EHR_definition object for defining
+                        parameters for simulating EHR data
+entity                  A sample of 6 clinical tests and meaures used
+                        in UK primary care
+expand_string           Reads strings and expands sections wrapped in
+                        dotted parentheses
+export_definition_search
+                        Exports definition searches to an excel file
+export_fn               Exports to a variety of formats based on the
+                        file type argument
+extract_keywords        Function to extract rows from a lookup table
+                        based on keywords
+first_events            Selects the earliest event grouped by patient
+flat_files              Exports flat files from the database.  One file
+                        per practice
+get_EHR_attribute       Return the value of an attribute in the .ehr
+                        environment
+get_matches             Find matched controls for a set of cases
+head.SQLiteConnection   head for 'SQLiteConnection' object
+import_CPRD_data        Imports all selected CPRD data into an sqlite
+                        database
+import_definitions      Imports definitions to be searched from a csv
+                        file into a MedicalDefinition object
+last_events             Selects the earliest event grouped by patient
+list_EHR_attributes     Lists all of the EHR attribute names in .ehr
+match_case              Selected controls matching a list of variables
+                        from a case
+match_on_index          Function for performing matching of controls to
+                        cases using the consultation files to generate
+                        a dummy index date for controls.
+medcodes_to_read        Translate CPRD medcodes to Read/Oxmis
+patients_in_window      Select patients alive and registered between
+                        certain dates
+patients_per_medcode    Produce a dataset of CPRD medcodes with
+                        frequencies of patients in the clinical table
+prev_terms              This function adds columns enabling one to
+                        calculate numerators and denominators for
+                        prevalence and incidence.
+prev_totals             Calculates the prevalence totals for the output
+                        of a data frame of events/patients etc.
+print.EHR_definition    Tools for describing EMR_description objects.
+print.MedicalDefinition
+                        Basic print method for medical definition
+                        classes
+product                 A sample of 500 medicines used in UK primary
+                        care
+qof_15_months           Helper function providing startdate and enddate
+                        for a given year
+qof_years               Helper function providing startdate and enddate
+                        for a given year
+rEHR                    The rEHR package.
+random_dates            Generates random dates between a start and end
+                        day.
+read_to_medcodes        Translate Read/Oxmis codes to CPRD medcodes
+read_zip                Reads a zipped data file to a dataframe
+repsample_example       An example dataset to demonstrate the repsample
+                        function.  2474 theroetical UK GP Practices.
+select_by_year          Runs a series of selects over a year range and
+                        collects in a list of dataframes
+select_events           Extracts From the database
+set_CPRD                Sets EHR metadata to CPRD format When this is
+                        run, most functions in rEHR act as though the
+                        EHR database is CPRD
+set_EHR_attribute       Sets the value of an attribute in the .ehr
+                        environment
+simulate_ehr_consultations
+                        Generates simulated GP consultation tables.
+simulate_ehr_events     Generate simulated events tables
+simulate_ehr_patients   Generate a dataframe of simulated patients with
+                        exit dates based on presented comorbidities.
+simulate_ehr_practices
+                        generates a simulated dataframe of primary care
+                        practices in the same format as is used in CPRD
+standard_years          Helper function providing startdate and enddate
+                        for a given year
+surv_sims               Function to simulate survival data.
+temp_location           Sets location of the db temporary store for
+                        temporary tables
+temp_table              Creates a temporary table in the database
+to_stata                Compresses a dataframe and saves in stata
+                        format.  Options to save as Stata 12 or 13.
+to_temp_table           Send a dataframe to a temporary table in the
+                        database
+wrap_sql_query          combines strings and vectors in a sensible way
+                        for select queries

@@ -1,0 +1,25 @@
+Package: rEHR
+Authors@R: c(person("David", "Springate", email = "daspringate@gmail.com",
+    role = c("aut", "cre")),
+    person("Evangelos", "Kontopantelis",
+    role = c("ctb")),
+    person("Ivan", "Olier",
+    role = c("aut", "cre")))
+Author: David Springate [aut, cre],
+    Evangelos Kontopantelis [ctb],
+    Ivan Olier [ctb]
+Maintainer: David Springate <daspringate@gmail.com>
+Version: 1.0
+License: GPL-3
+Title: An R package for manipulating and analysing Electronic Health
+        Record data
+Description: R tools for processing and extracting clinical information from
+    Electronic Medical Records Databases
+Licence: GNU GPL3
+Depends: R (>= 3.0.2), sqldf, RSQLite, dplyr
+Imports: assertthat, stringr, foreign, parallel, readstata13, combinat,
+        xlsx
+Suggests: testthat, devtools, roxygen2, knitr, reshape2, survival
+VignetteBuilder: knitr
+LazyData: true
+Packaged: 2016-01-05 16:40:54 UTC; mdehsds4

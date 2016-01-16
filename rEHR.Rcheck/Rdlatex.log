@@ -1,0 +1,1143 @@
+Hmm ... looks like a package
+
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6)
+ %&-line parsing enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
+erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
+ french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
+us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
+tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
+turkish, ukenglish, ukrainian, loaded.
+
+(/usr/share/texmf/tex/latex/base/book.cls
+Document Class: book 2005/09/16 v1.4f Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/bk10.clo))
+(/usr/share/R/texmf/tex/latex/Rd.sty
+(/usr/share/texmf/tex/latex/base/ifthen.sty)
+(/usr/share/texmf/tex/latex/tools/longtable.sty)
+(/usr/share/texmf/tex/latex/tools/bm.sty)
+(/usr/share/texmf/tex/latex/base/alltt.sty)
+(/usr/share/texmf/tex/latex/tools/verbatim.sty)
+(/usr/share/texmf/tex/latex/ltxmisc/url.sty)
+(/usr/share/texmf/tex/latex/base/textcomp.sty
+(/usr/share/texmf/tex/latex/base/ts1enc.def))
+(/usr/share/texmf/tex/latex/base/fontenc.sty
+(/usr/share/texmf/tex/latex/base/t1enc.def))
+(/usr/share/texmf/tex/latex/psnfss/times.sty)
+(/usr/share/texmf/tex/latex/graphics/color.sty
+(/usr/share/texmf/tex/latex/config/color.cfg)
+(/usr/share/texmf/tex/latex/pdftex-def/pdftex.def))
+(/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+(/usr/share/texmf/tex/latex/graphics/keyval.sty)
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texmf/tex/latex/config/hyperref.cfg)
+(/usr/share/texmf/tex/latex/oberdiek/kvoptions.sty)
+Implicit mode ON; LaTeX internals redefined
+)
+*hyperref using default driver hpdftex*
+(/usr/share/texmf/tex/latex/hyperref/hpdftex.def)
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+) (/usr/share/texmf/tex/latex/base/makeidx.sty)
+(/usr/share/texmf/tex/latex/base/inputenc.sty
+(/usr/share/texmf/tex/latex/base/utf8.def
+(/usr/share/texmf/tex/latex/base/t1enc.dfu)
+(/usr/share/texmf/tex/latex/base/ot1enc.dfu)
+(/usr/share/texmf/tex/latex/base/omsenc.dfu)
+(/usr/share/texmf/tex/latex/base/ts1enc.dfu))
+(/usr/share/texmf/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+No file Rd2.aux.
+(/usr/share/texmf/tex/latex/base/ts1cmr.fd)
+(/usr/share/texmf/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texmf/tex/latex/hyperref/nameref.sty
+(/usr/share/texmf/tex/latex/oberdiek/refcount.sty))
+(/usr/share/texmf/tex/latex/psnfss/t1pcr.fd)
+(/usr/share/texmf/tex/latex/psnfss/t1phv.fd)
+(/usr/share/texmf/tex/latex/base/utf8.def) [1{/usr/share/texmf/fonts/map/pdftex
+/updmap/pdftex.map}] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [2]
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 111--111
+ []\T1/pcr/m/n/10 build_cohort(dat, cohort_type = c("incid", "prev"), cohort_st
+art, cohort_end,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [3]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 199--199
+ []  \T1/pcr/m/n/10 date_fields = c("eventdate", "sysdate", "lcd", "uts", "frd"
+, "crd", "tod",[] 
+[4] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [5]
+(/usr/share/texmf/tex/latex/psnfss/ts1ptm.fd)
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 344--344
+ []\T1/pcr/m/n/9 tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(100
+0, 689, 1000, 874, 777),[] 
+[6]
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 345--345
+ []                      \T1/pcr/m/n/9 event = c(0,1,0,1,1), drug_1 = c(NA, NA,
+ NA, 340, 460),[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 356--356
+ []\T1/pcr/m/n/9 tv_out3 <- cut_tv(tv_test, start, end, drug_3_start, id_var = 
+id, drug_3_state)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 357--357
+ []\T1/pcr/m/n/9 tv_out3 <- cut_tv(tv_out3, start, end, drug_3_stop, id_var = i
+d, drug_3_state)[] 
+
+Overfull \hbox (112.38031pt too wide) in paragraph at lines 359--359
+ []\T1/pcr/m/n/9 inc_1 <- cut_tv(tv_test, start, end, stage_1, id_var = id, dis
+ease_stage, on_existing = "inc")[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 360--360
+ []\T1/pcr/m/n/9 inc_1 <- cut_tv(inc_1, start, end, stage_2, id_var = id, disea
+se_stage, on_existing = "inc")[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 369--369
+ []          \T1/pcr/m/n/9 cut_tv(start, end, stage_1, id_var = id, disease_sta
+ge, on_existing = "inc") %>%[] 
+
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 370--370
+ []          \T1/pcr/m/n/9 cut_tv(start, end, stage_2, id_var = id, disease_sta
+ge, on_existing = "inc")[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [7]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 420--420
+ []  \T1/pcr/m/n/10 patient = list(num = 10000, comorbidity = list(codes = NULL
+, prevalence =[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 421--421
+ []  \T1/pcr/m/n/10 NULL), sim_params = list(transfer_out_prob = 0.2, scale = 2
+5000, weibull_shape[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 422--422
+ []  \T1/pcr/m/n/10 = 1, censor_type = "noninformative", betas = list(condition
+s = NULL, gender =[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 424--424
+ []  \T1/pcr/m/n/10 consultation = list(per_year = 2, type = list(code = 0:1, p
+rob = c(0.2,[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 425--425
+ []  \T1/pcr/m/n/10 0.8))), clinical = list(mean_events = 1), referral = list(m
+ean_events =[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 426--426
+ []  \T1/pcr/m/n/10 0.1), therapy = list(mean_events = 1), practice = list(num 
+= 100, regions[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 427--427
+ []  \T1/pcr/m/n/10 = 13, imd_cats = 5, early_lcd_prob = 0.1, early_lcd_range =
+ 2, uts_limit =[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 428--428
+ []  \T1/pcr/m/n/10 as.Date("1998-01-01"), late_uts_prob = 0.5, late_uts_range 
+= 3))[] 
+[8] (/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 526--526
+ []\T1/pcr/m/n/9 medical_table <- read.delim("medical.txt", fileEncoding="latin
+1", stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 527--527
+ []\T1/pcr/m/n/9 drug_table <- read.delim("product.txt", fileEncoding="latin1",
+ stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 528--528
+ []\T1/pcr/m/n/9 def2 <- import_definition_lists(system.file("extdata", "exampl
+e_search.csv",[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 530--530
+ []\T1/pcr/m/n/9 draft_lists <- definition_search(def2, medical_table, drug_tab
+le = drug_table)[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [9]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [10]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [11]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 684--684
+ []\T1/pcr/m/n/9 medical_table <- read.delim("medical.txt", fileEncoding="latin
+1", stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 685--685
+ []\T1/pcr/m/n/9 drug_table <- read.delim("product.txt", fileEncoding="latin1",
+ stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 686--686
+ []\T1/pcr/m/n/9 def2 <- import_definition_lists(system.file("extdata", "exampl
+e_search.csv",[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 688--688
+ []\T1/pcr/m/n/9 draft_lists <- definition_search(def2, medical_table, drug_tab
+le = drug_table)[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [12]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/psnfss/ts1pcr.fd)
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 759--759
+ []\T1/pcr/m/n/9 keywords <- c(\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral ulceration\TS
+1/pcr/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 mouth ulceration\TS1
+/pcr/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous ulceration\T
+S1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 760--760
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous ulceration\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 ,\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/
+n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 mouth ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/n/
+9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/n
+/9 ,[] 
+[13]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 761--761
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous stomatitis\TS1/pcr/m/n/9 '\T1/pcr/m/n
+/9 , "stomatitis", "aphthae", \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous stoma
+titis\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 762--762
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous ulcers\TS1/pcr/m/n/9 '\T1/pcr/m/
+n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent oral ulcers\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent mouth ulcers\TS1/pcr/m/n/9 '\
+T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 763--763
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent oral aphthous ulcers\TS1/pcr/m/n/9 '
+\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent aphthous ulcers\TS1/pcr
+/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent aphthous stomat
+itis\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 781--781
+ []  \T1/pcr/m/n/10 sql_only = FALSE, group_column = "patid", date_column = "ev
+entdate")[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 810--810
+ []\T1/pcr/m/n/9 b1 <- first_events(db, tab = "Clinical", columns = c("eventdat
+e", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [14]
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 827--827
+ []\T1/pcr/m/n/10 flat_files(db, table = "Consultation", practice_table = "Prac
+tice", out_dir,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [15]
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 892--892
+ []\T1/pcr/m/n/10 get_matches(cases, control_pool, n_controls, match_vars, extr
+a_vars,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 894--894
+ []  \T1/pcr/m/n/10 tracker = function(case_num) ".", method = c("incidence_den
+sity",[] 
+
+Overfull \hbox (79.58897pt too wide) in paragraph at lines 930--940
+\T1/ptm/m/n/10 more ver-bose track-ing, e.g. to track num-ber of cases, set \T1
+/pcr/m/n/10 tracker = function() paste0(case_num, ",") 
+(/usr/share/texmf/tex/latex/base/utf8.def) [16]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 979--979
+ []\T1/pcr/m/n/10 import_CPRD_data(db, data_dir, filetypes = c("Additional", "C
+linical",[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 980--980
+ []  \T1/pcr/m/n/10 "Consultation", "Immunisation", "Patient", "Practice", "Ref
+erral", "Staff",[] 
+[17] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1048--1048
+ []  \T1/pcr/m/n/10 sql_only = FALSE, group_column = "patid", date_column = "ev
+entdate")[] 
+[18]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 1077--1077
+ []\T1/pcr/m/n/9 b2 <- last_events(db, tab = "Clinical", other_columns = c("eve
+ntdate", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [19]
+Overfull \hbox (2.91873pt too wide) in paragraph at lines 1155--1157
+[]\T1/ptm/m/n/10 character vec-tor de-tail-ing the com-mon vari-ables in \T1/pc
+r/m/n/10 cases \T1/ptm/m/n/10 and \T1/pcr/m/n/10 control_pool
+(/usr/share/texmf/tex/latex/base/utf8.def) [20]
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 1200--1200
+ []\T1/pcr/m/n/10 medcodes_to_read(medcodes_data, lookup_table, medcodes_name =
+ "medcode",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [21]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 1264--1264
+ []\T1/pcr/m/n/9 def <- MedicalDefinition(terms = list(c("angina", "unstable"),
+ c("angina", "Crescendo "),[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 1266--1266
+ []                         \T1/pcr/m/n/9 codes = list("G33..00", "G330.00", "%
+r212H", "-G617"))[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [22]
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1312--1312
+ []\T1/pcr/m/n/10 patients_per_medcode(db, clinical_table = "Clinical", patid =
+ "patid",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 1352--1352
+ []\T1/pcr/m/n/10 prev_terms(dat, event_date = "eventdate", year_fn = standard_
+years)[] 
+[23] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [24]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [25]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [26]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1553--1553
+ []\T1/pcr/m/n/10 read_to_medcodes(readcodes_data, lookup_table, readcodes_name
+ = "readcode",[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 1554--1554
+ []  \T1/pcr/m/n/10 lookup_readcodes = "readcode", lookup_medcodes = "medcode",
+ description)[] 
+[27] (/usr/share/texmf/tex/latex/base/utf8.def) [28]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [29]
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1663--1663
+ []\T1/pcr/m/n/10 select_by_year(dbname = NULL, db = NULL, tables, columns = "*
+", where,[] 
+
+Overfull \hbox (40.58775pt too wide) in paragraph at lines 1713--1716
+[]\T1/ptm/m/n/10 The \T1/pcr/m/n/10 selector_fn \T1/ptm/m/n/10 ar-gu-ment de-te
+r-mines how the database se-lect op-er-ates. De-fault is the \T1/pcr/m/n/10 sel
+ect_events
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 1722--1722
+ []\T1/pcr/m/n/9 where_q <- "crd < STARTDATE & (is.null(tod) | tod > ENDDATE) &
+ accept == 1"[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 1723--1723
+ []\T1/pcr/m/n/9 ayears <- select_by_year(db, "Patient", columns = c("patid", "
+yob", "tod"),[] 
+[30]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 1730--1730
+ []\T1/pcr/m/n/9 where_q <- "eventdate >= STARTDATE & eventdate <= ENDDATE & me
+dcode %in% .(a$medcode)"[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 1731--1731
+ []\T1/pcr/m/n/9 byears <- byears <- select_by_year("~/rOpenHealth/CPRD_test/Co
+upland/Coupland",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [31]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 1792--1792
+ []\T1/pcr/m/n/9 b <- select_events(db, tab = "Referral", columns = c("patid", 
+"eventdate", "medcode"),[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 1794--1794
+ []\T1/pcr/m/n/9 b1 <- select_events(db, tab = "Clinical", columns = c("patid",
+ "eventdate", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [32]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [33]
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 1897--1897
+ []\T1/pcr/m/n/10 simulate_ehr_events(ehr_def, consultation, event_type = c("cl
+inical",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [34]
+Overfull \hbox (52.23726pt too wide) in paragraph at lines 1950--1952
+[]\T1/ptm/m/n/10 Patients must have trans-ferred out af-ter the ealiest pos-si-
+ble col-lec-tion date \T1/pcr/m/n/10 ehr_def$practice$uts_limit 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [35]
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2012--2012
+ []\T1/pcr/m/n/10 surv_sims(cov_mat, beta, cens_type = c("typeI", "noninformati
+ve"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [36]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 2114--2114
+ []                                        \T1/pcr/m/n/9 columns = c("patid", "
+eventdate", "medcode"),[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 2115--2115
+ []                                        \T1/pcr/m/n/9 where = "eventdate > \
+TS1/pcr/m/n/9 '\T1/pcr/m/n/9 2005-01-01\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [37]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [38]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2211--2211
+ []\T1/pcr/m/n/9 wrap_sql_query("eventdate >= STARTDATE & eventdate <= ENDDATE 
+& medcode %in% #1 &[] 
+No file Rd2.ind.
+[39] (./Rd2.aux) )
+(see the transcript file for additional information){/usr/share/texmf/fonts/enc
+/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/urw/courier/ucrr8a.pfb></usr/s
+hare/texmf/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texmf/fonts/type1/ur
+w/times/utmb8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmr8a.pfb></usr/sha
+re/texmf/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/tim
+es/utmri8a.pfb>
+Output written on Rd2.pdf (39 pages, 213231 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.14 [02-Oct-2002] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (70 entries accepted, 0 rejected).
+Sorting entries....done (450 comparisons).
+Generating output file Rd2.ind....done (124 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6)
+ %&-line parsing enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
+erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
+ french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
+us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
+tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
+turkish, ukenglish, ukrainian, loaded.
+
+(/usr/share/texmf/tex/latex/base/book.cls
+Document Class: book 2005/09/16 v1.4f Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/bk10.clo))
+(/usr/share/R/texmf/tex/latex/Rd.sty
+(/usr/share/texmf/tex/latex/base/ifthen.sty)
+(/usr/share/texmf/tex/latex/tools/longtable.sty)
+(/usr/share/texmf/tex/latex/tools/bm.sty)
+(/usr/share/texmf/tex/latex/base/alltt.sty)
+(/usr/share/texmf/tex/latex/tools/verbatim.sty)
+(/usr/share/texmf/tex/latex/ltxmisc/url.sty)
+(/usr/share/texmf/tex/latex/base/textcomp.sty
+(/usr/share/texmf/tex/latex/base/ts1enc.def))
+(/usr/share/texmf/tex/latex/base/fontenc.sty
+(/usr/share/texmf/tex/latex/base/t1enc.def))
+(/usr/share/texmf/tex/latex/psnfss/times.sty)
+(/usr/share/texmf/tex/latex/graphics/color.sty
+(/usr/share/texmf/tex/latex/config/color.cfg)
+(/usr/share/texmf/tex/latex/pdftex-def/pdftex.def))
+(/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+(/usr/share/texmf/tex/latex/graphics/keyval.sty)
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texmf/tex/latex/config/hyperref.cfg)
+(/usr/share/texmf/tex/latex/oberdiek/kvoptions.sty)
+Implicit mode ON; LaTeX internals redefined
+)
+*hyperref using default driver hpdftex*
+(/usr/share/texmf/tex/latex/hyperref/hpdftex.def)
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+) (/usr/share/texmf/tex/latex/base/makeidx.sty)
+(/usr/share/texmf/tex/latex/base/inputenc.sty
+(/usr/share/texmf/tex/latex/base/utf8.def
+(/usr/share/texmf/tex/latex/base/t1enc.dfu)
+(/usr/share/texmf/tex/latex/base/ot1enc.dfu)
+(/usr/share/texmf/tex/latex/base/omsenc.dfu)
+(/usr/share/texmf/tex/latex/base/ts1enc.dfu))
+(/usr/share/texmf/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+(./Rd2.aux) (/usr/share/texmf/tex/latex/base/ts1cmr.fd)
+(/usr/share/texmf/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texmf/tex/latex/hyperref/nameref.sty
+(/usr/share/texmf/tex/latex/oberdiek/refcount.sty)) (./Rd2.out) (./Rd2.out)
+(/usr/share/texmf/tex/latex/psnfss/t1pcr.fd)
+(/usr/share/texmf/tex/latex/psnfss/t1phv.fd) (./Rd2.toc [1{/usr/share/texmf/fon
+ts/map/pdftex/updmap/pdftex.map}]) (/usr/share/texmf/tex/latex/base/utf8.def)
+[2] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [3]
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 111--111
+ []\T1/pcr/m/n/10 build_cohort(dat, cohort_type = c("incid", "prev"), cohort_st
+art, cohort_end,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [4]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 199--199
+ []  \T1/pcr/m/n/10 date_fields = c("eventdate", "sysdate", "lcd", "uts", "frd"
+, "crd", "tod",[] 
+[5] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [6]
+(/usr/share/texmf/tex/latex/psnfss/ts1ptm.fd)
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 344--344
+ []\T1/pcr/m/n/9 tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(100
+0, 689, 1000, 874, 777),[] 
+[7]
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 345--345
+ []                      \T1/pcr/m/n/9 event = c(0,1,0,1,1), drug_1 = c(NA, NA,
+ NA, 340, 460),[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 356--356
+ []\T1/pcr/m/n/9 tv_out3 <- cut_tv(tv_test, start, end, drug_3_start, id_var = 
+id, drug_3_state)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 357--357
+ []\T1/pcr/m/n/9 tv_out3 <- cut_tv(tv_out3, start, end, drug_3_stop, id_var = i
+d, drug_3_state)[] 
+
+Overfull \hbox (112.38031pt too wide) in paragraph at lines 359--359
+ []\T1/pcr/m/n/9 inc_1 <- cut_tv(tv_test, start, end, stage_1, id_var = id, dis
+ease_stage, on_existing = "inc")[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 360--360
+ []\T1/pcr/m/n/9 inc_1 <- cut_tv(inc_1, start, end, stage_2, id_var = id, disea
+se_stage, on_existing = "inc")[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 369--369
+ []          \T1/pcr/m/n/9 cut_tv(start, end, stage_1, id_var = id, disease_sta
+ge, on_existing = "inc") %>%[] 
+
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 370--370
+ []          \T1/pcr/m/n/9 cut_tv(start, end, stage_2, id_var = id, disease_sta
+ge, on_existing = "inc")[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [8]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 420--420
+ []  \T1/pcr/m/n/10 patient = list(num = 10000, comorbidity = list(codes = NULL
+, prevalence =[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 421--421
+ []  \T1/pcr/m/n/10 NULL), sim_params = list(transfer_out_prob = 0.2, scale = 2
+5000, weibull_shape[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 422--422
+ []  \T1/pcr/m/n/10 = 1, censor_type = "noninformative", betas = list(condition
+s = NULL, gender =[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 424--424
+ []  \T1/pcr/m/n/10 consultation = list(per_year = 2, type = list(code = 0:1, p
+rob = c(0.2,[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 425--425
+ []  \T1/pcr/m/n/10 0.8))), clinical = list(mean_events = 1), referral = list(m
+ean_events =[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 426--426
+ []  \T1/pcr/m/n/10 0.1), therapy = list(mean_events = 1), practice = list(num 
+= 100, regions[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 427--427
+ []  \T1/pcr/m/n/10 = 13, imd_cats = 5, early_lcd_prob = 0.1, early_lcd_range =
+ 2, uts_limit =[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 428--428
+ []  \T1/pcr/m/n/10 as.Date("1998-01-01"), late_uts_prob = 0.5, late_uts_range 
+= 3))[] 
+[9] (/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 526--526
+ []\T1/pcr/m/n/9 medical_table <- read.delim("medical.txt", fileEncoding="latin
+1", stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 527--527
+ []\T1/pcr/m/n/9 drug_table <- read.delim("product.txt", fileEncoding="latin1",
+ stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 528--528
+ []\T1/pcr/m/n/9 def2 <- import_definition_lists(system.file("extdata", "exampl
+e_search.csv",[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 530--530
+ []\T1/pcr/m/n/9 draft_lists <- definition_search(def2, medical_table, drug_tab
+le = drug_table)[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [10]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [11]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [12]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 684--684
+ []\T1/pcr/m/n/9 medical_table <- read.delim("medical.txt", fileEncoding="latin
+1", stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 685--685
+ []\T1/pcr/m/n/9 drug_table <- read.delim("product.txt", fileEncoding="latin1",
+ stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 686--686
+ []\T1/pcr/m/n/9 def2 <- import_definition_lists(system.file("extdata", "exampl
+e_search.csv",[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 688--688
+ []\T1/pcr/m/n/9 draft_lists <- definition_search(def2, medical_table, drug_tab
+le = drug_table)[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [13]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/psnfss/ts1pcr.fd)
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 759--759
+ []\T1/pcr/m/n/9 keywords <- c(\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral ulceration\TS
+1/pcr/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 mouth ulceration\TS1
+/pcr/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous ulceration\T
+S1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 760--760
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous ulceration\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 ,\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/
+n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 mouth ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/n/
+9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/n
+/9 ,[] 
+[14]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 761--761
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous stomatitis\TS1/pcr/m/n/9 '\T1/pcr/m/n
+/9 , "stomatitis", "aphthae", \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous stoma
+titis\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 762--762
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous ulcers\TS1/pcr/m/n/9 '\T1/pcr/m/
+n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent oral ulcers\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent mouth ulcers\TS1/pcr/m/n/9 '\
+T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 763--763
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent oral aphthous ulcers\TS1/pcr/m/n/9 '
+\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent aphthous ulcers\TS1/pcr
+/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent aphthous stomat
+itis\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 781--781
+ []  \T1/pcr/m/n/10 sql_only = FALSE, group_column = "patid", date_column = "ev
+entdate")[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 810--810
+ []\T1/pcr/m/n/9 b1 <- first_events(db, tab = "Clinical", columns = c("eventdat
+e", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [15]
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 827--827
+ []\T1/pcr/m/n/10 flat_files(db, table = "Consultation", practice_table = "Prac
+tice", out_dir,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [16]
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 892--892
+ []\T1/pcr/m/n/10 get_matches(cases, control_pool, n_controls, match_vars, extr
+a_vars,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 894--894
+ []  \T1/pcr/m/n/10 tracker = function(case_num) ".", method = c("incidence_den
+sity",[] 
+
+Overfull \hbox (79.58897pt too wide) in paragraph at lines 930--940
+\T1/ptm/m/n/10 more ver-bose track-ing, e.g. to track num-ber of cases, set \T1
+/pcr/m/n/10 tracker = function() paste0(case_num, ",") 
+(/usr/share/texmf/tex/latex/base/utf8.def) [17]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 979--979
+ []\T1/pcr/m/n/10 import_CPRD_data(db, data_dir, filetypes = c("Additional", "C
+linical",[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 980--980
+ []  \T1/pcr/m/n/10 "Consultation", "Immunisation", "Patient", "Practice", "Ref
+erral", "Staff",[] 
+[18] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1048--1048
+ []  \T1/pcr/m/n/10 sql_only = FALSE, group_column = "patid", date_column = "ev
+entdate")[] 
+[19]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 1077--1077
+ []\T1/pcr/m/n/9 b2 <- last_events(db, tab = "Clinical", other_columns = c("eve
+ntdate", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [20]
+Overfull \hbox (2.91873pt too wide) in paragraph at lines 1155--1157
+[]\T1/ptm/m/n/10 character vec-tor de-tail-ing the com-mon vari-ables in \T1/pc
+r/m/n/10 cases \T1/ptm/m/n/10 and \T1/pcr/m/n/10 control_pool
+(/usr/share/texmf/tex/latex/base/utf8.def) [21]
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 1200--1200
+ []\T1/pcr/m/n/10 medcodes_to_read(medcodes_data, lookup_table, medcodes_name =
+ "medcode",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [22]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 1264--1264
+ []\T1/pcr/m/n/9 def <- MedicalDefinition(terms = list(c("angina", "unstable"),
+ c("angina", "Crescendo "),[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 1266--1266
+ []                         \T1/pcr/m/n/9 codes = list("G33..00", "G330.00", "%
+r212H", "-G617"))[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [23]
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1312--1312
+ []\T1/pcr/m/n/10 patients_per_medcode(db, clinical_table = "Clinical", patid =
+ "patid",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 1352--1352
+ []\T1/pcr/m/n/10 prev_terms(dat, event_date = "eventdate", year_fn = standard_
+years)[] 
+[24] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [25]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [26]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [27]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1553--1553
+ []\T1/pcr/m/n/10 read_to_medcodes(readcodes_data, lookup_table, readcodes_name
+ = "readcode",[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 1554--1554
+ []  \T1/pcr/m/n/10 lookup_readcodes = "readcode", lookup_medcodes = "medcode",
+ description)[] 
+[28] (/usr/share/texmf/tex/latex/base/utf8.def) [29]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [30]
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1663--1663
+ []\T1/pcr/m/n/10 select_by_year(dbname = NULL, db = NULL, tables, columns = "*
+", where,[] 
+
+Overfull \hbox (40.58775pt too wide) in paragraph at lines 1713--1716
+[]\T1/ptm/m/n/10 The \T1/pcr/m/n/10 selector_fn \T1/ptm/m/n/10 ar-gu-ment de-te
+r-mines how the database se-lect op-er-ates. De-fault is the \T1/pcr/m/n/10 sel
+ect_events
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 1722--1722
+ []\T1/pcr/m/n/9 where_q <- "crd < STARTDATE & (is.null(tod) | tod > ENDDATE) &
+ accept == 1"[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 1723--1723
+ []\T1/pcr/m/n/9 ayears <- select_by_year(db, "Patient", columns = c("patid", "
+yob", "tod"),[] 
+[31]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 1730--1730
+ []\T1/pcr/m/n/9 where_q <- "eventdate >= STARTDATE & eventdate <= ENDDATE & me
+dcode %in% .(a$medcode)"[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 1731--1731
+ []\T1/pcr/m/n/9 byears <- byears <- select_by_year("~/rOpenHealth/CPRD_test/Co
+upland/Coupland",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [32]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 1792--1792
+ []\T1/pcr/m/n/9 b <- select_events(db, tab = "Referral", columns = c("patid", 
+"eventdate", "medcode"),[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 1794--1794
+ []\T1/pcr/m/n/9 b1 <- select_events(db, tab = "Clinical", columns = c("patid",
+ "eventdate", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [33]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [34]
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 1897--1897
+ []\T1/pcr/m/n/10 simulate_ehr_events(ehr_def, consultation, event_type = c("cl
+inical",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [35]
+Overfull \hbox (52.23726pt too wide) in paragraph at lines 1950--1952
+[]\T1/ptm/m/n/10 Patients must have trans-ferred out af-ter the ealiest pos-si-
+ble col-lec-tion date \T1/pcr/m/n/10 ehr_def$practice$uts_limit 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [36]
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2012--2012
+ []\T1/pcr/m/n/10 surv_sims(cov_mat, beta, cens_type = c("typeI", "noninformati
+ve"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [37]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 2114--2114
+ []                                        \T1/pcr/m/n/9 columns = c("patid", "
+eventdate", "medcode"),[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 2115--2115
+ []                                        \T1/pcr/m/n/9 where = "eventdate > \
+TS1/pcr/m/n/9 '\T1/pcr/m/n/9 2005-01-01\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [38]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [39]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2211--2211
+ []\T1/pcr/m/n/9 wrap_sql_query("eventdate >= STARTDATE & eventdate <= ENDDATE 
+& medcode %in% #1 &[] 
+(./Rd2.ind [40] [41]) (./Rd2.aux) )
+(see the transcript file for additional information){/usr/share/texmf/fonts/enc
+/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/sh
+are/texmf/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf/fonts/type1/urw/
+courier/ucrro8a.pfb></usr/share/texmf/fonts/type1/urw/helvetic/uhvr8a.pfb></usr
+/share/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf/fonts/type1/urw
+/times/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmr8a.pfb></usr/shar
+e/texmf/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (41 pages, 262966 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.14 [02-Oct-2002] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (70 entries accepted, 0 rejected).
+Sorting entries....done (450 comparisons).
+Generating output file Rd2.ind....done (124 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6)
+ %&-line parsing enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
+erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
+ french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
+us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
+tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
+turkish, ukenglish, ukrainian, loaded.
+
+(/usr/share/texmf/tex/latex/base/book.cls
+Document Class: book 2005/09/16 v1.4f Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/bk10.clo))
+(/usr/share/R/texmf/tex/latex/Rd.sty
+(/usr/share/texmf/tex/latex/base/ifthen.sty)
+(/usr/share/texmf/tex/latex/tools/longtable.sty)
+(/usr/share/texmf/tex/latex/tools/bm.sty)
+(/usr/share/texmf/tex/latex/base/alltt.sty)
+(/usr/share/texmf/tex/latex/tools/verbatim.sty)
+(/usr/share/texmf/tex/latex/ltxmisc/url.sty)
+(/usr/share/texmf/tex/latex/base/textcomp.sty
+(/usr/share/texmf/tex/latex/base/ts1enc.def))
+(/usr/share/texmf/tex/latex/base/fontenc.sty
+(/usr/share/texmf/tex/latex/base/t1enc.def))
+(/usr/share/texmf/tex/latex/psnfss/times.sty)
+(/usr/share/texmf/tex/latex/graphics/color.sty
+(/usr/share/texmf/tex/latex/config/color.cfg)
+(/usr/share/texmf/tex/latex/pdftex-def/pdftex.def))
+(/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+(/usr/share/texmf/tex/latex/graphics/keyval.sty)
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texmf/tex/latex/config/hyperref.cfg)
+(/usr/share/texmf/tex/latex/oberdiek/kvoptions.sty)
+Implicit mode ON; LaTeX internals redefined
+)
+*hyperref using default driver hpdftex*
+(/usr/share/texmf/tex/latex/hyperref/hpdftex.def)
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+) (/usr/share/texmf/tex/latex/base/makeidx.sty)
+(/usr/share/texmf/tex/latex/base/inputenc.sty
+(/usr/share/texmf/tex/latex/base/utf8.def
+(/usr/share/texmf/tex/latex/base/t1enc.dfu)
+(/usr/share/texmf/tex/latex/base/ot1enc.dfu)
+(/usr/share/texmf/tex/latex/base/omsenc.dfu)
+(/usr/share/texmf/tex/latex/base/ts1enc.dfu))
+(/usr/share/texmf/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+(./Rd2.aux) (/usr/share/texmf/tex/latex/base/ts1cmr.fd)
+(/usr/share/texmf/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texmf/tex/latex/hyperref/nameref.sty
+(/usr/share/texmf/tex/latex/oberdiek/refcount.sty)) (./Rd2.out) (./Rd2.out)
+(/usr/share/texmf/tex/latex/psnfss/t1pcr.fd)
+(/usr/share/texmf/tex/latex/psnfss/t1phv.fd) (./Rd2.toc [1{/usr/share/texmf/fon
+ts/map/pdftex/updmap/pdftex.map}]) (/usr/share/texmf/tex/latex/base/utf8.def)
+[2] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [3]
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 111--111
+ []\T1/pcr/m/n/10 build_cohort(dat, cohort_type = c("incid", "prev"), cohort_st
+art, cohort_end,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [4]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 199--199
+ []  \T1/pcr/m/n/10 date_fields = c("eventdate", "sysdate", "lcd", "uts", "frd"
+, "crd", "tod",[] 
+[5] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [6]
+(/usr/share/texmf/tex/latex/psnfss/ts1ptm.fd)
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 344--344
+ []\T1/pcr/m/n/9 tv_test <- data.frame(id = 1:5, start = rep(0, 5), end = c(100
+0, 689, 1000, 874, 777),[] 
+[7]
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 345--345
+ []                      \T1/pcr/m/n/9 event = c(0,1,0,1,1), drug_1 = c(NA, NA,
+ NA, 340, 460),[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 356--356
+ []\T1/pcr/m/n/9 tv_out3 <- cut_tv(tv_test, start, end, drug_3_start, id_var = 
+id, drug_3_state)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 357--357
+ []\T1/pcr/m/n/9 tv_out3 <- cut_tv(tv_out3, start, end, drug_3_stop, id_var = i
+d, drug_3_state)[] 
+
+Overfull \hbox (112.38031pt too wide) in paragraph at lines 359--359
+ []\T1/pcr/m/n/9 inc_1 <- cut_tv(tv_test, start, end, stage_1, id_var = id, dis
+ease_stage, on_existing = "inc")[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 360--360
+ []\T1/pcr/m/n/9 inc_1 <- cut_tv(inc_1, start, end, stage_2, id_var = id, disea
+se_stage, on_existing = "inc")[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 369--369
+ []          \T1/pcr/m/n/9 cut_tv(start, end, stage_1, id_var = id, disease_sta
+ge, on_existing = "inc") %>%[] 
+
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 370--370
+ []          \T1/pcr/m/n/9 cut_tv(start, end, stage_2, id_var = id, disease_sta
+ge, on_existing = "inc")[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [8]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 420--420
+ []  \T1/pcr/m/n/10 patient = list(num = 10000, comorbidity = list(codes = NULL
+, prevalence =[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 421--421
+ []  \T1/pcr/m/n/10 NULL), sim_params = list(transfer_out_prob = 0.2, scale = 2
+5000, weibull_shape[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 422--422
+ []  \T1/pcr/m/n/10 = 1, censor_type = "noninformative", betas = list(condition
+s = NULL, gender =[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 424--424
+ []  \T1/pcr/m/n/10 consultation = list(per_year = 2, type = list(code = 0:1, p
+rob = c(0.2,[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 425--425
+ []  \T1/pcr/m/n/10 0.8))), clinical = list(mean_events = 1), referral = list(m
+ean_events =[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 426--426
+ []  \T1/pcr/m/n/10 0.1), therapy = list(mean_events = 1), practice = list(num 
+= 100, regions[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 427--427
+ []  \T1/pcr/m/n/10 = 13, imd_cats = 5, early_lcd_prob = 0.1, early_lcd_range =
+ 2, uts_limit =[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 428--428
+ []  \T1/pcr/m/n/10 as.Date("1998-01-01"), late_uts_prob = 0.5, late_uts_range 
+= 3))[] 
+[9] (/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 526--526
+ []\T1/pcr/m/n/9 medical_table <- read.delim("medical.txt", fileEncoding="latin
+1", stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 527--527
+ []\T1/pcr/m/n/9 drug_table <- read.delim("product.txt", fileEncoding="latin1",
+ stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 528--528
+ []\T1/pcr/m/n/9 def2 <- import_definition_lists(system.file("extdata", "exampl
+e_search.csv",[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 530--530
+ []\T1/pcr/m/n/9 draft_lists <- definition_search(def2, medical_table, drug_tab
+le = drug_table)[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [10]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [11]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [12]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 684--684
+ []\T1/pcr/m/n/9 medical_table <- read.delim("medical.txt", fileEncoding="latin
+1", stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 685--685
+ []\T1/pcr/m/n/9 drug_table <- read.delim("product.txt", fileEncoding="latin1",
+ stringsAsFactors = FALSE)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 686--686
+ []\T1/pcr/m/n/9 def2 <- import_definition_lists(system.file("extdata", "exampl
+e_search.csv",[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 688--688
+ []\T1/pcr/m/n/9 draft_lists <- definition_search(def2, medical_table, drug_tab
+le = drug_table)[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [13]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/psnfss/ts1pcr.fd)
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 759--759
+ []\T1/pcr/m/n/9 keywords <- c(\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral ulceration\TS
+1/pcr/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 mouth ulceration\TS1
+/pcr/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous ulceration\T
+S1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 760--760
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous ulceration\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 ,\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/
+n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 mouth ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/n/
+9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous ulcer[s]?\TS1/pcr/m/n/9 '\T1/pcr/m/n
+/9 ,[] 
+[14]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 761--761
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 aphthous stomatitis\TS1/pcr/m/n/9 '\T1/pcr/m/n
+/9 , "stomatitis", "aphthae", \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous stoma
+titis\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 762--762
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 oral aphthous ulcers\TS1/pcr/m/n/9 '\T1/pcr/m/
+n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent oral ulcers\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent mouth ulcers\TS1/pcr/m/n/9 '\
+T1/pcr/m/n/9 ,[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 763--763
+ []\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent oral aphthous ulcers\TS1/pcr/m/n/9 '
+\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent aphthous ulcers\TS1/pcr
+/m/n/9 '\T1/pcr/m/n/9 , \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 recurrent aphthous stomat
+itis\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 781--781
+ []  \T1/pcr/m/n/10 sql_only = FALSE, group_column = "patid", date_column = "ev
+entdate")[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 810--810
+ []\T1/pcr/m/n/9 b1 <- first_events(db, tab = "Clinical", columns = c("eventdat
+e", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [15]
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 827--827
+ []\T1/pcr/m/n/10 flat_files(db, table = "Consultation", practice_table = "Prac
+tice", out_dir,[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [16]
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 892--892
+ []\T1/pcr/m/n/10 get_matches(cases, control_pool, n_controls, match_vars, extr
+a_vars,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 894--894
+ []  \T1/pcr/m/n/10 tracker = function(case_num) ".", method = c("incidence_den
+sity",[] 
+
+Overfull \hbox (79.58897pt too wide) in paragraph at lines 930--940
+\T1/ptm/m/n/10 more ver-bose track-ing, e.g. to track num-ber of cases, set \T1
+/pcr/m/n/10 tracker = function() paste0(case_num, ",") 
+(/usr/share/texmf/tex/latex/base/utf8.def) [17]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 979--979
+ []\T1/pcr/m/n/10 import_CPRD_data(db, data_dir, filetypes = c("Additional", "C
+linical",[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 980--980
+ []  \T1/pcr/m/n/10 "Consultation", "Immunisation", "Patient", "Practice", "Ref
+erral", "Staff",[] 
+[18] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1048--1048
+ []  \T1/pcr/m/n/10 sql_only = FALSE, group_column = "patid", date_column = "ev
+entdate")[] 
+[19]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 1077--1077
+ []\T1/pcr/m/n/9 b2 <- last_events(db, tab = "Clinical", other_columns = c("eve
+ntdate", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [20]
+Overfull \hbox (2.91873pt too wide) in paragraph at lines 1155--1157
+[]\T1/ptm/m/n/10 character vec-tor de-tail-ing the com-mon vari-ables in \T1/pc
+r/m/n/10 cases \T1/ptm/m/n/10 and \T1/pcr/m/n/10 control_pool
+(/usr/share/texmf/tex/latex/base/utf8.def) [21]
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 1200--1200
+ []\T1/pcr/m/n/10 medcodes_to_read(medcodes_data, lookup_table, medcodes_name =
+ "medcode",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [22]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 1264--1264
+ []\T1/pcr/m/n/9 def <- MedicalDefinition(terms = list(c("angina", "unstable"),
+ c("angina", "Crescendo "),[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 1266--1266
+ []                         \T1/pcr/m/n/9 codes = list("G33..00", "G330.00", "%
+r212H", "-G617"))[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [23]
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1312--1312
+ []\T1/pcr/m/n/10 patients_per_medcode(db, clinical_table = "Clinical", patid =
+ "patid",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 1352--1352
+ []\T1/pcr/m/n/10 prev_terms(dat, event_date = "eventdate", year_fn = standard_
+years)[] 
+[24] (/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [25]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [26]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [27]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1553--1553
+ []\T1/pcr/m/n/10 read_to_medcodes(readcodes_data, lookup_table, readcodes_name
+ = "readcode",[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 1554--1554
+ []  \T1/pcr/m/n/10 lookup_readcodes = "readcode", lookup_medcodes = "medcode",
+ description)[] 
+[28] (/usr/share/texmf/tex/latex/base/utf8.def) [29]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [30]
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1663--1663
+ []\T1/pcr/m/n/10 select_by_year(dbname = NULL, db = NULL, tables, columns = "*
+", where,[] 
+
+Overfull \hbox (40.58775pt too wide) in paragraph at lines 1713--1716
+[]\T1/ptm/m/n/10 The \T1/pcr/m/n/10 selector_fn \T1/ptm/m/n/10 ar-gu-ment de-te
+r-mines how the database se-lect op-er-ates. De-fault is the \T1/pcr/m/n/10 sel
+ect_events
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 1722--1722
+ []\T1/pcr/m/n/9 where_q <- "crd < STARTDATE & (is.null(tod) | tod > ENDDATE) &
+ accept == 1"[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 1723--1723
+ []\T1/pcr/m/n/9 ayears <- select_by_year(db, "Patient", columns = c("patid", "
+yob", "tod"),[] 
+[31]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 1730--1730
+ []\T1/pcr/m/n/9 where_q <- "eventdate >= STARTDATE & eventdate <= ENDDATE & me
+dcode %in% .(a$medcode)"[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 1731--1731
+ []\T1/pcr/m/n/9 byears <- byears <- select_by_year("~/rOpenHealth/CPRD_test/Co
+upland/Coupland",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [32]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 1792--1792
+ []\T1/pcr/m/n/9 b <- select_events(db, tab = "Referral", columns = c("patid", 
+"eventdate", "medcode"),[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 1794--1794
+ []\T1/pcr/m/n/9 b1 <- select_events(db, tab = "Clinical", columns = c("patid",
+ "eventdate", "medcode"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [33]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [34]
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 1897--1897
+ []\T1/pcr/m/n/10 simulate_ehr_events(ehr_def, consultation, event_type = c("cl
+inical",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [35]
+Overfull \hbox (52.23726pt too wide) in paragraph at lines 1950--1952
+[]\T1/ptm/m/n/10 Patients must have trans-ferred out af-ter the ealiest pos-si-
+ble col-lec-tion date \T1/pcr/m/n/10 ehr_def$practice$uts_limit 
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [36]
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2012--2012
+ []\T1/pcr/m/n/10 surv_sims(cov_mat, beta, cens_type = c("typeI", "noninformati
+ve"),[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [37]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 2114--2114
+ []                                        \T1/pcr/m/n/9 columns = c("patid", "
+eventdate", "medcode"),[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 2115--2115
+ []                                        \T1/pcr/m/n/9 where = "eventdate > \
+TS1/pcr/m/n/9 '\T1/pcr/m/n/9 2005-01-01\TS1/pcr/m/n/9 '\T1/pcr/m/n/9 ",[] 
+(/usr/share/texmf/tex/latex/base/utf8.def) [38]
+(/usr/share/texmf/tex/latex/base/utf8.def)
+(/usr/share/texmf/tex/latex/base/utf8.def) [39]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2211--2211
+ []\T1/pcr/m/n/9 wrap_sql_query("eventdate >= STARTDATE & eventdate <= ENDDATE 
+& medcode %in% #1 &[] 
+(./Rd2.ind [40] [41]) (./Rd2.aux) )
+(see the transcript file for additional information){/usr/share/texmf/fonts/enc
+/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/sh
+are/texmf/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf/fonts/type1/urw/
+courier/ucrro8a.pfb></usr/share/texmf/fonts/type1/urw/helvetic/uhvr8a.pfb></usr
+/share/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf/fonts/type1/urw
+/times/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmr8a.pfb></usr/shar
+e/texmf/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (41 pages, 263426 bytes).
+Transcript written on Rd2.log.
+Saving output to 'rEHR-manual.pdf' ...
+Done
+You may want to clean up by 'rm -rf /tmp/RtmpIMiJyt/Rd2pdf71f21223deef'

@@ -1,0 +1,13 @@
+* installing *source* package 'rEHR' ...
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** preparing package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+Using CPRD settings
+* DONE (rEHR)

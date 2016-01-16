@@ -88,7 +88,7 @@ Manchester Pharmacy School, University of Manchester \\ \(^{*}\)Corresponding Au
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-12}
+  \date{2016-01-05}
 
 
 
@@ -98,105 +98,105 @@ Manchester Pharmacy School, University of Manchester \\ \(^{*}\)Corresponding Au
 \maketitle
 
 \begin{abstract}
-Electronic Health Record research is a growing field and is set to
-expand still further due to advances in analysis methodology and an
-increasing body of evidence supporting the validity of such studies.
-However, data science methodology to enable the rapid processing,
-cleaning and analysis of these increasingly large datasets is less well
-developed and commonly used software tools are often inadequate,
-resulting in bottlenecks in the research workflow and in obstacles to
-increased transparency and reproducibility of research methods.
-Preparing a research-ready dataset from an EHR is a complex and time
-consuming task requiring substantial data science skills, even for
-simple designs. In addition, certain aspects of the workflow are highly
-computationally intensive (for example extraction of longitudinal data
-and matching controls to a large cohort) - often taking many days or
-even weeks to run using standard software. This package simplifies and
-accelerates the process of extracting ready-for-analysis datasets from
-EHR databases. It has a simple import function to a database backend
-that greatly accelerates data access times. A set of generic query
-functions allow users to extract data efficiently without needing
-detailed knowledge of SQL queries. Longitudinal data extractions can
-also be made in a single command, making use of parallel processing. The
-package also contains functions for cutting data by time-varying
-covariates, matching controls to cases, unit conversion and construction
-of clinical code lists. There are also functions to create a simple
-simulated EHR for testing purposes. The package has been tested with one
-for the largest primary care databases in the world, the Clinical
-Practice Research Datalink (CPRD), but allows for a common interface to
-other primary care EHRs. This simplified and accelerated work flow for
-EHR data extraction results in simpler, cleaner scripts that are more
-easily debugged, shared and reproduced.
+Research with structured Electronic Health Records (EHRs) is expanding
+as data becomes more accessible; analytic methods advance; and the
+scientific validity of such studies is increasingly accepted. However,
+data science methodology to enable the rapid searching/extraction,
+cleaning and analysis of these large, often complex, datasets is less
+well developed. In addition, commonly used software is inadequate,
+resulting in bottlenecks in research workflows and in obstacles to
+increased transparency and reproducibility of the research. Preparing a
+research-ready dataset from EHRs is a complex and time consuming task
+requiring substantial data science skills, even for simple designs. In
+addition, certain aspects of the workflow are computationally intensive,
+for example extraction of longitudinal data and matching controls to a
+large cohort, which may take days or even weeks to run using standard
+software. The rEHR package simplifies and accelerates the process of
+extracting ready-for-analysis datasets from EHR databases. It has a
+simple import function to a database backend that greatly accelerates
+data access times. A set of generic query functions allow users to
+extract data efficiently without needing detailed knowledge of SQL
+queries. Longitudinal data extractions can also be made in a single
+command, making use of parallel processing. The package also contains
+functions for cutting data by time-varying covariates, matching controls
+to cases, unit conversion and construction of clinical code lists. There
+are also functions to synthesise dummy EHR. The package has been tested
+with one for the largest primary care EHRs, the Clinical Practice
+Research Datalink (CPRD), but allows for a common interface to other
+EHRs. This simplified and accelerated work flow for EHR data extraction
+results in simpler, cleaner scripts that are more easily debugged,
+shared and reproduced.
 \end{abstract}
 
 \section{1. Introduction}\label{introduction}
 
 We present the \texttt{R} (R Core Team 2014) package \texttt{rEHR} for
 manipulating and analysing Electronic Health Record (EHR) data and
-demonstrate its use with a simple simulated EHR generated using the
-package. \texttt{rEHR} is available from the Comprehensive R Archive
-Network (CRAN) at \textbf{{[}{[}upload to CRAN!{]}{]}}.
+demonstrate its use with rEHR-generated synthetic data. \texttt{rEHR} is
+available from the Comprehensive R Archive Network (CRAN) at
+\textbf{{[}{[}upload to CRAN!{]}{]}}.
 
-The UK leads the world in primary care electronic health records (EHR)
-research, building on the near-universal deployment of EHRs in general
-practice and the clinical coding performed by general practictioners.
-The major UK primary care databases (PCD) are: The Clinical Practice
-Research Datalink (CPRD, previously known as the General Practice
-Research Database, GPRD), The Health Improvement Network (THIN),
-QResearch, The Doctors' Independent Network (DIN-LINK) and more
-recently, Research ONE. These databases hold the full medical records
-for millions of patients across hundreds of practices over several
-decades. To date, over 1600 papers have published using these UK PCDs,
-with well over 150 papers published per year since 2012. EHR research is
-set to grow still faster due to advances in analysis methodology (e.g.
-\emph{ITSpaper}), an increasing body of evidence supporting the validity
-of such studies (e.g. Reeves et al. (2014), Springate et al. (2015)) and
-efforts to improve transparency and reproducibility (D. A. Springate et
-al. (2014)).
+The package has been developed using structured primary care data from
+the UK, which has enjoyed near-universal deployment of EHRs in general
+practice and clinical coding performed by general practitioners for over
+twenty years. Comprehensive extracts of these UK primary care records
+are made available for research - the main sources are: The Clinical
+Practice Research Datalink (CPRD, previously known as the General
+Practice Research Database, GPRD), The Health Improvement Network
+(THIN), QResearch, The Doctors' Independent Network (DIN-LINK) and more
+recently, Research One. These databases hold near complete medical
+records for millions of patients. To date, over 1600 papers have
+published using these UK primary care databases (PCDs), with well over
+150 papers published per year since 2012. EHR research is set to grow
+still faster due to advances in analysis methodology (e.g.
+({\textbf{???}})), an increasing body of evidence supporting the
+validity of such studies (e.g. Reeves et al. (2014), Springate et al.
+(2015)) and efforts to improve transparency and reproducibility (D. A.
+Springate et al. (2014)).
 
-Despite the research interest in EHRs in general and PCDs in particular,
-data science methodology to enable the rapid processing, cleaning and
-analysis of these increasingly large datasets is less well developed and
-commonly used software tools are often inadequate, resulting in
-bottlenecks in the research workflow and in obstacles to increased
-transparency and reproducibility of research methods. PCDs such as CPRD
-store data in complex relational and nested structures, and preparing an
+Despite the research interest in PCDs, data science methodology to
+enable the rapid searching/extraction, cleaning and analysis of these
+increasingly large and complex datasets is less well developed. In
+addition, commonly used software tools are often inadequate, resulting
+in bottlenecks in the research workflow and in obstacles to increased
+transparency and reproducibility of research. PCDs such as CPRD store
+data in complex relational and nested structures, and preparing an
 analysis-ready dataset requires substantial data science skills, even
 for simple designs. This complexity is an inevitable consequence of the
-wide range of information contained withing these databases, which
-detail the full primary care history for every patient, including coded
-data for all diagnoses, prescriptions, referrals and test results for
-all consultations. To manage this vast wealth of data requires a
-relational structure based on multiple tables, classifications and
-terminologies (e.g.~Read codes for diagnoses and referrals, product
-codes for prescriptions). To extract relevant data, research teams have
-to complete a sequence of non-trivial technical tasks. The more complex
-the research design the more steps are required to obtain the final
-dataset. For example, investigating drug outcomes typically involves
-constructing complex definitions of codes for diagnosis, drug exposure
-(may be varying over time), mortality, and possible confounding factors
+wide range of information contained within these databases, which detail
+the primary care history for every patient, including coded data for all
+diagnoses, prescriptions, referrals and test results for all
+consultations. To manage this vast wealth of data requires a relational
+structure based on multiple tables, classifications and terminologies
+(e.g.~Read codes for diagnoses and referrals, product codes for
+prescriptions). To extract relevant data, research teams have to
+complete a sequence of non-trivial technical tasks. The more complex the
+research design the more steps are required to obtain the final dataset.
+For example, investigating drug outcomes typically involves constructing
+complex definitions of codes for diagnosis, drug exposure (may be
+varying over time), mortality, and possible confounding factors
 (e.g.~comorbidities, additional medications, gender, age, referrals,
 date of diagnosis, etc.). In addition, certain aspects of the workflow
-are highly computationally intensive (for example extraction of
-longitudinal data and matching controls to a large cohort) - often
-taking many days or even weeks to run using standard software. Although
-more powerful computers and servers help (and are practically a
-prerequisite for working with data of this size), an inefficient and
-slow program running on a fast server will still be inefficient and
-slow. Some `how-to' papers exist for good practice in observational data
-management but they address only some of the issues or focus on specific
-applications (Danaei et al. 2013; Davé and Petersen 2009; J. M. Overhage
-and Overhage 2013; Perlis et al. 2012). At the same time there is a
-wealth of health informatics and computer science literature on how to
-make these research processes more transparent, reducing the duplication
-of effort and improving the consistency of data processing (Ainsworth,
-Cunningham, and Buchan 2012; Bechhofer et al. 2013). Finally, several
-software packages exist for speeding up data analysis, but these are
-generic, do not apply directly to EHR manipulation and may require
-specialist knowledge to effectively use (e.g. \texttt{dplyr} (Wickham
-and Francois 2015) for fast manipulation of dataframes \texttt{sqldf}
-(Grothendieck 2014) for database integration and \texttt{parallel} in
-base \texttt{R} for parallel processing).
+are computationally intensive (for example extraction of longitudinal
+data and matching controls to a large cohort) - often taking days or
+even weeks to run using standard software. Although more powerful
+compute facilities help (and are practically a prerequisite for working
+with these data), an inefficient and slow program running on a fast
+server will still be inefficient and slow. Some `how-to' papers exist
+for good practice in observational data management but they address only
+some of the issues or focus on specific applications (Danaei et al.
+2013; Davé and Petersen 2009; J. M. Overhage and Overhage 2013; Perlis
+et al. 2012). At the same time there is a wealth of health informatics
+and computer science literature on how to make these research processes
+more transparent, reducing the duplication of effort and improving the
+consistency of data processing (Ainsworth, Cunningham, and Buchan 2012;
+Bechhofer et al. 2013). Finally, several software packages exist for
+speeding up data analysis, but these are generic, do not apply directly
+to EHR manipulation and may require specialist knowledge to effectively
+use (e.g. \texttt{dplyr} (Wickham and Francois 2015) for fast
+manipulation of dataframes \texttt{sqldf} (Grothendieck 2014) for
+database integration and \texttt{parallel} (in base \texttt{R}) for
+parallel processing).
 
 \texttt{rEHR} simplifies and accelerates the process of extracting
 ready-for-analysis datasets from EHR databases. In section 2 we provide
@@ -208,7 +208,7 @@ incidence statistics. In section 4 we convert the longitudinal data from
 the previous section to a cohort dataset suitable for survival analysis
 and illustrate algorithms to match controls to cases and to cut cohort
 data by time-varying covariates. In section 5 we briefly discuss some
-miscellaneous functions provided in the package. In the final section we
+accessory functions provided in the package. In the final section we
 discuss the \texttt{.ehr} environment used to define the EHR database
 being used and how this can be set to work with different databases.
 
@@ -239,17 +239,17 @@ The development version of the package is available from
 \end{Shaded}
 
 EHR data are stored as relational databases but are most commonly made
-available to researchers in the form of `flat' text files. This has the
+available to researchers in the form of flat text files. This has the
 advantage of easier access for simple tasks and, for example, viewing
-the files in a spreadsheet program. However, most non-trivial operations
-require researchers to iterate over a series of (potentially large)
-different groups of files. For example here we present pseudocode for a
-simple workflow leading to the production of a dataset of prevalent
-cases for a condition such as diabetes:
+the files in a spreadsheet. However, most non-trivial operations require
+researchers to iterate over a series of (potentially large) different
+groups of files. For example here we present pseudocode for a simple
+workflow leading to the production of a dataset of prevalent cases for a
+condition such as diabetes:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Pseudocode prevalent cases algorithm}
+\CommentTok{# Pseudocode prevalent cases algorithm    }
 \NormalTok{define a list of clinical codes for the condition}
 \NormalTok{for each practice:}
 \StringTok{    }\NormalTok{load clinical events }\KeywordTok{files} \NormalTok{(clinical, referral, drugs etc.)}
@@ -260,7 +260,7 @@ cases for a condition such as diabetes:
         \NormalTok{select events in year}
         \NormalTok{merge active patients and events in year according to condition algorithm}
     \NormalTok{combine all years in practice}
-\NormalTok{Combine patients in all practices}
+\NormalTok{combine patients in all practices}
 \end{Highlighting}
 \end{Shaded}
 
@@ -353,8 +353,8 @@ The \texttt{import\_CPRD\_data} and \texttt{add\_to\_database} functions
 are able to import tab-delimited text files or zipped tab-delimited
 text-files. By default, all date strings are converted to R dates with
 standard ISO format (``\%Y-\%m-\%d''). A \texttt{regex} argument should
-be supplied to match a common prefix to the filenames, separated from
-the file type by an underscore.
+be supplied that is a regular expression to match a common prefix to the
+filenames, separated from the file type by an underscore.
 
 \section{3. Querying the database}\label{querying-the-database}
 
@@ -408,7 +408,7 @@ There are two important caveats to this:
   \texttt{.()} are processed by the \texttt{expand\_string} function
   before being passed to \texttt{dplyr::translate\_sql\_q}.
 \item
-  Dates should seperately quoted and entered in ISO format
+  Dates should separately quoted and entered in ISO format
   (`\%Y-\%m-\%d'). This is because dates are stored as ISO text in the
   database, not as r Date types.
 \end{enumerate}
@@ -579,7 +579,7 @@ computers (Linux, BSD, Mac), this function can make use of parallel
 processes to select data for different years concurrently, greatly
 accelerating the extraction process on multicore machines. The function
 runs a series of selects over a year range and collects in a list of
-dataframes
+dataframes.
 
 The function applies a database select over a range of years and outputs
 as a list or a dataframe. Either a database object or a path to a
@@ -622,7 +622,7 @@ users can supply lists of year offsets, months and days for year- start
 and end to return a function that can be supplied as the
 \texttt{year\_fn} argument. Finally the user can set the
 \texttt{as\_list} argument to determine whether data from each year is
-returned as a seperate list element or as a single data frame.
+returned as a separate list element or as a single data frame.
 
 \subsubsection{Selecting prevalent and incident
 events}\label{selecting-prevalent-and-incident-events}
@@ -684,7 +684,7 @@ total number of patients registered at that time point.
 
 Notice that \texttt{select\_by\_year} returns a dataframe in long form,
 with a year column for the longitudinal component. Next we calculate the
-incident cases, which are those patients with first diganoses at any
+incident cases, which are those patients with first diagnoses at any
 point before the end of the year in question, plus the dates for the
 first diagnoses. In this case we include events matching our list of
 diabetes clinical codes in either clinical or referral files. Because we
@@ -724,10 +724,10 @@ argument to \texttt{first\_events}:
 \end{verbatim}
 
 Note that in this case extra columns have been added for both year and
-table, to identify the table the event was found in. Beacuse events were
-taken from more than one table (Clinicals and Referrals), the
+table, to identify the table the event was found in. Because events were
+taken from more than one table (Clinical and Referrals), the
 incident\_cases dataframe should be sorted and duplicates removed to
-ensure that only thes first events are kept. The two datasets are then
+ensure that only the first events are kept. The two datasets are then
 merged to give the dataset from which the denominators and numerators
 can be calculated. The \texttt{dplyr} package is imported to the
 namespace when the \texttt{rEHR} package is loaded. This simplifies and
@@ -979,25 +979,26 @@ In a small cohort, this can rapidly reduce the control pool, leading to
 many cases without matches. In this example, 19 out of 23 were matched
 with mean 3.6 controls matched to every case.
 
-\subsubsection{Matching on a dummy index date sourced from consultation
-files}\label{matching-on-a-dummy-index-date-sourced-from-consultation-files}
+\subsubsection{Matching on a dummy index
+date}\label{matching-on-a-dummy-index-date}
 
-A common matching approach is to match on an index date (e.g. ), for
-example the diagnosis date of the cases. There are several reasons for
-matching on index\_date:
+A common matching approach is to match on an index date, for example the
+diagnosis date of the cases or the date followup starts. There are
+several reasons to match on index date:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  It ensures cases and controls are followed-up for the same amount of
-  time on average. Not including an index date for controls may result
-  in them being, on average, in the cohort for longer than the cases
-  because their cohort start date is not constrained by the index date.
+  It ensures cases and controls are followed-up, on average, for the
+  same amount of time. Not including an index date for controls may
+  result in them being, on average, in the cohort for longer than the
+  cases because their cohort start date is not constrained by the index
+  date
 \item
   There is a possible reduction of detection bias, for example if cases
-  are expected to visit their doctors more often becuase they have more
-  co-morbidities.
+  are expected to visit their doctors more often because they have more
+  co-morbidities
 \item
   If controls are known to have attended their practice at around the
   same time as their matched case, it is likely they will experience
@@ -1013,24 +1014,24 @@ situation, it is common to match on a dummy index date which may be a
 clinical event or interaction in the control's electronic health record
 that occurs around the same time as the index date of the case (Parisi
 et al. 2015; Gelfand et al. 2006). The \texttt{match\_on\_index()}
-function allows for matching on an arbitrary number of categrorical
+function allows for matching on an arbitrary number of categorical
 \texttt{match\_var} variables and on continuous variables via the
 \texttt{extra\_conditions} argument in the same way as the
 \texttt{get\_matches()} function above. In addition, a supplied index
-date for each case is is matched to event dates in a series of
-consultation files (1 file for each practice), providing a dummy index
-date for controls of a consultaton date within
-\texttt{index\_diff\_limit} days of the matched case's index date.
+date for each case is matched to event dates in a series of consultation
+files (1 file for each practice), providing a dummy index date for
+controls of a consultation date within \texttt{index\_diff\_limit} days
+of the matched case's index date.
 
-Note that the consultaton files must be in flat-file format, i.e.~not as
-part of the database, but as text (or other filetype, e.g stata dta)
+Note that the consultation files must be in flat-file format, i.e.~not
+as part of the database, but as text (or other filetype, e.g stata dta)
 files. This is the data format provided by CPRD (``Clinical Practice
 Research Datalink (CPRD) GOLD''). Although in most situations it is more
 efficient to process EHR data in SQL databases, as in the earlier
 functions described here, consultation tables are often very large and
 searching these for every case in a large cohort would be very slow. By
 processing consultation files that have been split by practice, it is
-possble to search for matches a practice at a time which is both
+possible to search for matches a practice at a time which is both
 efficient and allows for parallel processing to speed the process up
 still further. For convenience, a function \texttt{flat\_files()} is
 provided that can export a database table to flat files split by
@@ -1065,9 +1066,9 @@ even millions of patients. If too few controls are found, the constraint
 can be relaxed by setting a higher \texttt{index\_diff\_limit}. Setting
 this to an arbitrarily high value effectively means that matching is not
 done on index date, but just on practice and the other user-specified
-matching variables. Users may find that this is a more efficent way to
+matching variables. Users may find that this is a more efficient way to
 perform exact matching than using the \texttt{get\_matches()} function.
-The author has used this method to accelerate matching runs with several
+We have used this method to accelerate matching runs with several
 million controls that previously took days or weeks to minutes or a few
 hours.
 
@@ -1232,10 +1233,98 @@ demonstrate the different scenarios with a small sample dataset:
 ##   (dbl), drug_3_state (dbl), disease_stage (dbl)
 \end{verbatim}
 
-\section{5. Miscellaneous functions}\label{miscellaneous-functions}
+\section{5. Accessory functions}\label{accessory-functions}
 
 In this section we briefly discuss some miscellaneous functions provided
 in the package.
+
+\subsection{Clinical code list
+construction}\label{clinical-code-list-construction}
+
+An important part of EHR analyses is the construction of lists of
+clinical codes to define conditions, comorbidities and other clinical
+entities of interest to the study (D. A. Springate et al. (2014)). We
+have previously described methodologies to construct draft lists of
+clinical codes from keyword and code searches (Olier et al. (2015)). The
+\texttt{R} implementation of this methodology is now part of the rEHR
+package.
+
+Building draft lists of clinical codes is a two-stage process: First,
+the search is defined by instantiating an object of class
+\texttt{MedicalDefinition}, containing the terms to be searched for in
+the lookup tables. \texttt{MedicalDefinition} objects can be
+instantiated from terms defined within \texttt{R} or imported from a csv
+file. The constructor function can be provided with lists of:
+\texttt{terms}(clinical search terms), \texttt{codes} (clinical codes),
+\texttt{tests} (test search terms), \texttt{drugs} (drug search terms),
+\texttt{drugcodes} (drug product codes). Within the individual argument
+lists, vectors of length \textgreater{} 1 are searched for together
+(logical AND), in any order. Different vectors in the same list are
+searched for separately (logical OR). Placing a ``-'' character at the
+start of a character vector element excludes that terms from the search.
+Providing \texttt{NULL} to any of the arguments means that this element
+will not be searched for. Underscores are treated as spaces. When
+searching for codes, a range of clinical codes can be searched for by
+providing two codes separated by a hyphen. e.g ``E114-E117z''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Example construction of a clinical code list}
+\NormalTok{def <-}\StringTok{ }\KeywordTok{MedicalDefinition}\NormalTok{(}
+    \DataTypeTok{terms =} \KeywordTok{list}\NormalTok{(}
+        \StringTok{"peripheral vascular disease"}\NormalTok{, }\StringTok{"peripheral gangrene"}\NormalTok{, }\StringTok{"-wrong answer"}\NormalTok{,}
+        \StringTok{"intermittent claudication"}\NormalTok{, }\StringTok{"thromboangiitis obliterans"}\NormalTok{,}
+        \StringTok{"thromboangiitis obliterans"}\NormalTok{, }\StringTok{"diabetic peripheral angiopathy"}\NormalTok{,}
+        \KeywordTok{c}\NormalTok{(}\StringTok{"diabetes"}\NormalTok{, }\StringTok{"peripheral angiopathy"}\NormalTok{),  }\CommentTok{# single AND expression}
+        \KeywordTok{c}\NormalTok{(}\StringTok{"buerger"}\NormalTok{,  }\StringTok{"disease presenile_gangrene"}\NormalTok{),}
+            \StringTok{"-excepted"}\NormalTok{, }\CommentTok{# exclusion}
+    \DataTypeTok{codes =} \KeywordTok{list}\NormalTok{(}\StringTok{"G73"}\NormalTok{),}
+    \DataTypeTok{tests =} \OtherTok{NULL}\NormalTok{,}
+    \DataTypeTok{drugs =} \KeywordTok{list}\NormalTok{(}\StringTok{"insulin"}\NormalTok{, }\StringTok{"diabet"}\NormalTok{, }\StringTok{"aspirin"}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+Code lists can be defined in a csv file with format as shown in table 2.
+These files can then be imported to \texttt{MedicalDefinition} objects
+using the \texttt{import\_definitions(input\_file = "path/to/file.csv")}
+function.
+
+\begin{longtable}[c]{@{}llll@{}}
+\toprule
+definition & status & items &\tabularnewline
+\midrule
+\endhead
+terms & include & peripheral vascular disease &\tabularnewline
+terms & include & peripheral gangrene &\tabularnewline
+terms & exclude & wrong answer &\tabularnewline
+terms & include & intermittent claudication &\tabularnewline
+terms & include & thromboangiitis obliterans &\tabularnewline
+terms & include & Diabetic peripheral angiopathy &\tabularnewline
+terms & include & diabetes & peripheral angiopathy\tabularnewline
+terms & include & buerger & disease presenile\_gengrene\tabularnewline
+terms & exclude & excepted &\tabularnewline
+codes & include & G73 &\tabularnewline
+drugs & include & insulin &\tabularnewline
+drugs & include & diabet &\tabularnewline
+drugs & include & aspirin &\tabularnewline
+\bottomrule
+\end{longtable}
+
+table 2: Example code list definition in csv format
+
+The \texttt{MedicalDefinition} objects are then used to run searches
+against lookup tables provided with EHRs via the
+\texttt{build\_definition\_lists()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Use fileEncoding="latin1" to avoid any issues with non-ascii characters}
+\NormalTok{medical_table <-}\StringTok{ }\KeywordTok{read.delim}\NormalTok{(}\StringTok{"Lookups/medical.txt"}\NormalTok{, }\DataTypeTok{fileEncoding =} \StringTok{"latin1"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{drug_table <-}\StringTok{ }\KeywordTok{read.delim}\NormalTok{(}\StringTok{"Lookups/product.txt"}\NormalTok{, }\DataTypeTok{fileEncoding =} \StringTok{"latin1"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+
+\NormalTok{draft_lists <-}\StringTok{ }\KeywordTok{build_definition_lists}\NormalTok{(def, }\DataTypeTok{medical_table =} \NormalTok{medical_table, }\DataTypeTok{drug_table =} \NormalTok{drug_table)}
+\end{Highlighting}
+\end{Shaded}
 
 \subsection{Unit conversion}\label{unit-conversion}
 
@@ -1250,7 +1339,7 @@ units for direct comparison. The CPRD-specific
 \texttt{cprd\_uniform\_hba1c\_values()} function accepts a single
 argument of a dataframe in the CPRD ``Additional'' table form containing
 only entity types for HbA1C and Fructosamine and converts any HbA1C and
-fructosamine values to a comon mmol/mol scale. Once this conversion has
+fructosamine values to a common mmol/mol scale. Once this conversion has
 taken place, the function also removes obvious mis-coding errors that
 are far outside the possible range. A dataframe is returned with an
 extra column \texttt{hba1c\_score}
@@ -1439,41 +1528,42 @@ functions.
 
 \section{7. Conclusion}\label{conclusion}
 
-Working with EHR data requires a combination of computational and
-statistical expertise. The \texttt{rEHR} package greatly simplifies and
-accelerates the extraction and processing of data from EHR databases,
-allowing researchers to devote more time to the statistical analysis of
-results. The workflow is straightforward - amounting to a flat series of
-function calls, rather than a complex set of nested loops, errors will
-be much more easily spotted and fixed. The combination of use of SQL
-databases, optimised data manipulation packages and multicore
-functionality results in code that runs many times faster than code that
-is commonly written for these tasks. Although this package is currently
-only tested with CPRD data, the \texttt{.ehr} environment system will
-allow it to be easily linked to other EHR databases.
+Working with structured EHR data requires a combination of computational
+and statistical expertise. The \texttt{rEHR} package greatly simplifies
+and accelerates the extraction and processing of coded data from EHR
+databases, enabling researchers to spend more time on their analyses,
+time that would otherwise be consumed with laborious preparation of
+research-ready data. The workflow is straightforward, amounting to a
+flat series of function calls rather than a complex set of nested loops,
+therefore errors are much more easily spotted and fixed. The combination
+of SQL native databases, optimised data manipulation packages and
+multicore functionality results in a package that runs many times faster
+than equivalent code.
 
-Future versions of the \texttt{rEHR} software will include:
+\subsection{Limitations and future
+work}\label{limitations-and-future-work}
+
+Although rEHR is currently only tested with CPRD data, the \texttt{.ehr}
+environment system will allow it to be easily linked to other EHR
+databases. Future versions of the \texttt{rEHR} software will include:
 
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  Implementaion of the \texttt{repsample} algorithm for representative
-  sampling of practices (Kontopantelis 2013)
+  Implementation of the \texttt{repsample} algorithm for representative
+  sampling of practices (Kontopantelis 2013).
 \item
   Iterative proportional fitting for matching on population
   characteristics between different EHR databases (Springate et al.
-  (2015) Appendix 2)
+  (2015) Appendix 2).
 \item
-  A robust algorithm for determining smoking status
+  A robust algorithm for determining smoking status.
 \item
-  Functions for constructing draft lists of clinical codes
+  Interfaces to other EHR systems, in particular UK primary care
+  databases such as THIN, QResearch and Research One.
 \item
-  interfaces to other EHR systems, in particular UK primary care
-  databases such as The Health Improvement Network, QResearch and
-  ResearchOne.
-\item
-  Uniform units functions for other clinical tests such as blood
-  pressure, cholesterol and serum creatine
+  Uniform units functions for other clinical measurements such as blood
+  pressure, cholesterol and serum creatinine.
 \end{itemize}
 
 \section{Acknowledgements}\label{acknowledgements}
@@ -1481,7 +1571,8 @@ Future versions of the \texttt{rEHR} software will include:
 This work was funded by the National Institute for Health Research
 (NIHR) School for Primary Care as part of the project ``An analytical
 framework for increasing the efficiency and validity of research using
-primary care databases''
+primary care databases'' and by MRC Health eResearch Centre Grant
+MR/K006665/1.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -1537,6 +1628,12 @@ Ashcroft, Martin Rutter, Iain Buchan, and Tim Doran. 2014. ``Glucose,
 Blood Pressure and Cholesterol Levels and Their Relationships to
 Clinical Outcomes in Type 2 Diabetes: A Retrospective Cohort Study.''
 \emph{Diabetologia}. Springer, 1--14.
+
+Olier, Ivan, David A Springate, David Reeves, Darren M Ashcroft, Tim
+Doran, Sioban Reilly, and Evangelos Kontopantelis. 2015. ``Modelling
+Conditions in a Primary Care Database: An Application to Severe Mental
+Illness with the Clinical Practice Research Datalink.'' \emph{Submitted
+BMJ Open}.
 
 Overhage, J Marc, and Lauren M Overhage. 2013. ``Sensible Use of
 Observational Clinical Data.'' \emph{Statistical Methods in Medical

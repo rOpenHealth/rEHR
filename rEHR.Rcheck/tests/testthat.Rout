@@ -1,0 +1,62 @@
+
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("testthat")
+> library("dplyr")
+
+Attaching package: 'dplyr'
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> 
+> test_check("rEHR")
+Loading required package: rEHR
+Loading required package: sqldf
+Loading required package: gsubfn
+Loading required package: proto
+Loading required package: RSQLite
+Loading required package: DBI
+Loading required package: RSQLite.extfuns
+Using CPRD settings
+Importing data from csv : ...
+Time-varying covariate cutting : ...............
+Constuction of simulated EHR data : Building patient table.......
+........................Building patient table...
+................................
+Importing data from text files to db : Reading /home/mdehsds4/rOpenHealth/rEHR/rEHR.Rcheck/rEHR/ehr_data/ehr_Clinical.txt... Converting date formats... Adding practid variable... Importing to table 'Clinical'...
+Reading /home/mdehsds4/rOpenHealth/rEHR/rEHR.Rcheck/rEHR/ehr_data/ehr_Consultation.txt... Converting date formats... Adding practid variable... Importing to table 'Consultation'...
+Reading /home/mdehsds4/rOpenHealth/rEHR/rEHR.Rcheck/rEHR/ehr_data/ehr_Patient.txt... Converting date formats... Adding practid variable... Importing to table 'Patient'...
+Reading /home/mdehsds4/rOpenHealth/rEHR/rEHR.Rcheck/rEHR/ehr_data/ehr_Practice.txt... Converting date formats... Importing to table 'Practice'...
+Reading /home/mdehsds4/rOpenHealth/rEHR/rEHR.Rcheck/rEHR/ehr_data/ehr_Referral.txt... Converting date formats... Adding practid variable... Importing to table 'Referral'...
+.......
+Accessing data : Loading required package: tcltk
+...Temporary table 'Asthma' created
+.....
+
+Warning message:
+In file(input_file, open = "r") :
+  file("") only supports open = "w+" and open = "w+b": using the former
+> 
+> proc.time()
+   user  system elapsed 
+ 14.983   0.308  16.359 

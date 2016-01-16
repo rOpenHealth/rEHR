@@ -20,10 +20,6 @@ vignette: >
   
 ---
 
-```{r global options, include = FALSE,  }
-library(devtools)
-load_all("~/rOpenHealth//rEHR")
-```
 
 # 1. Introduction
 
