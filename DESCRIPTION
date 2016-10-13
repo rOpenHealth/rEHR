@@ -1,14 +1,17 @@
 Package: rEHR
 Authors@R: c(person("David", "Springate", email = "daspringate@gmail.com",
-    role = c("aut", "cre")),
-    person("Evangelos", "Kontopantelis",
-    role = c("ctb")),
-    person("Ivan", "Olier",
-    role = c("ctb")))
+         role = "aut", "cre"),
+  person("Evangelos", "Kontopantelis", email = "E.Kontopantelis@manchester.ac.uk", 
+         role = "ctb"),
+  person("Ivan", "Olier", email = "i.olier@keele.ac.uk",
+         role = "ctb"),
+  person("Rosa", "Parisi", email = "rosa.parisi@manchester.ac.uk",
+         role = "ctb"))
 Author: David Springate [aut, cre],
     Evangelos Kontopantelis [ctb],
-    Ivan Olier [ctb]
-Maintainer: David Springate <daspringate@gmail.com>
+    Ivan Olier [ctb],
+    Rosa Parisi [ctb]
+Maintainer: David Springate <daspringate@gmail.com>; Rosa Parisi <rosa.parisi@manchester.ac.uk>; Ivan Olier <i.olier@keele.ac.uk>; Evangelos Kontopantelis <E.Kontopantelis@manchester.ac.uk>
 Version: 1.0
 License: GPL (>= 2)
 Title: An R Package For Manipulating And Analysing Electronic Health Record Data
