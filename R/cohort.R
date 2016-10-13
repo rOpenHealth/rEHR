@@ -40,7 +40,7 @@ build_cohort <- function(dat, cohort_type = c("incid", "prev"), cohort_start,
      dat %>% 
         filter_(cohort_filter) %>% 
         arrange_(.ehr$patient_id, "desc(year)") %>% 
-        distinct_(.ehr$patient_id)  %>% 
+        distinct_(.ehr$patient_id, .keep_all = TRUE)  %>%
         mutate_(start_date = start_q,
                 end_date = end_q,
                 start = paste0("as.integer(start_date - as.Date('", cohort_start, "'))"),
