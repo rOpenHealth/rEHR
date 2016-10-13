@@ -301,7 +301,7 @@ cohort2 <- build_cohort(prevalence_dat, cohort_type = "incid",
 IDM_controls <- get_matches(cases = filter(cohort2, case == 1), 
                             control_pool = filter(cohort2, case == 0), 
                             match_vars = c("gender", "region"),
-                            n_controls = 4, cores = 2, 
+                            n_controls = 4, cores = 1, 
                             method = "incidence_density", diagnosis_date  = "eventdate")
 ```
 
@@ -316,7 +316,7 @@ IDM_controls2 <- get_matches(cases = filter(cohort2, case == 1),
                              match_vars = c("gender", "region"),
                              extra_conditions = "yob >= ( .(CASE$yob) - 2) & 
                              yob <= ( .(CASE$yob) + 2)",
-                             n_controls = 4, cores = 2, 
+                             n_controls = 4, cores = 1, 
                              method = "incidence_density", diagnosis_date  = "eventdate")
 ```
 
