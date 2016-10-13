@@ -217,14 +217,15 @@ str(incident_cases)
 Note that in this case extra columns have been added for both year and table, to identify the table the event was found in. Because events were taken from more than one table (Clinical and Referrals), the incident_cases dataframe should be sorted and duplicates removed to ensure that only the first events are kept. The two datasets are then merged to give the dataset from which the denominators and numerators can be calculated. The `dplyr` package is imported to the namespace when the `rEHR` package is loaded. This simplifies and accelerates merging operations and is an important part of the `rEHR` workflow:
 
 ```{r, message = FALSE} 
+## All patients are kept (equivalent to merge(all.x = TRUE))
+prevalence_dat <- left_join(registered_patients, incident_cases)
+
 ## Remove duplicates across clinical and referral tables:
 incident_cases %>%
     group_by(patid, year) %>%
     arrange(eventdate) %>%
     distinct() %>%
     ungroup -> incident_cases
-## All patients are kept (equivalent to merge(all.x = TRUE))
-prevalence_dat <- left_join(registered_patients, incident_cases)
 ```
 
 Prevalence and incidence can be calculated by the built-in functions `prev_terms()` and `prev_totals()`. `prev_terms()` adds logical columns for membership of incidence and prevalence denominators as well as a column for the contribution of the individual to that year's followup time. `prev_totals()` summarises this information to calculate the denominators and numerators for prevalence and incidence, according to the users' grouping factors. The criteria for membership of the incidence and prevalence numerators and denominators as well as for followup time are shown in table 1.
