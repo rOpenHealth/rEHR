@@ -118,9 +118,9 @@ select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode")
                        eventdate < '2006-01-01' & eventdate >= '2005-01-01'")
 ```
 
-The `where` argument is equivalent to the WHERE clause in SQL, in that it is used to select subsets of the data table.  The user must supply a string representation of valid `R` code, which is then translated  to SQL via the `dplyr::translate_sql_q` function.  There are two important caveats to this:
+The `where` argument is equivalent to the WHERE clause in SQL, in that it is used to select subsets of the data table.  The user must supply a string representation of valid `R` code, which is then translated  to SQL via the `dplyr::translate_sql_` function.  There are two important caveats to this:
 
-1. If an element of the clause represents an R object to be accessed (such as the elements of a vector) it must be wrapped in a `.()` (See the example above). String elements wrapped in `.()` are processed by the `expand_string` function before being passed to `dplyr::translate_sql_q`.
+1. If an element of the clause represents an R object to be accessed (such as the elements of a vector) it must be wrapped in a `.()` (See the example above). String elements wrapped in `.()` are processed by the `expand_string` function before being passed to `dplyr::translate_sql_`.
 2. Dates should separately quoted and entered in ISO format ('%Y-%m-%d').  This is because dates are stored as ISO text in the database, not as r Date types.
 
 If the argument `sql_only == TRUE`, the function only generates the SQL needed for the query, rather than running the query itself.  In this way, `select_events` can be used as the base for more complex query functions.  The results of this function can also then be passed to `temp_table()` to create temporary tables where it is not desirable to keep large query results in RAM. For example:
