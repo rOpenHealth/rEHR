@@ -195,13 +195,13 @@ match_on_index <- function(cases, control_pool, index_var, match_vars,
             matched_consultations <- filter_(consultations, 
                                              expand_string(".(.ehr$patient_id) %in% 
                                                     .(matched_controls[[.ehr$patient_id]])")) %>% 
-                mutate_(index_diff = expand_string("abs(as.integer( .(.ehr$event_date) - 
+                mutate_(index_diff = expand_string("abs(as.integer( .(.ehr$eventdate) - 
                                                    .(CASE[[index_var]]) ))")) %>%
                 filter(index_diff <= index_diff_limit) %>% 
                 group_by_(expand_string(".(.ehr$patient_id)")) %>% 
                 arrange(index_diff) %>%
                 distinct() %>%
-                transmute_(index_date = expand_string(".(.ehr$event_date)"))
+                transmute_(index_date = expand_string(".(.ehr$eventdate)"))
             matched_controls <- inner_join(matched_controls, matched_consultations, 
                                            by = .ehr$patient_id)
             n_ <- nrow(matched_controls)
