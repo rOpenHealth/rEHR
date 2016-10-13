@@ -151,7 +151,7 @@ There are two methods for including `R` objects in raw SQL strings.  First, wrap
 ```{r}
 medcodes1 <- 1:5
 practice <- 255
-expand_string("SELECT * FROM clinical WHERE practid == .(practice)")
+rEHR:::expand_string("SELECT * FROM clinical WHERE practid == .(practice)")
 wrap_sql_query("SELECT * FROM clinical WHERE practid == #1 AND medcodes in #2", 
                practice, medcodes1)
 ```
