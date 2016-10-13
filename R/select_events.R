@@ -6,7 +6,7 @@
 #' It can either extract by itself or generate the SQL to make a query.  
 #' In this way it can be combined to make compound queries.
 #' The where argument is equivalent to the WHERE clause in sql
-#' The elements are converted to SQL using dplyr::translate_sql_q
+#' The elements are converted to SQL using dplyr::translate_sql_
 #' If an element is wrapped in a `.()`, the element is expanded.
 #' Dates should be entered as strings in ISO format (%Y-%m-%d)
 #' 
@@ -35,7 +35,7 @@ select_events <- function(db = NULL, tab, columns = "*", where = NULL,
     assert_that(is.character(tab) && length(tab) == 1)
     columns <- paste(columns, collapse = ", ")
     if(is.character(where)){
-        where_clause <- translate_sql_q(parse(text = expand_string(where)))
+        where_clause <- translate_sql_(expand_string(where))
         sql_query <- paste("SELECT", columns, "FROM", tab, "WHERE", where_clause)
     } else sql_query <- paste("SELECT", columns, "FROM", tab)
     if(sql_only){
