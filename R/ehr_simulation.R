@@ -204,8 +204,9 @@ simulate_ehr_consultations <- function(ehr_def, patient_table, cores = 1){
     comorbid_names <- names(ehr_def$patient$comorbidity$codes)
     
     patient_consultations <- function(p){
-        comorbidities <- names(p[, comorbid_names][p[, comorbid_names] == 1])
-        
+        #comorbidities <- names(p[, comorbid_names][p[, comorbid_names] == 1])
+        comorbidities <- names(which(apply(p[, comorbid_names] == 1,2,any)))
+
         in_date <- max(as.Date("1800-01-01") +p$yob + 1800 + 18, ehr_def$practice$uts_limit)
         in_year <- as.integer(format(in_date, format = "%Y"))
         out_date <- min(p$tod, ehr_def$end_date,na.rm = TRUE)
