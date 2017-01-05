@@ -20,7 +20,7 @@ test_that("Patient table is sane", {
     expect_is(patient$tod, "Date")
     expect_is(patient$deathdate, "Date")
     expect_true(all(patient$yob >= as.integer(format(as.Date(ehr_def$start_date), format = "%y")) - 1800))
-    expect_more_than(sum(patient[,names(ehr_def$patient$comorbidity$codes)]), 0)
+    expect_gt(sum(patient[,names(ehr_def$patient$comorbidity$codes)]), 0)
     expect_equal(length(unique(patient$patid)), nrow(patient))
 })
 
