@@ -1,5 +1,5 @@
 ---
-title: "rEHR: An R package for manipulating and analysing Electronic Health Record data"
+title: "Manipulating and analysing Electronic Health Record data"
 author: 
     - "David A Springate$^{*1}$, Rosa Parisi$^{2}$, ..., Evangelos Kontopantelis$^{1}$"
     - "$^{1}$Institute of Population Health, University of Manchester"
