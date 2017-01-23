@@ -23,7 +23,7 @@ vignette: >
 
 # 1. Introduction
 
-We present the `R` [@R] package `rEHR` for manipulating and analysing Electronic Health Record (EHR) data and demonstrate its use with rEHR-generated synthetic data. `rEHR` is available from the Comprehensive R Archive Network (CRAN) at __[[upload to CRAN!]]__.
+We present the `R` [@R] package `rEHR` for manipulating and analysing Electronic Health Record (EHR) data and demonstrate its use with rEHR-generated synthetic data. `rEHR` is available from the Comprehensive R Archive Network (CRAN) at <https://cran.r-project.org/web/packages=rEHR>.
 
 The package has been developed using structured primary care data from the UK, which has enjoyed near-universal deployment of EHRs in general practice and clinical coding performed by general practitioners for over twenty years. Comprehensive extracts of these UK primary care records are made available for research - the main sources are: The Clinical Practice Research Datalink (CPRD, previously known as the General Practice Research Database, GPRD), The Health Improvement Network (THIN), QResearch, The Doctors' Independent Network (DIN-LINK) and more recently, Research One. These databases hold near complete medical records for millions of patients. To date, over 1600 papers have published using these UK primary care databases (PCDs), with well over 150 papers published per year since 2012.  EHR research is set to grow still faster due to advances in analysis methodology (e.g. @Kontopantelis2015), an increasing body of evidence supporting the validity of such studies (e.g. @Reeves2014, @Springate2015) and efforts to improve transparency and reproducibility (@Springate2014).
 
