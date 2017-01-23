@@ -1,23 +1,19 @@
 Package: rEHR
-Authors@R: c(person("David", "Springate", email = "daspringate@gmail.com",
-         role = "aut", "cre"),
-  person("Evangelos", "Kontopantelis", email = "E.Kontopantelis@manchester.ac.uk", 
-         role = "ctb"),
-  person("Ivan", "Olier", email = "i.olier@keele.ac.uk",
-         role = "ctb"),
-  person("Rosa", "Parisi", email = "rosa.parisi@manchester.ac.uk",
-         role = "ctb"))
-Author: David Springate [aut, cre],
-    Evangelos Kontopantelis [ctb],
-    Ivan Olier [ctb],
-    Rosa Parisi [ctb]
-Maintainer: Rosa Parisi <rosa.parisi@manchester.ac.uk>  
-Contacts: David Springate <daspringate@gmail.com>; Ivan Olier <i.olier@keele.ac.uk>; Evangelos Kontopantelis <E.Kontopantelis@manchester.ac.uk>
+Authors@R: c(person(given = "David", family = "Springate", role = "aut",
+              email = "daspringate@gmail.com"),
+              person(given = "Rosa", family = "Parisi", role = c("aut","cre"), 
+              email = "rosa.parisi@manchester.ac.uk"),
+              person(given = "Evangelos", family = "Kontopantelis", role = c("ctb"), 
+              email = "E.Kontopantelis@manchester.ac.uk"),
+              person(given = "Ivan", family = "Olier", role = c("ctb"), 
+              email = "i.olier@keele.ac.uk"))
 Version: 1.0
 License: GPL (>= 2)
-Title: An R Package For Manipulating And Analysing Electronic Health Record Data
-Description: R tools for processing and extracting clinical information from
+Title: Manipulating and Analysing Electronic Health Record Data
+Description: Tools for processing and extracting clinical information from
     Electronic Medical Records Databases.
+URL: https://github.com/rOpenHealth/rEHR
+BugReports: https://github.com/rOpenHealth/rEHR/issues
 Depends:
     R (>= 3.0.2),
     sqldf,
