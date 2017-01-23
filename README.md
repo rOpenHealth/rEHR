@@ -12,7 +12,7 @@ This in development package provides tools for accelerating and automating the m
 
 The package is currently only tested with [CPRD](www.cprd.com) data, but it should be possible to configure it with other EHR data.  See the [ehr_system](https://github.com/rOpenHealth/rEHR/blob/master/R/ehr_system.R) code for details of how the interface with CPRD is implemented. See the [vignette](https://github.com/rOpenHealth/rEHR/blob/master/vignettes/introduction-to-rehr.pdf) for more details.
 
-The package was originally called `rCPRD`. It is not yet on CRAN but you can install from github using devtools:
+The package can be installed from CRAN <https://CRAN.R-project.org/package=rEHR> or from github using devtools:
 
 ```R
 install.packages("devtools")
