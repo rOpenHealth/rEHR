@@ -8,7 +8,14 @@ RUN apt-get update -y && \
     libqpdf-dev \
     libmagick++-dev \
     && apt-get clean
-    
+
+## Get JAVA
+RUN apt-get update -qq \
+  && apt-get -y --no-install-recommends install \
+    default-jdk \
+    default-jre \
+  && R CMD javareconf
+  
 ADD . /home/rstudio/rEHR
 
 RUN Rscript -e 'devtools::install_dev_deps("home/rstudio/rEHR")'
