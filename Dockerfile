@@ -7,6 +7,7 @@ RUN apt-get update -y && \
     texinfo \
     libqpdf-dev \
     libmagick++-dev \
+    libicu \
     && apt-get clean
 
 ## Get JAVA
