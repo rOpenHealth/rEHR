@@ -21,7 +21,11 @@ Depends:
     dplyr
 Imports:
     assertthat,
+    tibble,
+    DBI,
     stringr,
+    stringdist,
+    rlang,
     foreign,
     parallel,
     readstata13,
@@ -36,3 +40,4 @@ Suggests:
     survival
 VignetteBuilder: knitr
 LazyData: true
+RoxygenNote: 7.3.1
