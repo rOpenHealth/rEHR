@@ -1,0 +1,21 @@
+```{r}
+practices <- select_events(db = db, tab = "Practice", convert_dates = TRUE)
+prevalence_dat <- left_join(prevalence_dat, practices)
+cohort <- build_cohort(prevalence_dat, cohort_type = "prev", 
+                       cohort_start = "2006-01-01", cohort_end = "2012-12-31", 
+                       diagnosis_start = "eventdate")
+head(cohort)
+```
+```{r}
+cohort$death <- with(cohort, 
+                     ifelse(!is.null(deathdate) & 
+                                (deathdate > as.Date("2006-01-01") & 
+                                     deathdate < as.Date("2012-12-31")), 
+                            1, 0))
+cohort$death[is.na(cohort$death)] <- 0
+
+library(survival)
+surv_obj <- with(cohort, Surv(start, end, death))
+coxph(surv_obj ~ gender + case, data = cohort)
+```
+

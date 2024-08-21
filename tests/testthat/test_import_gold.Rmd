@@ -1,0 +1,47 @@
+
+```{r}
+#This section demonstrates how to import data from text files into a SQLite database using the rEHR package.
+# Use system.file function to get the path to the gold_data directory
+ehr_path <- dirname(system.file("ehr_data", "ehr_Clinical.txt", package = "rEHR"))
+print(ehr_path)
+# Create a new database connection to a temporary file
+db <- database(tempfile(fileext = ".sqlite"))
+
+## Import multiple data files into the database
+import_CPRD_data(db, data_dir = ehr_path,
+                 filetypes = c("Clinical", "Consultation", 
+                               "Patient", "Practice", 
+                               "Referral"),
+                 dateformat = "%Y-%m-%d", 
+                 yob_origin = 1800,
+                 regex = "ehr",
+                 recursive = TRUE)
+```
+```{r}
+## Use the overloaded `head` function to view a list of ## tables or the head of individual tables:
+head(db)
+```
+```{r}
+head(db, table = "Consultation")
+```
+
+
+
+```{r}
+#This section tests if the database exists and the tables have been imported correctly.
+test_that("db exists and has imported tables", {
+    expect_is(db, "SQLiteConnection")  # Check if db is a SQLiteConnection
+    expect_equal(sort(head(db)$tbl_name), sort(c("Clinical", "Consultation", 
+                                                 "Patient", "Practice", 
+                                                 "Referral")))  # Check if tables are imported correctly
+    for (i in c("Clinical", "Consultation", 
+                "Patient", "Practice", 
+                "Referral")) {
+        expect_is(head(db, table = i), "data.frame")  # Check if each table is a data.frame
+    }
+})
+
+```
+
+
+

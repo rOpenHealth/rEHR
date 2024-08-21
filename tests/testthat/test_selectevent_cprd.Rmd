@@ -1,0 +1,46 @@
+```{r}
+#This section demonstrates how to select events from the Clinical table and test the results.
+# Select events from the Clinical table
+q <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
+                   where = "medcode BETWEEN 1090 AND 1122", 
+                   sql_only = FALSE)
+# Test if select_events works correctly
+test_that("select_events is sane", {
+    expect_is(q, "data.frame")  # Check if q is a data.frame
+    expect_named(q, c("patid", "eventdate", "medcode"))  # Check if q has the correct column names
+    expect_true(all(q$medcode >= 1090 & q$medcode <=1122))  # Check if all medcode values are in the specified range
+})
+```
+```{r}
+diabetes_codes <- clinical_codes[clinical_codes$list == "Diabetes",]
+medcode_list <- paste(diabetes_codes$medcode, collapse = ", ")
+where_clause <- sprintf("medcode IN (%s) AND eventdate < '2008-01-01' AND eventdate >= '2002-01-01'", medcode_list)
+select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
+              where = where_clause)
+```
+
+```{r}
+medcode_list <- paste(diabetes_codes$medcode, collapse = ", ")
+where_clause <- sprintf("medcode IN (%s)", medcode_list)
+first_DM <- first_events(db, tab = "Clinical", 
+                         columns = c("patid", "eventdate", "medcode"), 
+              where = where_clause)
+last_DM <- last_events(db, tab = "Clinical", 
+                       columns = c("patid", "eventdate", "medcode"), 
+              where = where_clause)
+head(first_DM)
+head(last_DM)
+test_that("first_DM and last_DM is sane", {
+expect_true(nrow(first_DM) > 0)
+  expect_true(nrow(last_DM) > 0)
+  expect_true(all(first_DM$eventdate <= last_DM$eventdate))
+  expect_equal(colnames(first_DM), c("patid", "eventdate", "medcode"))
+  expect_equal(colnames(last_DM), c("patid", "eventdate", "medcode"))
+})
+```
+
+
+
+
+
+

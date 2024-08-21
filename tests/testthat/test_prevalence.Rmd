@@ -1,0 +1,29 @@
+```{r}
+## All patients are kept (equivalent to merge(all.x = TRUE))
+prevalence_dat <- left_join(registered_patients, incident_cases)
+head(prevalence_dat)
+test_that("left_join is sane", {
+  expect_is(prevalence_dat, "data.frame")  
+  expect_true(all(registered_patients$patid %in% prevalence_dat$patid)) 
+  expected_columns <- c("patid", "practid", "gender", "yob", "crd", "tod", "deathdate", "eventdate", "medcode", "year")
+  expect_true(all(expected_columns %in% colnames(prevalence_dat)))
+  expect_type(prevalence_dat$patid, "integer")
+  expect_type(prevalence_dat$eventdate, "character")})
+## Remove duplicates across clinical and referral tables:
+incident_cases %>%
+    group_by(patid, year) %>%
+    arrange(eventdate) %>%
+    distinct() %>%
+    ungroup -> incident_cases
+```
+
+```{r}
+## All patients are kept (equivalent to merge(all.x = TRUE))
+prevalence_dat <- prev_terms(prevalence_dat)
+totals <- prev_totals(prevalence_dat)
+totals$prevalence$year_counts
+totals$incidence$year_counts
+```
+
+
+

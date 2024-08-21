@@ -1,0 +1,38 @@
+```{r}
+# Create a SQL query for selecting events
+q1 <- select_events(db, tab = "Clinical", columns = c("patid", "eventdate", "medcode"), 
+                    where = "medcode BETWEEN 1090 AND 1122", 
+                    sql_only = TRUE)
+
+# Create a temporary table named Asthma
+#This section demonstrates how to create a temporary table and test if it has been created correctly.
+temp_table(db, tab_name = "Asthma", select_query = q1)
+head(db, table = "Asthma")
+
+# Test if the temporary table can be created
+test_that("temp_tables can be created", {
+    expect_is(head(db, temp = TRUE), "data.frame")  # Check if the temporary table is a data.frame
+    expect_true(nrow(head(db, temp = TRUE)) == 1)  # Check if the temporary table has the correct number of rows
+    expect_is(head(db, table = "Asthma"), "data.frame")  # Check if the Asthma table is a data.frame
+    expect_named(head(db, table = "Asthma"), c("patid", "eventdate", "medcode"))  # Check if the Asthma table has the correct column names
+    expect_true(all(head(db, table = "Asthma")$medcode >= 1090 & head(db, table = "Asthma")$medcode <= 1122))  # Check if all medcode values are in the specified range
+})
+
+```
+```{r}
+test_that("temp table exist before drop", {
+  drop_before <- dbGetQuery(db, "SELECT name FROM sqlite_temp_master WHERE type='table'")$name
+  expect_true("Asthma" %in% drop_before)})
+```
+
+```{r}
+drop_all_temp_tables(db)
+```
+```{r}
+test_that("temp table does not exist after drop", {
+  temp_tables_after <- dbGetQuery(db, "SELECT name FROM sqlite_temp_master WHERE type='table'")$name
+  expect_false("temp_table1" %in% temp_tables_after)})
+```
+
+
+

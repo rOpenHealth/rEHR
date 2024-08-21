@@ -1,0 +1,125 @@
+```{r}
+# load test data
+cohort2 <- build_cohort(prevalence_dat, cohort_type = "incid", 
+                        cohort_start = "2006-01-01", cohort_end = "2012-12-31", 
+                        diagnosis_start = "eventdate")
+IDM_controls <- get_matches(cases = filter(cohort2, case == 1), 
+                            control_pool = filter(cohort2, case == 0), 
+                            match_vars = c("gender", "region"),
+                            n_controls = 4, cores = 1, 
+                            method = "incidence_density", diagnosis_date  = "eventdate")
+```
+```{r}
+# Verify the number of cases and controls
+num_cases <- length(unique(IDM_controls$matched_case))
+num_controls <- nrow(IDM_controls)
+cat("Number of cases matched:", num_cases, "\n")
+cat("Number of controls matched:", num_controls, "\n")
+```
+
+```{r}
+test_that("Incidence density matching works correctly", {
+  matched_controls_idm <- IDM_controls
+  # Check if the function returns a dataframe
+  expect_true(is.data.frame(matched_controls_idm))
+  # Check if there are any results returned
+  expect_true(nrow(matched_controls_idm) > 0)
+  #Check at least one control match per case
+  matched_counts <- matched_controls_idm %>%
+      group_by(matched_case) %>%  
+      summarise(count = n(), .groups = "drop")
+    expect_true(all(matched_counts$count == 4))
+  #Verify that the date of diagnosis of the control group member precedes the date of diagnosis of the case
+  expect_true(all(IDM_controls$eventdate_controls <= IDM_controls$eventdate_cases))
+})
+```
+```{r}
+IDM_controls2 <- get_matches(cases = filter(cohort2, case == 1), 
+                             control_pool = filter(cohort2, case == 0), 
+                             match_vars = c("gender", "region"),
+                             extra_conditions = "yob >= ( .(CASE$yob) - 2) & 
+                             yob <= ( .(CASE$yob) + 2)",
+                             n_controls = 4, cores = 1, 
+                             method = "incidence_density", diagnosis_date  = "eventdate")
+num_cases2 <- length(unique(IDM_controls2$matched_case))
+num_controls2 <- nrow(IDM_controls2)
+cat("Number of cases matched:", num_cases2, "\n")
+cat("Number of controls matched:", num_controls2, "\n")
+test_that("Incidence density matching works correctly", {
+  matched_controls_idm_2 <- IDM_controls2
+  # Check if there are any results returned
+  expect_true(nrow(matched_controls_idm_2) > 0)
+  #Check at least one control match per case
+  matched_counts <- matched_controls_idm_2 %>%
+      group_by(matched_case) %>%  
+      summarise(count = n(), .groups = "drop")
+    expect_true(all(matched_counts$count == 4))
+  #Verify that the date of diagnosis of the control group member precedes the date of diagnosis of the case
+  expect_true(all(IDM_controls2$eventdate_controls <= IDM_controls2$eventdate_cases))
+})
+```
+
+```{r}
+exact_controls <- get_matches(cases = filter(cohort2, case == 1), 
+                            control_pool = filter(cohort2, case == 0), 
+                            match_vars = c("gender", "region"),
+                            n_controls = 4, cores = 2, 
+                            method = "exact", diagnosis_date  = "eventdate")
+test_that("exact matching works correctly", {
+  matched_exact_controls <- exact_controls
+  # Check if the function returns a dataframe
+  expect_true(is.data.frame(matched_exact_controls))
+  # Check if there are any results returned
+  expect_true(nrow(matched_exact_controls) > 0)
+  # Check if each case has at least one match
+  matched_counts <- matched_exact_controls %>%
+      group_by(matched_case) %>% 
+      summarise(count = n(), .groups = "drop")
+    expect_true(all(matched_counts$count >= 1))
+  # Check if the matching variables are exactly the same between cases and controls  
+  for (var in c("gender", "region")) {
+        matched_cases <- matched_exact_controls[matched_exact_controls$case == 1, ]
+        matched_controls <- matched_exact_controls[matched_exact_controls$case == 0, ]
+        expect_true(all(matched_cases[[var]] == matched_controls[[var]]))
+    }
+})
+```
+
+```{r}
+# Verify the number of cases and controls
+num_cases3 <- length(unique(exact_controls$matched_case))
+num_controls3 <- nrow(exact_controls)
+cat("Number of cases matched:", num_cases3, "\n")
+cat("Number of controls matched:", num_controls3, "\n")
+```
+
+```{r}
+context("Matching functions")
+
+probabilistic_controls <- probabilistic_get_matches(cases = filter(cohort2, case == 1), 
+                                 control_pool = filter(cohort2, case == 0),
+                                 match_vars = c("yob"),
+                                 n_controls = 4,cores = 1,
+                                 threshold = 0.5)
+num_cases4 <- length(unique(probabilistic_controls$matched_case))
+num_controls4 <- nrow(probabilistic_controls)
+cat("Number of cases matched:", num_cases4, "\n")
+cat("Number of controls matched:", num_controls4, "\n")
+```
+
+```{r}
+test_that("Probabilistic matching works correctly", {
+  expect_is(probabilistic_controls,"data.frame")
+  expect_true("similarity" %in% colnames(probabilistic_controls))
+  expect_true("matched_case" %in% colnames(probabilistic_controls))
+  expect_true(nrow(probabilistic_controls) > 0)
+  expect_true(all(probabilistic_controls$similarity >= 0.5))
+  expect_true(all(probabilistic_controls$count >= 1))
+  controls_per_case <- probabilistic_controls %>% 
+                       group_by(matched_case) %>% 
+                       summarise(n_controls = n())
+  
+  expect_true(all(controls_per_case$n_controls == 4))
+})
+```
+

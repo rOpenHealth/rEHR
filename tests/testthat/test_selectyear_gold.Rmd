@@ -1,0 +1,67 @@
+```{r}
+# Select all patients with current registration date (crd) < the start date 
+# for each year.
+registered_patients <- select_by_year(db = db, 
+                         tables = "patient", 
+                         columns = c("patid", "practid", "gender", 
+                                     "yob", "crd", "tod", "deathdate"), 
+                         where = "crd < STARTDATE",
+                         year_range = c(2008:2012), 
+                         year_fn = standard_years)
+str(registered_patients)
+table(registered_patients$year)
+test_that("select_by_year is sane", {
+  expect_is(registered_patients, "data.frame")
+  expected_columns <- c("patid", "practid", "gender", 
+                        "yob", "crd", "tod", "deathdate", "year")
+  expect_true(all(expected_columns %in% colnames(registered_patients)))
+  expect_type(registered_patients$patid, "integer")  
+  expect_type(registered_patients$practid, "integer")  
+  expect_type(registered_patients$gender, "integer") 
+  expect_type(registered_patients$yob, "double")  
+  expect_type(registered_patients$crd, "character") 
+  expect_type(registered_patients$tod, "character")  
+  expect_type(registered_patients$deathdate, "character")  
+  expect_type(registered_patients$year, "integer")  
+  expect_true(all(registered_patients$crd < as.Date("2012-01-01"))) 
+  expect_true(all(registered_patients$year >= 2008 & registered_patients$year <= 2012))  
+  year_counts <- table(registered_patients$year)
+  expect_true(all(names(year_counts) %in% c("2008", "2009", "2010", "2011", "2012")))  })
+```
+
+```{r}
+# Extract medcode values from diabetes_codes
+medcode_list <- paste(diabetes_codes$medcode, collapse = ", ")
+# Create the where clause with the extracted medcode values
+where_clause <- sprintf("medcode IN (%s) AND eventdate <= ENDDATE", medcode_list)
+incident_cases <- select_by_year(db = db, 
+                                      tables = c("Clinical", "Referral"), 
+                                      columns = c("patid", "eventdate", "medcode"), 
+                                      where = where_clause,
+                                      year_range = c(2008:2012), 
+                                      year_fn = standard_years, 
+                                      selector_fn = first_events)
+
+# Display the structure of the resulting data frame
+str(incident_cases)
+test_that("select incident_cases is sane", {
+  expect_type(where_clause, "character")
+  expect_true(grepl("medcode IN \\(", where_clause)) 
+  expect_true(grepl("eventdate <= ENDDATE", where_clause))  
+  expect_is(incident_cases, "data.frame")  
+  expected_columns <- c("patid", "eventdate", "medcode", "year")
+  expect_true(all(expected_columns %in% colnames(incident_cases)))
+  expect_type(incident_cases$patid, "integer")  
+  expect_type(incident_cases$eventdate, "character")  
+  expect_type(incident_cases$medcode, "integer") 
+  expect_type(incident_cases$year, "integer") 
+  expect_true(all(incident_cases$year >= 2008 & incident_cases$year <= 2012)) 
+  year_counts <- table(incident_cases$year)
+  expect_true(all(names(year_counts) %in% c("2008", "2009", "2010", "2011", "2012"))) 
+  expect_true(all(year_counts > 0)) 
+})
+```
+
+
+
+
