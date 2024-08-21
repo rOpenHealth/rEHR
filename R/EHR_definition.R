@@ -37,7 +37,7 @@
 #'  \item to do.
 #' }
 define_EHR <- function(start_date = "1930-01-01",
-                       end_date = "2014-06-30",
+                       end_date = "2022-06-30",
                        patient = list(num = 10000,
                                       comorbidity = list(codes = NULL,
                                                          prevalence =  NULL),

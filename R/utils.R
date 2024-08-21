@@ -82,24 +82,28 @@ to_stata <- function(dat, fname, stata13 = FALSE, ...){
 #' wrap_sql_query("eventdate >= STARTDATE & eventdate <= ENDDATE & medcode %in% #1 & 
 #'    practice == #2", medcodes1, practice)
 wrap_sql_query <- function(query, ...){
-    items <- list(...)
-    if(!length(items)) return(query)
-    items <- lapply(items, function(x){
-        if(length(x) > 1){
-            paste("(", paste(x, collapse = ", "), ")")
-        } else x
-    })
-    locations <- unique(unlist(str_extract_all(query, "#[0-9]+")))
-    max_locations <- max(as.numeric(unlist(str_extract_all(locations, "[0-9]+"))))
-    assert_that(length(items) == max_locations)
-    items_dict <- list()
-    for(l in 1:length(locations)){
-        items_dict[[locations[l]]] <- items[[as.integer(str_extract(locations[l], "[0-9]+"))]]
+  items <- list(...)
+  if(!length(items)) return(query)
+  items <- lapply(items, function(x){
+    if(length(x) > 1){
+      paste("(", paste(x, collapse = ", "), ")")
+      #paste(x, collapse = "")
+    } else {
+      as.character(x)  
     }
-    for(n in names(items_dict)){
-        query <- str_replace_all(query, n, items_dict[[n]])
-    }
-    query
+  })
+  locations <- unique(unlist(str_extract_all(query, "#[0-9]+")))
+  max_locations <- max(as.numeric(unlist(str_extract_all(locations, "[0-9]+"))))
+  assert_that(length(items) == max_locations)
+  items_dict <- list()
+  for(l in 1:length(locations)){
+    items_dict[[locations[l]]] <- items[[as.integer(str_extract(locations[l], "[0-9]+"))]]
+  }
+  for(n in names(items_dict)){
+    query <- str_replace_all(query, n, items_dict[[n]])
+    #query <- str_replace_all(query, fixed(n), fixed(items_dict[[n]]))
+  }
+  query
 }
 
 
@@ -113,16 +117,21 @@ wrap_sql_query <- function(query, ...){
 #'  a <- runif(10)
 #'  expand_string("The r code is .(a)")
 expand_string <- function(s, level = 3){
-    e <- strsplit(s, "[[:space:]]+")[[1]]
-    paste(lapply(e, 
-                 function(x){
-                     if(str_detect(x, "^\\.")){
-                         eval(parse(text = str_match(x, "\\.(.+)")[2]),
-                              envir = parent.frame(n = level))
-                     } else x
-                 }), collapse = " ")
+  e <- strsplit(s, "[[:space:]]+")[[1]]
+  paste(sapply(e, 
+               function(x){
+                 if (grepl("^\\.\\(", x)) {  # Check for variables that start with . and surrounded by ()
+                   # Extract . ()
+                   var_name <- gsub("^\\.\\((.+)\\)$", "\\1", x)
+                   # Find the value of a variable in the parent environment
+                   values <- eval(parse(text = var_name), envir = parent.frame(n = level))
+                   # Convert values to comma-separated strings for SQL IN clauses
+                   paste("(", paste(values, collapse = ", "), ")", sep = "")
+                 } else {
+                   x
+                 }
+               }), collapse = " ")
 }
-
 
 #' converts date fields from ISO character string format to R Date format
 #' 
@@ -187,17 +196,18 @@ export_fn <- function(x, file, ...){
 #' export_fn
 flat_files <- function(db, table = "Consultation", practice_table = "Practice", 
                        out_dir, file_type = c("txt", "csv", "rda", "dta"), ...){
-    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
-    file_type <- match.arg(file_type)    
-    practices <- unique(select_events(db, practice_table)[[ .ehr$practice_id]])
-    for (practice in practices){
-        tab <- select_events(db, table, where = ".(.ehr$practice_id) == .(practice)")
-        fname <- file.path(out_dir, paste0("ehr_", table, 
-                                           str_pad(practice, width = 3, 
-                                                   pad = 0), ".", file_type))
-        message("exporting to ", fname, "...")
-        export_fn(tab, file = fname, ...)
-    }
-    message("Done exporting.")
+  dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+  file_type <- match.arg(file_type)    
+  practices <- unique(select_events(db, practice_table)[[ .ehr$practice_id]])
+  for (practice in practices){
+    tab <- select_events(db, table, where = ".(.ehr$practice_id) == .(practice)")
+    fname <- file.path(out_dir, paste0("ehr_", table, 
+                                       str_pad(practice, width = 3, 
+                                               pad = 0), ".", file_type))
+    message("exporting to ", fname, "...")
+    export_fn(tab, file = fname, ...)
+  }
+  message("Done exporting.")
 }
+
 

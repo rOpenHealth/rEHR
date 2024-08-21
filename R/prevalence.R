@@ -10,39 +10,39 @@
 #' @param year_fn function that determines how year start and end dates are calculated
 #' @return longitudinal data frame with incidence, prevalence and followup columns
 prev_terms <- function(dat, event_date = "eventdate", year_fn = standard_years){
-    f_dates <- intersect(c(names(dat), event_date), .ehr$date_fields)
-    if(length(f_dates)){
-        message("Converting date columns...")
-        for(column in f_dates){
-            if(!is(dat[[column]], "Date")){
-                dat[[column]] <- as.Date(dat[[column]])
-            }
-        }
+  f_dates <- intersect(c(names(dat), event_date), .ehr$date_fields)
+  if(length(f_dates)){
+    message("Converting date columns...")
+    for(column in f_dates){
+      if(!is(dat[[column]], "Date")){
+        dat[[column]] <- as.Date(dat[[column]])
+      }
     }
-    start_dates <- as.Date(vapply(dat$year, function(x) year_fn(x)$startdate, "character"))
-    end_dates <- as.Date(vapply(dat$year, function(x) year_fn(x)$enddate, "character"))
-    
-    
-    dat$prev_num <- !is.na(dat[[event_date]]) & (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
-                                                     (dat[[.ehr$date_fields[["transfer_out"]]]] > 
-                                                          dat[[event_date]]))
-    dat$prev_denom <- (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
-                           dat[[.ehr$date_fields[["transfer_out"]]]] > start_dates)
-    
-    dat$incid_num <- !is.na(dat[[event_date]]) & 
-        dat[[event_date]] >= start_dates & dat[[event_date]] <= end_dates &
-        (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
-             (dat[[.ehr$date_fields[["transfer_out"]]]] > 
-                  dat[[event_date]]))
-    dat$incid_denom <- !dat$incid_num & 
-        (is.na(dat[[event_date]]) | dat[[event_date]] > end_dates) & 
-        (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
-             dat[[.ehr$date_fields[["transfer_out"]]]] > start_dates)
-    dat$followup <- pmin(end_dates, 
-                         dat[[.ehr$date_fields[["transfer_out"]]]], 
-                         dat[[.ehr$date_fields[["death"]]]], 
-                         na.rm = TRUE) - start_dates
-    dat
+  }
+  start_dates <- as.Date(vapply(dat$year, function(x) year_fn(x)$startdate, "character"))
+  end_dates <- as.Date(vapply(dat$year, function(x) year_fn(x)$enddate, "character"))
+  
+  
+  dat$prev_num <- !is.na(dat[[event_date]]) & (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
+                                                 (dat[[.ehr$date_fields[["transfer_out"]]]] > 
+                                                    dat[[event_date]]))
+  dat$prev_denom <- (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
+                       dat[[.ehr$date_fields[["transfer_out"]]]] > start_dates)
+  
+  dat$incid_num <- !is.na(dat[[event_date]]) & 
+    dat[[event_date]] >= start_dates & dat[[event_date]] <= end_dates &
+    (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
+       (dat[[.ehr$date_fields[["transfer_out"]]]] > 
+          dat[[event_date]]))
+  dat$incid_denom <- !dat$incid_num & 
+    (is.na(dat[[event_date]]) | dat[[event_date]] > end_dates) & 
+    (is.na(dat[[.ehr$date_fields[["transfer_out"]]]]) | 
+       dat[[.ehr$date_fields[["transfer_out"]]]] > start_dates)
+  dat$followup <- pmin(end_dates, 
+                       dat[[.ehr$date_fields[["transfer_out"]]]], 
+                       dat[[.ehr$date_fields[["death"]]]], 
+                       na.rm = TRUE) - start_dates
+  dat
 }
 
 
@@ -62,67 +62,40 @@ prev_terms <- function(dat, event_date = "eventdate", year_fn = standard_years){
 #' @return list of aggregates and/or the original data
 prev_totals <- function(dat, included_totals = c("year", .ehr$practice_id), time_var = "year", 
                         person_years = 100){
-    prevalence <- lapply(included_totals, function(x){
-        if(x == time_var){
-            prev_den <- dat %>% 
-                filter(prev_denom == TRUE, followup > 0) %>% 
-                group_by_(time_var) %>% 
-                summarise(denominator = sum(followup)) %>%
-                mutate(denominator = as.numeric(denominator / 365.25))
-            prev_num <- dat %>% 
-                filter(prev_num == TRUE, followup > 0) %>% 
-                group_by_(time_var) %>% 
-                summarise(numerator = n())
-            ## merge and calculate incidence rates:
-            inner_join(prev_num, prev_den) %>% 
-                mutate(prevalence = (numerator / (denominator / person_years)))
-        } else {
-            prev_den <- dat %>% 
-                filter(prev_denom == TRUE, followup > 0) %>% 
-                group_by_(time_var, x) %>% 
-                summarise(denominator = sum(followup)) %>%
-                mutate(denominator = as.numeric(denominator / 365.25))
-            prev_num <- dat %>% 
-                filter(prev_num == TRUE, followup > 0) %>% 
-                group_by_(time_var, x) %>% 
-                summarise(numerator = n())
-            ## merge and calculate incidence rates:
-            inner_join(prev_num, prev_den) %>% 
-                mutate(prevalence = (numerator / (denominator / person_years)))
-         }
-    })
-    names(prevalence) <- paste(included_totals, "counts", sep = "_")
-    incidence <- lapply(included_totals, function(x){
-        if(x == time_var){
-            incid_den <- dat %>% 
-                filter(incid_denom == TRUE, followup > 0) %>% 
-                group_by_(time_var) %>% 
-                summarise(denominator = sum(followup)) %>%
-                mutate(denominator = as.numeric(denominator / 365.25))
-            incid_num <- dat %>% 
-                filter(incid_num == TRUE, followup > 0) %>% 
-                group_by_(time_var) %>% 
-                summarise(numerator = n())
-            ## merge and calculate incidence rates:
-            inner_join(incid_num, incid_den) %>% 
-                mutate(incidence = (numerator / (denominator / person_years)))
-        } else {
-            incid_den <- dat %>% 
-                filter(incid_denom == TRUE, followup > 0) %>% 
-                group_by_(time_var, x) %>% 
-                summarise(denominator = sum(followup)) %>%
-                mutate(denominator = as.numeric(denominator / 365.25))
-            incid_num <- dat %>% 
-                filter(incid_num == TRUE, followup > 0) %>% 
-                group_by_(time_var, x) %>% 
-                summarise(numerator = n())
-            ## merge and calculate incidence rates:
-            inner_join(incid_num, incid_den) %>% 
-                mutate(incidence = (numerator / (denominator / person_years)))
-        }
-    })
-    names(incidence) <- paste(included_totals, "counts", sep = "_")
-    list(incidence = incidence, prevalence = prevalence)
+  prevalence <- lapply(included_totals, function(x){
+    group_cols <- c(time_var, if (x != time_var) x else NULL)
+    prev_den <- dat %>%
+      filter(prev_denom == TRUE, followup > 0) %>%
+      group_by(across(all_of(group_cols))) %>%
+      summarise(denominator = sum(followup), .groups = 'drop') %>%
+      mutate(denominator = as.numeric(denominator / 365.25))
+    prev_num <- dat %>%
+      filter(prev_num == TRUE, followup > 0) %>%
+      group_by(across(all_of(group_cols))) %>%
+      summarise(numerator = n(), .groups = 'drop')
+    
+    inner_join(prev_num, prev_den, by = group_cols) %>%
+      mutate(prevalence = (numerator / (denominator / person_years)))
+  })
+  names(prevalence) <- paste(included_totals, "counts", sep = "_")
+  
+  incidence <- lapply(included_totals, function(x){
+    group_cols <- c(time_var, if (x != time_var) x else NULL)
+    incid_den <- dat %>%
+      filter(incid_denom == TRUE, followup > 0) %>%
+      group_by(across(all_of(group_cols))) %>%
+      summarise(denominator = sum(followup), .groups = 'drop') %>%
+      mutate(denominator = as.numeric(denominator / 365.25))
+    incid_num <- dat %>%
+      filter(incid_num == TRUE, followup > 0) %>%
+      group_by(across(all_of(group_cols))) %>%
+      summarise(numerator = n(), .groups = 'drop')
+    
+    inner_join(incid_num, incid_den, by = group_cols) %>%
+      mutate(incidence = (numerator / (denominator / person_years)))
+  })
+  names(incidence) <- paste(included_totals, "counts", sep = "_")
+  list(incidence = incidence, prevalence = prevalence)
 }
 
 

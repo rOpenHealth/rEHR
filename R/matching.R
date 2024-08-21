@@ -13,25 +13,33 @@
 #' @param replace logical should sampling of matched controls be with replacement (incident density
 #' sampling) or not.
 #' @return A dataframe of matched controls or NULL if no controls could be found  
-match_case <- function(matcher, control_pool, n_controls, id, replace){
-    matched_controls <- filter_(control_pool, paste(names(id), "!=", id), .dots = matcher) 
-    if(!nrow(matched_controls)) {
-        cat("No matches for id", id, ".")
-        return(NULL)
-    }
-    if(replace){
-        matched_controls <- matched_controls %>% 
-            sample_n(size = n_controls, replace = TRUE) %>% 
-            mutate_(matched_case = id)
-    } else {
-        n_ <- nrow(matched_controls) 
-        if(0 < n_ & n_ < n_controls) cat(n_)
-        matched_controls <- matched_controls %>% 
-            sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
-            mutate_(matched_case = id)
-    }
-    matched_controls
+match_case <- function(matcher, control_pool, n_controls, id, replace) {
+  id_name <- names(id)
+  id_value <- id[[1]]
+
+  filter_expr <- rlang::expr((!!rlang::sym(id_name) != !!id_value))
+  for (cond in matcher) {
+    filter_expr <- rlang::expr(!!filter_expr & !!cond)
+  }
+
+  matched_controls <- dplyr::filter(control_pool, !!filter_expr)
+  
+  if(nrow(matched_controls) == 0) {
+    cat("No matches for id", id, ".")
+    return(NULL)
+  }
+  
+  if(replace){
+    matched_controls <- dplyr::sample_n(matched_controls, size = n_controls, replace = TRUE)
+  } else {
+    n_ <- nrow(matched_controls)
+    if(0 < n_ && n_ < n_controls) cat(n_)
+    matched_controls <- dplyr::sample_n(matched_controls, size = min(n_, n_controls), replace = FALSE)
+  }
+  dplyr::mutate(matched_controls, matched_case = id_value)
 }
+
+
 
 
 #' Find matched controls for a set of cases
@@ -67,61 +75,56 @@ match_case <- function(matcher, control_pool, n_controls, id, replace){
 #' set \code{tracker = function() paste0(case_num, ",")}
 get_matches <- function(cases, control_pool, n_controls, match_vars, extra_vars, 
                         extra_conditions = NULL, cores = 1, 
-                        track = TRUE, tracker = function(case_num) ".",
-                        method = c("incidence_density", "exact"),
-                        diagnosis_date  = NULL){
-    method <- match.arg(method)
-    if(method == "incidence_density"){
-        assert_that(!is.null(diagnosis_date))
-        message("Running Incident Density Sampling on ", cores, " cpu cores.")
-        cases$pcase <- 1
-        control_pool$pcase <- 0
-        control_pool <- bind_rows(cases, control_pool)
-        
-        bind_rows(mclapply(1:nrow(cases), function(case_num){
-            CASE <- cases[case_num,]
-            matcher <- c(lapply(match_vars, function(m) {
-                paste0(m, " == '", CASE[[m]], "'")  
-            }), wrap_sql_query("is.na(#1) | #1 > '#2'", diagnosis_date, CASE[[diagnosis_date]]))
-            if(!is.null(extra_conditions)) {
-                matcher <- append(matcher, expand_string(extra_conditions))
-            }
-            id <- CASE[[.ehr$patient_id]]
-            names(id) <- .ehr$patient_id
-            if(track) cat(tracker(case_num))
-            match_case(matcher, control_pool, n_controls, id, replace = TRUE)
-        }, mc.cores = cores))
-    } else if (method == "exact"){
-        message("Running on a single core for Unique Matching.\n", 
-                nrow(control_pool), " controls...")
-        for(case_num in 1:nrow(cases)){
-            if(track) cat(tracker(case_num))
-            CASE <- cases[case_num,]
-            matcher <- lapply(match_vars, function(m) {
-                paste0(m, " == '", CASE[[m]], "'")  
-            })
-            if(!is.null(extra_conditions)) {
-                matcher <- append(matcher, expand_string(extra_conditions))
-            }
-            id <- CASE[[.ehr$patient_id]]
-            names(id) <- .ehr$patient_id
-            
-            if(exists("matched_")){
-                matched_ <- bind_rows(matched_, match_case(matcher, control_pool, 
-                                                           n_controls, id, replace = FALSE))
-            } else {
-                matched_ <- match_case(matcher, control_pool, 
-                                       n_controls, id, replace = FALSE)
-            }
-            control_ids_ <- unique(matched_[[names(id)]])
-            exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
-            control_pool <- control_pool %>% filter_(exclude_str_) 
+                        track = TRUE, tracker = function(case_num) ".", 
+                        method = c("incidence_density", "exact"), 
+                        diagnosis_date = NULL) {
+  method <- match.arg(method)
+  
+  if (method == "incidence_density") {
+    assert_that(!is.null(diagnosis_date))
+    message("Running Incident Density Sampling on ", cores, " cpu cores.")
+    cases$pcase <- 1
+    control_pool$pcase <- 0
+    control_pool <- bind_rows(cases, control_pool)
+    
+    results <- mclapply(1:nrow(cases), function(case_num) {
+      CASE <- cases[case_num, ]
+      matcher <- lapply(match_vars, function(m) {
+        rlang::expr(!!rlang::sym(m) == !!CASE[[m]])
+      })
+      if (!is.null(extra_conditions)) {
+        sql_expr <- wrap_sql_query("is.na(#1) | #1 > '#2'", diagnosis_date, CASE[[diagnosis_date]])
+        matcher <- c(matcher, rlang::parse_expr(sql_expr))
+      }
+      id <- setNames(list(CASE[[.ehr$patient_id]]), .ehr$patient_id)
+      if (track) cat(tracker(case_num))
+      match_case(matcher, control_pool, n_controls, id, replace = TRUE)
+    }, mc.cores = cores)
+    do.call(dplyr::bind_rows, results)
+  } else if (method == "exact"){
+      message("Running on a single core for Unique Matching.\n", nrow(control_pool), " controls...")
+      matched_ <- NULL
+      for (case_num in 1:nrow(cases)) {
+        if (track) cat(tracker(case_num))
+        CASE <- cases[case_num, ]
+        matcher <- lapply(match_vars, function(m) {
+          rlang::expr(!!rlang::sym(m) == !!CASE[[m]])
+        })
+        if (!is.null(extra_conditions)) {
+          matcher <- append(matcher, rlang::parse_exprs(extra_conditions))
         }
-        matched_
+        id <- setNames(list(CASE[[.ehr$patient_id]]), .ehr$patient_id)
+        matched_case <- match_case(matcher, control_pool, n_controls, id, replace = FALSE)
+        matched_ <- if (is.null(matched_)) matched_case else dplyr::bind_rows(matched_, matched_case)
+        
+        control_ids_ <- unique(matched_[[names(id)]])
+        exclude_str_ <- sprintf("!('%s' %%in%% c(%s))", names(id), paste(control_ids_, collapse=", "))
+        
+        control_pool <- dplyr::filter(control_pool, !!rlang::parse_expr(exclude_str_))
+      }
+      matched_
     }
 }
-
-
 
 #' Function for performing matching of controls to cases using the consultation files to generate a
 #' dummy index date for controls.
@@ -163,69 +166,142 @@ get_matches <- function(cases, control_pool, n_controls, match_vars, extra_vars,
 #' @return a dataframe of matched controls
 #' 
 match_on_index <- function(cases, control_pool, index_var, match_vars,
-                                extra_conditions = "", index_diff_limit = 90, consult_path,
-                                    n_controls = 5, cores = 1, import_fn = read.delim, ...){
-    message("Finding ", nrow(cases), " cases...")
-    cons_files <- list.files(consult_path)
-    bind_rows(mclapply(unique(cases[[ .ehr$practice_id ]]), function(practice){
-        p_cases <- filter_(cases, expand_string(".(.ehr$practice_id) == .(practice)"))
-        p_controls <- filter_(control_pool, expand_string(".(.ehr$practice_id) == .(practice)"))
-        #cons_files[str_detect(cons_files, pattern = str_pad(practice, 3, pad = 0))]
-        consultations <- import_fn(file.path(consult_path, 
-                                             cons_files[str_detect(cons_files, 
-                                                                   str_pad(practice, 
-                                                                           3, pad = 0))]), ...) %>%
-            filter_(expand_string("! .(.ehr$patient_id) %in% .(p_cases[[.ehr$patient_id]])")) 
-        if(exists("matched_")) rm(matched_)
-        p_num <- nrow(p_cases)
-        cat("Start practice", practice, ".")
-        for(case_num in 1:p_num){
-            CASE <- p_cases[case_num,]
-            extra_conditions_ <- expand_string(extra_conditions)
-            matcher <- lapply(match_vars, function(m) {
-                paste0(m, " == '", CASE[[m]], "'")  
-            })
-            if(nchar(extra_conditions_)){
-                matcher <- append(matcher, extra_conditions_, after = length(matcher))
-            }
-            id <- CASE[[ .ehr$patient_id]]
-            names(id) <- .ehr$patient_id
-            matched_controls <- filter_(p_controls, .dots = append(paste(names(id), "!=", id), 
-                                                                   matcher)) 
-            matched_consultations <- filter_(consultations, 
-                                             expand_string(".(.ehr$patient_id) %in% 
+                           extra_conditions = "", index_diff_limit = 90, consult_path,
+                           n_controls = 5, cores = 1, import_fn = read.delim, ...){
+  message("Finding ", nrow(cases), " cases...")
+  cons_files <- list.files(consult_path)
+  bind_rows(mclapply(unique(cases[[ .ehr$practice_id ]]), function(practice){
+    p_cases <- filter_(cases, expand_string(".(.ehr$practice_id) == .(practice)"))
+    p_controls <- filter_(control_pool, expand_string(".(.ehr$practice_id) == .(practice)"))
+    #cons_files[str_detect(cons_files, pattern = str_pad(practice, 3, pad = 0))]
+    consultations <- import_fn(file.path(consult_path, 
+                                         cons_files[str_detect(cons_files, 
+                                                               str_pad(practice, 
+                                                                       3, pad = 0))]), ...) %>%
+      filter_(expand_string("! .(.ehr$patient_id) %in% .(p_cases[[.ehr$patient_id]])")) 
+    if(exists("matched_")) rm(matched_)
+    p_num <- nrow(p_cases)
+    cat("Start practice", practice, ".")
+    for(case_num in 1:p_num){
+      CASE <- p_cases[case_num,]
+      extra_conditions_ <- expand_string(extra_conditions)
+      matcher <- lapply(match_vars, function(m) {
+        paste0(m, " == '", CASE[[m]], "'")  
+      })
+      if(nchar(extra_conditions_)){
+        matcher <- append(matcher, extra_conditions_, after = length(matcher))
+      }
+      id <- CASE[[ .ehr$patient_id]]
+      names(id) <- .ehr$patient_id
+      matched_controls <- filter_(p_controls, .dots = append(paste(names(id), "!=", id), 
+                                                             matcher)) 
+      matched_consultations <- filter_(consultations, 
+                                       expand_string(".(.ehr$patient_id) %in% 
                                                     .(matched_controls[[.ehr$patient_id]])")) %>% 
-                mutate_(index_diff = expand_string("abs(as.integer( .(.ehr$eventdate) - 
+        mutate_(index_diff = expand_string("abs(as.integer( .(.ehr$eventdate) - 
                                                    .(CASE[[index_var]]) ))")) %>%
-                filter(index_diff <= index_diff_limit) %>% 
-                group_by_(expand_string(".(.ehr$patient_id)")) %>% 
-                arrange(index_diff) %>%
-                distinct() %>%
-                transmute_(index_date = expand_string(".(.ehr$eventdate)"))
-            matched_controls <- inner_join(matched_controls, matched_consultations, 
-                                           by = .ehr$patient_id)
-            n_ <- nrow(matched_controls)
-            if (n_ == 0){
-                cat(0)
-                #next
-            } else if (0 < n_ & n_ < n_controls){
-                 cat(n_)
-            } else cat(".")
-            if(exists("matched_")){
-                matched_ <- bind_rows(matched_, matched_controls %>%
-                                          sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
-                                          mutate_(matched_case = id))
-            } else {
-                 matched_ <- matched_controls %>%
-                    sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
-                    mutate_(matched_case = id)
-            }
-            control_ids_ <- unique(matched_[[names(id)]])
-            exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
-            p_controls <- p_controls %>% filter_(exclude_str_) 
-            
-        }
-        cat("Practice", practice, "exhausted.")
-        matched_
-    }, mc.cores = cores))
+        filter(index_diff <= index_diff_limit) %>% 
+        group_by_(expand_string(".(.ehr$patient_id)")) %>% 
+        arrange(index_diff) %>%
+        distinct() %>%
+        transmute_(index_date = expand_string(".(.ehr$eventdate)"))
+      matched_controls <- inner_join(matched_controls, matched_consultations, 
+                                     by = .ehr$patient_id)
+      n_ <- nrow(matched_controls)
+      if (n_ == 0){
+        cat(0)
+        #next
+      } else if (0 < n_ & n_ < n_controls){
+        cat(n_)
+      } else cat(".")
+      if(exists("matched_")){
+        matched_ <- bind_rows(matched_, matched_controls %>%
+                                sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
+                                mutate_(matched_case = id))
+      } else {
+        matched_ <- matched_controls %>%
+          sample_n(size = min(n_, n_controls), replace = FALSE) %>% 
+          mutate_(matched_case = id)
+      }
+      control_ids_ <- unique(matched_[[names(id)]])
+      exclude_str_ <- expand_string("! .(names(id)) %in% .(control_ids_)")
+      p_controls <- p_controls %>% filter_(exclude_str_) 
+      
+    }
+    cat("Practice", practice, "exhausted.")
+    matched_
+  }, mc.cores = cores))
+}
+
+
+# Check and load required packages
+if (!requireNamespace("dplyr", quietly = TRUE)) {
+  stop("Package 'dplyr' is required but not installed.")
+}
+if (!requireNamespace("stringdist", quietly = TRUE)) {
+  stop("Package 'stringdist' is required but not installed.")
+}
+
+library(dplyr)
+library(stringdist)
+
+#' Calculate similarity between case and control
+#'
+#' @param case_row A dataframe row representing a single case
+#' @param control_row A dataframe row representing a single control
+#' @param match_vars A character vector of variable names to match on
+#' @return A numeric value representing the similarity score
+calculate_similarity <- function(case_row, control_row, match_vars) {
+  similarity_scores <- sapply(match_vars, function(var) {
+    1 - stringdist::stringdist(case_row[[var]], control_row[[var]], method = "jaccard")
+  })
+  mean(similarity_scores)
+}
+
+#' Probabilistic match for a single case
+#'
+#' @param case_row A dataframe row representing a single case
+#' @param control_pool A dataframe of potential controls
+#' @param n_controls The number of controls to match to each case
+#' @param match_vars A character vector of variable names to match on
+#' @param threshold A numeric value for the minimum similarity score required
+#' @return A dataframe of matched controls or NULL if no controls could be found
+probabilistic_match_case <- function(case_row, control_pool, n_controls, match_vars, threshold = 0.5) {
+  control_pool <- control_pool %>%
+    mutate(similarity = calculate_similarity(case_row, ., match_vars)) %>%
+    filter(similarity >= threshold) %>%
+    arrange(desc(similarity)) %>%
+    head(n_controls)
+  control_pool %>%
+    mutate(matched_case = case_row$patid)
+}
+
+#' Selected controls matching a list of variables from a case
+#' 
+#' Helper function for probabilistic_get_matches()
+#' This function will perform probabilistic matching up to a supplied number 
+#' of matched controls.
+#'  
+#' @param matcher list of character strings defining the matching conditions
+#' @param control_pool dataframe of potential controls for matching 
+#' @param n_controls The number of controls for each case. If replace == FALSE
+#' this is a maximum value
+#' @param id named vector of length 1 for the variable name and value of the case identifier
+#' @param replace logical should sampling of matched controls be with replacement (incident density
+#' sampling) or not.
+#' @return A dataframe of matched controls or NULL if no controls could be found  
+#' @examples \dontrun{
+#' cases <- data.frame(patid = 1:3, name = c("Alice", "Bob", "Charlie"), age = c(25, 35, 45), gender = c("F", "M", "M"))
+#' control_pool <- data.frame(patid = 4:10, name = c("Alicia", "Robert", "Charles", "Al", "Bobby", "Char", "Ali"), age = c(24, 36, 44, 26, 34, 46, 27), gender = c("F", "M", "M", "F"))
+#' matched_controls <- probabilistic_get_matches(cases, control_pool, n_controls = 2, match_vars = c("name", "age", "gender"), threshold = 0.5, cores = 1)
+#' print(matched_controls)
+#' }
+probabilistic_get_matches <- function(cases, control_pool, n_controls, match_vars, threshold = 0.5, cores = 1) {
+  cases <- mutate(cases, case_id = row_number())
+  results <- do.call(rbind, parallel::mclapply(seq_len(nrow(cases)), function(case_num) {
+    case_row <- cases[case_num,]
+    probabilistic_match_case(case_row, control_pool, n_controls, match_vars, threshold)
+  }, mc.cores = cores))
+  
+  results
 }

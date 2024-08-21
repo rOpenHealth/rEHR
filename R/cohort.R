@@ -15,41 +15,48 @@
 #' @param diagnosis_start character string for the name of the diagnosis variable used to define the 
 #' start dates, or NULL if the diagnosis date is not to be included in the definition 
 #' of start dates.
+
 build_cohort <- function(dat, cohort_type = c("incid", "prev"), cohort_start, 
                          cohort_end, diagnosis_start = "eventdate"){
-    cohort_type <- match.arg(cohort_type)
-    cohort_filter <- wrap_sql_query("#1_num |  #1_denom", cohort_type)
-    cohort_start <- as.Date(cohort_start)
-    cohort_end <- as.Date(cohort_end)
-    end_criteria <- intersect(.ehr$cohort$end_criteria, names(dat))
-    if(!is.null(diagnosis_start)){
-        start_criteria <- c(diagnosis_start, intersect(.ehr$cohort$start_criteria, names(dat)))
-    } else {
-        start_criteria <- intersect(.ehr$cohort$start_criteria, names(dat))
-    }
-    start_q <- paste0("as.Date(pmax(as.Date('", 
-                      cohort_start, "'), ", 
-                      paste(start_criteria, 
-                            collapse = ", ", sep = ","), ", na.rm = TRUE), origin = '1970-01-01')",
-                      collapse = ",")
-    end_q <- paste0("as.Date(pmin(as.Date('", 
-                    cohort_end, "'), ", 
-                    paste(end_criteria, 
-                          collapse = ", ", sep = ","), ", na.rm = TRUE), origin = '1970-01-01')", 
+  cohort_type <- match.arg(cohort_type)
+  cohort_filter <- wrap_sql_query("#1_num |  #1_denom", cohort_type)
+  cohort_start <- as.Date(cohort_start)
+  cohort_end <- as.Date(cohort_end)
+  end_criteria <- intersect(.ehr$cohort$end_criteria, names(dat))
+  if(!is.null(diagnosis_start)){
+    start_criteria <- c(diagnosis_start, intersect(.ehr$cohort$start_criteria, names(dat)))
+  } else {
+    start_criteria <- intersect(.ehr$cohort$start_criteria, names(dat))
+  }
+  start_q <- paste0("as.Date(pmax(as.Date('", 
+                    cohort_start, "'), ", 
+                    paste(start_criteria, 
+                          collapse = ", ", sep = ","), ", na.rm = TRUE), origin = '1970-01-01')",
                     collapse = ",")
-     dat %>% 
-        filter_(cohort_filter) %>% 
-        arrange_(.ehr$patient_id, "desc(year)") %>% 
-        distinct_(.ehr$patient_id, .keep_all = TRUE)  %>%
-        mutate_(start_date = start_q,
-                end_date = end_q,
-                start = paste0("as.integer(start_date - as.Date('", cohort_start, "'))"),
-                end = paste0("as.integer(end_date - as.Date('", cohort_start, "'))"),
-                case = sprintf("ifelse(%s_num, 1, 0)", cohort_type)) %>%
-        filter(start < end) 
-        
-                
+  end_q <- paste0("as.Date(pmin(as.Date('", 
+                  cohort_end, "'), ", 
+                  paste(end_criteria, 
+                        collapse = ", ", sep = ","), ", na.rm = TRUE), origin = '1970-01-01')", 
+                  collapse = ",")
+  dat %>% 
+    filter(!!parse_expr(cohort_filter)) %>% 
+    arrange(desc(get(.ehr$patient_id)), desc(get("year"))) %>%
+    distinct(.data[[.ehr$patient_id]], .keep_all = TRUE) %>%
+    mutate(
+      start_date = as.Date(pmax(as.Date(cohort_start), !!!syms(start_criteria), na.rm = TRUE), origin = '1970-01-01'),
+      end_date = as.Date(pmin(as.Date(cohort_end), !!!syms(end_criteria), na.rm = TRUE), origin = '1970-01-01'),
+      start = as.integer(start_date - as.Date(cohort_start)),
+      end = as.integer(end_date - as.Date(cohort_start)),
+      case = ifelse(!!parse_expr(sprintf("%s_num", cohort_type)), 1, 0) 
+    ) %>%
+    filter(start < end) 
+  
+  
 }
+
+
+
+
 
 #' cut_tv - Cuts a survival dataset on a time varying variable
 #'
@@ -125,64 +132,68 @@ build_cohort <- function(dat, cohort_type = c("incid", "prev"), cohort_start,
 #' 
 cut_tv <- function(.data, entry, exit, cut_var, tv_name, cores = 1, 
                    id_var, on_existing = c("flip", "increment")){
-    cut_individual <- function(individual){
-        if(!tv_name %in% names(individual)){
-            individual[[tv_name]] <- 0
-        }
-        for(i in 1:nrow(individual)){
-            if(i == 1){
-                out <- cut_row(individual[i, ], prior_state = 0)
-            } else {
-                out <- bind_rows(out, cut_row(individual[i,], 
-                                              prior_state = slice(out, n())[[tv_name]]))
-            }
-        }
-        out
+  cut_individual <- function(individual){
+    if(!tv_name %in% names(individual)){
+      individual[[tv_name]] <- 0
     }
-    cut_row <- function(r, prior_state){
-        if(r[[cut_var]] > r[[entry]] && r[[cut_var]] < r[[exit]]){
-            pat1 <- r
-            pat1[[exit]] <- r[[cut_var]] - 1
-            pat2 <- r
-            pat2[[entry]] <- r[[cut_var]]
-            if(on_existing == "flip"){
-                if (pat2[[tv_name]] == 0) pat2[[tv_name]]  <- 1 else pat2[[tv_name]] <- 0    
-            } else if(on_existing == "increment") {
-                pat2[[tv_name]]  <- pat2[[tv_name]] + 1
-            }
-            rbind(pat1, pat2)
-        } else {
-            if(on_existing == "increment" & r[,tv_name] > 0) {
-                r
-            } else {
-                r[,tv_name] <- prior_state
-                r
-            }
-        } 
+    for(i in 1:nrow(individual)){
+      if(i == 1){
+        out <- cut_row(individual[i, ], prior_state = 0)
+      } else {
+        out <- bind_rows(out, cut_row(individual[i,], 
+                                      prior_state = slice(out, n())[[tv_name]]))
+      }
     }
-    
-    entry <- deparse(substitute(entry))
-    exit <- deparse(substitute(exit))
-    cut_var <- deparse(substitute(cut_var))
-    tv_name <- deparse(substitute(tv_name))
-    id_var <- deparse(substitute(id_var))
-    on_existing <- match.arg(on_existing)
-    
-    to_cut <- filter(.data, !is.na(.data[[cut_var]]))
-    same_state <- filter(.data, is.na(.data[[cut_var]]))
-    if(!tv_name %in% names(same_state) && nrow(same_state)){
-        same_state[[tv_name]] <- 0
+    out
+  }
+  
+  cut_row <- function(r, prior_state){
+    if(r[[cut_var]] > r[[entry]] && r[[cut_var]] < r[[exit]]){
+      pat1 <- r
+      pat1[[exit]] <- r[[cut_var]] - 1
+      pat2 <- r
+      pat2[[entry]] <- r[[cut_var]]
+      if(on_existing == "flip"){
+        pat2[[tv_name]] <- ifelse(pat2[[tv_name]] == 0, 1, 0)
+      } else if(on_existing == "increment") {
+        pat2[[tv_name]] <- pat2[[tv_name]] + 1
+      }
+      rbind(pat1, pat2)
+    } else {
+      if(on_existing == "increment" & r[[tv_name]] > 0) {
+        r
+      } else {
+        r[[tv_name]] <- prior_state
+        r
+      }
     }
-    bind_rows(same_state,
-              bind_rows(mclapply(unique(to_cut[[id_var]]), 
-                                 function(x){
-                                     cut_individual(to_cut[to_cut[[id_var]] == x, ])
-                                 }, mc.cores = cores))) %>%
-        arrange_(id_var, entry)
+  }
+  
+  entry <- deparse(substitute(entry))
+  exit <- deparse(substitute(exit))
+  cut_var <- deparse(substitute(cut_var))
+  tv_name <- deparse(substitute(tv_name))
+  id_var <- deparse(substitute(id_var))
+  on_existing <- match.arg(on_existing)
+  
+  to_cut <- dplyr::filter(.data, !is.na(.data[[cut_var]]))
+  same_state <- dplyr::filter(.data, is.na(.data[[cut_var]]))
+  if(!tv_name %in% names(same_state) && nrow(same_state)){
+    same_state[[tv_name]] <- 0
+  }
+  result <- dplyr::bind_rows(
+    same_state,
+    dplyr::bind_rows(parallel::mclapply(unique(to_cut[[id_var]]), 
+                                        function(x){
+                                          cut_individual(to_cut[to_cut[[id_var]] == x, ])
+                                        }, mc.cores = cores))
+  )
+  
+  result <- result %>%
+    dplyr::arrange(.data[[id_var]], .data[[entry]])
+  
+  return(result)
 }
-
-
-
 
 
 

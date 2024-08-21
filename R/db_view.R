@@ -22,3 +22,4 @@ head.SQLiteConnection <- function(x, table = NULL, n = 6L, temp = FALSE, ...){
         dbGetQuery(x, sprintf("SELECT * FROM %s LIMIT %d;", table, n), ...)
     }
 }
+

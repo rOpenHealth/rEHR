@@ -27,7 +27,7 @@ set_CPRD <- function(){
                         drugs = c("productname", "drugsubstance", "bnfchapter"),
                         drugcodes = "bnfcode")
      # dates
-    .ehr$raw_date_format <- "%d/%m/%Y"
+    .ehr$raw_date_format <- "%Y/%m/%d"
     .ehr$date_fields <- c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod", "deathdate")
     names(.ehr$date_fields) <- c("event", "entry", "last_coll", "up_to_std", "first_reg",
                                  "current_reg", "transfer_out", "death")

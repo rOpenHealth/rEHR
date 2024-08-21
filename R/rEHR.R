@@ -1,6 +1,6 @@
 #' The rEHR package.
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name rEHR
 #' @import assertthat
 #' @import stringr

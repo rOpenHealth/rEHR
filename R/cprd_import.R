@@ -58,8 +58,8 @@ database <- function(dbname){
 #' @param yob_origin value to add yob values to to get actual year of birth (Generally 1800)
 #' @param practid logical should practice id variable be constructed from the patient ids?
 #' @param filenames logical should the filename be included as a variable?
-add_to_database <- function(db, files, table_name, dateformat = "%d/%m/%Y", yob_origin = 1800, practid = TRUE, filenames = FALSE){
-    date_fields <- c("eventdate", "sysdate", "lcd", "uts", "frd", "crd", "tod", "deathdate")
+add_to_database <- function(db, files, table_name, dateformat = "%Y/%m/%d", yob_origin = 1800, practid = TRUE, filenames = FALSE){
+    date_fields <- c("eventdate", "sysdate", "chsdate","lcd", "uts", "frd", "crd", "tod", "deathdate")
     for(f in files){
         if(str_detect(f, "zip$")){
             message(sprintf("Unzipping %s...", f), appendLF = FALSE)
@@ -120,7 +120,7 @@ import_CPRD_data <- function(db, data_dir,
                              filetypes = c("Additional", "Clinical", "Consultation", 
                                            "Immunisation", "Patient", "Practice", 
                                            "Referral", "Staff", "Test", "Therapy"),
-                             dateformat = "%d/%m/%Y", 
+                             dateformat = "%Y/%m/%d", 
                              yob_origin = 1800,
                              regex = "PET",
                              recursive = TRUE, ...){

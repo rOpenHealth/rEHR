@@ -55,60 +55,87 @@
 #' cores = 10)
 #' }
 select_by_year <- function(dbname = NULL, db = NULL, tables, columns = "*", where, year_range, 
-                           year_fn = qof_years, as_list = FALSE, selector_fn = select_events, 
+                           year_fn = standard_years, as_list = FALSE, selector_fn = select_events, 
                            cores = 1L, ...){
-    if(cores > 1){
-        assert_that(!is.null(dbname) && is.character(dbname))
+  if(cores > 1){
+    assert_that(!is.null(dbname) && is.character(dbname))
+  } else {
+    if(!is.null(db) && inherits(db, "SQLiteConnection")){
+      message("Using open database connection")
+    } else if(!is.null(dbname) && is.character(dbname)){
+      message(sprintf("Opening connection to %s", dbname))
+      db <- DBI::dbConnect(RSQLite::SQLite(), dbname)
+    } else stop("You must supply either an SQLite database connection or a path to a SQLite database")
+    assert_that(!is.null(db) && inherits(db, "SQLiteConnection"))
+  }
+  columns <- paste(columns, collapse = ", ")
+  dat <- mclapply(year_range, function(year, ...){
+    if(cores > 1) db <- DBI::dbConnect(RSQLite::SQLite(), dbname)
+    this_year <- year_fn(year)
+    where_year <- gsub("STARTDATE", sprintf("'%s'", this_year$startdate), where)
+    where_year <- gsub("ENDDATE", sprintf("'%s'", this_year$enddate), where_year)
+    year_out <- list()
+    if(length(tables) > 1){
+      year_out <- lapply(tables, function(tab){
+        out <- selector_fn(db = db, 
+                           tab = tab, columns = columns, where = where_year, 
+                           sql_only = FALSE, ...)
+        # Remove duplicate columns immediately after data retrieval
+        out <- remove_duplicate_columns(out)
+        if(nrow(out)){
+          out$table <- tab    
+        } else out <- NULL
+        out
+      })
+      # Merge data frames with potentially no duplicate columns
+      year_out <- dplyr::bind_rows(year_out, .id = "source_table")
+      if(nrow(year_out)) year_out$year <- year
+      if(cores > 1) DBI::dbDisconnect(db)
     } else {
-        if(!is.null(db) && class(db) == "SQLiteConnection"){
-            message("Using open database connection")
-        } else if(!is.null(dbname) && is.character(dbname)){
-            message(sprintf("Opening connection to %s", dbname))
-            db <- database(dbname)
-        } else stop("You must supply either an SQLite database connection or a path to a SQLite database ")
-        assert_that(!is.null(db) && class(db) == "SQLiteConnection")
+      year_out <- selector_fn(db = db, 
+                              tab = tables, columns = columns, where = where_year, 
+                              sql_only = FALSE, ...)
+      # Apply remove duplicate columns function if processing a single table
+      year_out <- remove_duplicate_columns(year_out)
+      if(nrow(year_out)){
+        year_out$year <- year
+      } else {
+        year_out <- NULL
+      }
+      if(cores > 1) DBI::dbDisconnect(db)
     }
-    columns <- paste(columns, collapse = ", ")
-    dat <- mclapply(year_range, function(year, ...){
-        if(cores > 1) db <- database(dbname)
-        this_year <- year_fn(year)
-        where_year <- str_replace_all(where, "STARTDATE", sprintf("'%s'", this_year$startdate))
-        where_year <- str_replace_all(where_year, "ENDDATE", sprintf("'%s'", this_year$enddate))
-        if(length(tables) > 1){
-            year_out <- bind_rows(lapply(tables, function(tab){
-                out <- selector_fn(db = db, 
-                                   tab = tab, columns = columns, where = where_year, 
-                                   sql_only = FALSE, ...)
-                if(nrow(out)){
-                    out$table <- tab    
-                } else out <- NULL
-                out
-            }))
-            if(nrow(year_out)) year_out$year <- year
-            if(cores > 1) dbDisconnect(db)
-            year_out
-        } else {
-            year_out <- selector_fn(db = db, 
-                                    tab = tables, columns = columns, where = where_year, 
-                                    sql_only = FALSE, ...)
-            if(nrow(year_out)){
-                year_out$year <- year
-            } else {
-                year_out <- NULL
-            }
-            if(cores > 1) dbDisconnect(db)
-            year_out
-        }
-    }, mc.cores = min(cores, length(year_range)))
-    names(dat) <- year_range
-    if(as_list){
-        dat
-    } else {
-        bind_rows(dat)    
-    }
+    year_out
+  }, mc.cores = min(cores, length(year_range)))
+  names(dat) <- year_range
+  if(as_list){
+    dat
+  } else {
+    dat = do.call(dplyr::bind_rows, dat)
+  }
+  return(dat)
 }
 
+        
+        
 
+#' Remove Duplicate Columns from a Data Frame
+#'
+#' This function examines a data frame for duplicate column names and retains only the first instance
+#' of each duplicated column. It is useful in post-processing of data frames combined from multiple
+#' sources where column names might overlap.
+#'
+#' @param df A data frame with potential duplicate column names.
+#' @return A data frame where each column name appears only once.
+#' @export
+remove_duplicate_columns <- function(df) {
+  duplicated_columns <- names(df)[duplicated(names(df))]
+  for (col in unique(duplicated_columns)) {
+    # Select the first occurrence of each duplicated column and remove others
+    df[[col]] <- df[[col]][!duplicated(df[[col]])]
+    df <- df[, !duplicated(names(df))]
+  }
+  return(df)
+}
 
 #' Function to build start/enddate helper fuctions
 #' 
