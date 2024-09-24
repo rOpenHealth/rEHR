@@ -30,3 +30,10 @@ Also note that the package has various dependencies which tend to break down whe
 Clinical code list construction functions have been absorbed from the [rpcdsearch](https://github.com/rOpenHealth/rpcdsearch) package.  See the [Codelist construction vignette](https://github.com/rOpenHealth/rEHR/blob/master/vignettes/codelists.pdf) for more details.
 
 Issues can be reported [here](https://github.com/rOpenHealth/rEHR/issues).
+
+Users can download the zip file of the updated code or directly pull this branch (“updated_version1”). Another approach would be cloning the repository and switch to the branch.
+```R
+git clone https://github.com/rOpenHealth/rEHR.git
+cd rEHR git checkout updated_version1
+git fetch origin git checkout -b updated_version1 origin/updated_version1
+```
