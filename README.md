@@ -30,3 +30,5 @@ Also note that the package has various dependencies which tend to break down whe
 Clinical code list construction functions have been absorbed from the [rpcdsearch](https://github.com/rOpenHealth/rpcdsearch) package.  See the [Codelist construction vignette](https://github.com/rOpenHealth/rEHR/blob/master/vignettes/codelists.pdf) for more details.
 
 Issues can be reported [here](https://github.com/rOpenHealth/rEHR/issues).
+
+Please see the updated version for combatibility with R version 4.4.1: https://github.com/rOpenHealth/rEHR/tree/updated_version1
